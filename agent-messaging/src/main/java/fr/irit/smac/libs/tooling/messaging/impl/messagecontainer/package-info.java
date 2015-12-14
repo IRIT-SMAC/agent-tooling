@@ -1,0 +1,1 @@
+package fr.irit.smac.libs.tooling.messaging.impl.messagecontainer;
