@@ -35,6 +35,7 @@
 		<module>agent-messaging</module>
 		<module>agent-scheduling</module>
 		<module>agent-plot</module>
+		<module>avt</module>
 	</modules>
 
 	<build>
