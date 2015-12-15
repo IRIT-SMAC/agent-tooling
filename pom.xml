@@ -10,6 +10,13 @@
 	<name>agent-tooling</name>
 	<url>http://maven.apache.org</url>
 
+	<organization>
+		<name>IRIT - SMAC Team</name>
+		<url>http://irit.fr/-SMAC-team-</url>
+	</organization>
+
+	<inceptionYear>2014</inceptionYear>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -32,6 +39,8 @@
 
 	<build>
 		<plugins>
+
+			<!-- define Java version for eclipse -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -41,6 +50,83 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+
+			<!-- handle license files -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>1.7</version>
+
+				<configuration>
+					<licenseName>lgpl_v3</licenseName>
+					<roots>
+						<root>src/main/java</root>
+						<root>src/examples/java</root>
+						<root>src/test/java</root>
+					</roots>
+					<!-- break some files otherwise -->
+					<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+				</configuration>
+
+				<executions>
+
+					<execution>
+						<id>update-license</id>
+						<goals>
+							<goal>update-project-license</goal>
+						</goals>
+						<phase>generate-resources</phase>
+					</execution>
+
+					<execution>
+						<!-- download license files -->
+						<id>download-licenses</id>
+						<goals>
+							<goal>download-licenses</goal>
+						</goals>
+					</execution>
+
+				</executions>
+			</plugin>
+
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											license-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.7,)
+										</versionRange>
+										<goals>
+											<goal>
+												update-project-license
+											</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 </project>
