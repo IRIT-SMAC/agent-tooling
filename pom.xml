@@ -25,6 +25,7 @@
 	<modules>
 		<module>agent-logging</module>
     <module>agent-messaging</module>
+    <module>agent-scheduling</module>
   </modules>
 
 	<build>
