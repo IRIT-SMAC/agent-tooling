@@ -28,14 +28,14 @@ import java.util.List;
  * 
  * @author lemouzy
  *
- * @param <MsgType>
+ * @param <T>
  */
-public interface IMsgSource<MsgType> {
+public interface IMsgSource<T> {
 
-	/**
-	 * Returns and removes the contained messages
-	 * 
-	 * @return
-	 */
-	public List<MsgType> getMsgs();
+    /**
+     * Returns and removes the contained messages
+     * 
+     * @return
+     */
+    public List<T> getMsgs();
 }

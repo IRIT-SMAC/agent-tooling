@@ -29,58 +29,60 @@ import fr.irit.smac.libs.tooling.messaging.ISender;
  * 
  * @author lemouzy
  *
- * @param <MsgType>
+ * @param <T>
  */
-public class BasicSender<MsgType> implements ISender<MsgType> {
+public class BasicSender<T> implements ISender<T> {
 
-	private final IDirectory<MsgType> directory;
-	private final Ref<MsgType> broadCastMsgBox;
+    private final IDirectory<T> directory;
+    private final Ref<T>        broadCastMsgBox;
 
-	public BasicSender(IDirectory<MsgType> directory) {
-		this.directory = directory;
-		this.broadCastMsgBox = this.directory.getGroupRef(IDirectory.ALL);
-	}
+    public BasicSender(IDirectory<T> directory) {
+        this.directory = directory;
+        this.broadCastMsgBox = this.directory.getGroupRef(IDirectory.ALL);
+    }
 
-	@Override
-	public IDirectory<MsgType> getDirectory() {
-		return this.directory;
-	}
+    @Override
+    public IDirectory<T> getDirectory() {
+        return this.directory;
+    }
 
-	@Override
-	public boolean send(MsgType msg, String receiverId) {
-		try {
-			return this.directory.getAgentRef(receiverId).getMsgSink()
-					.putMsg(msg);
-		} catch (NullPointerException e) {
-			throw new IllegalArgumentException(
-					"Trying to send a message to an unknown receiver : "
-							+ receiverId);
-		}
-	}
+    @Override
+    public boolean send(T msg, String receiverId) {
+        try {
+            return this.directory.getAgentRef(receiverId).getMsgSink()
+                .putMsg(msg);
+        }
+        catch (NullPointerException e) {
+            throw new IllegalArgumentException(
+                "Trying to send a message to an unknown receiver : "
+                    + receiverId);
+        }
+    }
 
-	@Override
-	public boolean send(MsgType msg, Ref<MsgType> receiverRef) {
-		return receiverRef.getMsgSink().putMsg(msg);
-	}
+    @Override
+    public boolean send(T msg, Ref<T> receiverRef) {
+        return receiverRef.getMsgSink().putMsg(msg);
+    }
 
-	@Override
-	public boolean sendToGroup(MsgType msg, String groupId) {
-		try {
-			return this.directory.getGroupRef(groupId).getMsgSink().putMsg(msg);
-		} catch (NullPointerException e) {
-			throw new IllegalArgumentException(
-					"Trying to send a message to an unknown group : " + groupId);
-		}
-	}
+    @Override
+    public boolean sendToGroup(T msg, String groupId) {
+        try {
+            return this.directory.getGroupRef(groupId).getMsgSink().putMsg(msg);
+        }
+        catch (NullPointerException e) {
+            throw new IllegalArgumentException(
+                "Trying to send a message to an unknown group : " + groupId);
+        }
+    }
 
-	@Override
-	public boolean sendToGroup(MsgType msg, Ref<MsgType> groupRef) {
-		return groupRef.getMsgSink().putMsg(msg);
-	}
+    @Override
+    public boolean sendToGroup(T msg, Ref<T> groupRef) {
+        return groupRef.getMsgSink().putMsg(msg);
+    }
 
-	@Override
-	public boolean broadcast(MsgType msg) {
-		return this.broadCastMsgBox.getMsgSink().putMsg(msg);
-	}
+    @Override
+    public boolean broadcast(T msg) {
+        return this.broadCastMsgBox.getMsgSink().putMsg(msg);
+    }
 
 }

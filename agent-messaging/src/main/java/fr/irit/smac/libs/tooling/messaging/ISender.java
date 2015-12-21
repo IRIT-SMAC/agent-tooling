@@ -30,67 +30,67 @@ import fr.irit.smac.libs.tooling.messaging.impl.Ref;
  * 
  * @author lemouzy
  *
- * @param <MsgType>
+ * @param <T>
  */
-public interface ISender<MsgType> {
+public interface ISender<T> {
 
-	/**
-	 * Returns the directory used for sending messages
-	 * 
-	 * @return
-	 */
-	public IDirectory<MsgType> getDirectory();
+    /**
+     * Returns the directory used for sending messages
+     * 
+     * @return
+     */
+    public IDirectory<T> getDirectory();
 
-	/**
-	 * Sends a message to the given id Note : this method is slower than the
-	 * send(MsgType msg, Ref<MsgType> receiverRef) method we recommend to use
-	 * this other method for performance reasons
-	 * 
-	 * @param msg
-	 * @param receiverId
-	 * @return true if the message has been actually sent, false otherwise
-	 */
-	public boolean send(MsgType msg, String receiverId);
+    /**
+     * Sends a message to the given id Note : this method is slower than the
+     * send(MsgType msg, Ref<MsgType> receiverRef) method we recommend to use
+     * this other method for performance reasons
+     * 
+     * @param msg
+     * @param receiverId
+     * @return true if the message has been actually sent, false otherwise
+     */
+    public boolean send(T msg, String receiverId);
 
-	/**
-	 * Sends a message to the given ref Note : this method is faster than the
-	 * send(MsgType msg, String receiverId) method
-	 * 
-	 * @param msg
-	 * @param receiverRef
-	 * @return true if the message has been actually sent, false otherwise
-	 */
-	public boolean send(MsgType msg, Ref<MsgType> receiverRef);
+    /**
+     * Sends a message to the given ref Note : this method is faster than the
+     * send(MsgType msg, String receiverId) method
+     * 
+     * @param msg
+     * @param receiverRef
+     * @return true if the message has been actually sent, false otherwise
+     */
+    public boolean send(T msg, Ref<T> receiverRef);
 
-	/**
-	 * Sends a message to all message boxes inscribed to the given group id Note
-	 * : this method is slower than the sendToGroup(MsgType msg, Ref<MsgType>
-	 * receiverRef) method we recommend to use this other method for performance
-	 * reasons
-	 * 
-	 * @param msg
-	 * @param groupId
-	 * @return true if all the messages have been actually sent, false otherwise
-	 */
-	public boolean sendToGroup(MsgType msg, String groupId);
+    /**
+     * Sends a message to all message boxes inscribed to the given group id Note
+     * : this method is slower than the sendToGroup(MsgType msg, Ref
+     * <MsgType> receiverRef) method we recommend to use this other method for
+     * performance reasons
+     * 
+     * @param msg
+     * @param groupId
+     * @return true if all the messages have been actually sent, false otherwise
+     */
+    public boolean sendToGroup(T msg, String groupId);
 
-	/**
-	 * Sends a message to all message boxes inscribed to the given group ref
-	 * Note : this method is faster than the sendToGroup(MsgType msg, String
-	 * receiverId) method
-	 * 
-	 * @param msg
-	 * @param groupId
-	 * @return true if all the messages have been actually sent, false otherwise
-	 */
-	public boolean sendToGroup(MsgType msg, Ref<MsgType> groupRef);
+    /**
+     * Sends a message to all message boxes inscribed to the given group ref
+     * Note : this method is faster than the sendToGroup(MsgType msg, String
+     * receiverId) method
+     * 
+     * @param msg
+     * @param groupId
+     * @return true if all the messages have been actually sent, false otherwise
+     */
+    public boolean sendToGroup(T msg, Ref<T> groupRef);
 
-	/**
-	 * Sends a message to all the existing message boxes (created with the
-	 * current message service).
-	 * 
-	 * @param msg
-	 * @return
-	 */
-	public boolean broadcast(MsgType msg);
+    /**
+     * Sends a message to all the existing message boxes (created with the
+     * current message service).
+     * 
+     * @param msg
+     * @return
+     */
+    public boolean broadcast(T msg);
 }

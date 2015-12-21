@@ -57,43 +57,47 @@ import fr.irit.smac.libs.tooling.messaging.impl.DefaultMsgService;
  */
 public class AgentMessaging {
 
-	// the storage of all message service instance, associated to the message
-	// type class the handle
-	private static Map<Class<?>, IMsgService<?>> instanciedMsgServices = new HashMap<Class<?>, IMsgService<?>>();
+    private AgentMessaging() {
 
-	/**
-	 * Get or create a message box for the given agentId, associated to the
-	 * given class message service type.
-	 * 
-	 * @param agentId
-	 *            the agent
-	 * @param messageClassType
-	 *            the class type or the messages handled by the message box
-	 * @return
-	 */
-	public static <MsgType> IMsgBox<MsgType> getMsgBox(String agentId,
-			Class<MsgType> messageClassType) {
-		return AgentMessaging.<MsgType> getMsgService(messageClassType)
-				.getMsgBox(agentId);
-	}
+    }
 
-	/**
-	 * Get or create a message service associated to the given class message
-	 * service type.
-	 * 
-	 * @param messageClassType
-	 * @return
-	 */
-	public static <MsgType> IMsgService<MsgType> getMsgService(
-			Class<MsgType> messageClassType) {
-		@SuppressWarnings("unchecked")
-		IMsgService<MsgType> msgService = (IMsgService<MsgType>) instanciedMsgServices
-				.get(messageClassType);
-		if (msgService == null) {
-			msgService = new DefaultMsgService<MsgType>();
-			instanciedMsgServices.put(messageClassType, msgService);
-		}
+    // the storage of all message service instance, associated to the message
+    // type class the handle
+    private static Map<Class<?>, IMsgService<?>> instanciedMsgServices = new HashMap<Class<?>, IMsgService<?>>();
 
-		return msgService;
-	}
+    /**
+     * Get or create a message box for the given agentId, associated to the
+     * given class message service type.
+     * 
+     * @param agentId
+     *            the agent
+     * @param messageClassType
+     *            the class type or the messages handled by the message box
+     * @return
+     */
+    public static <T> IMsgBox<T> getMsgBox(String agentId,
+        Class<T> messageClassType) {
+        return AgentMessaging.<T> getMsgService(messageClassType)
+            .getMsgBox(agentId);
+    }
+
+    /**
+     * Get or create a message service associated to the given class message
+     * service type.
+     * 
+     * @param messageClassType
+     * @return
+     */
+    public static <T> IMsgService<T> getMsgService(
+        Class<T> messageClassType) {
+        @SuppressWarnings("unchecked")
+        IMsgService<T> msgService = (IMsgService<T>) instanciedMsgServices
+            .get(messageClassType);
+        if (msgService == null) {
+            msgService = new DefaultMsgService<T>();
+            instanciedMsgServices.put(messageClassType, msgService);
+        }
+
+        return msgService;
+    }
 }

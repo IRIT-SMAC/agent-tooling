@@ -30,22 +30,22 @@ import fr.irit.smac.libs.tooling.messaging.IMsgBox;
  * 
  * @author lemouzy
  *
- * @param <MsgType>
+ * @param <T>
  */
-interface IMutableDirectory<MsgType> extends IDirectory<MsgType> {
+interface IMutableDirectory<T> extends IDirectory<T> {
 
-	public Ref<MsgType> subscribeAgentToGroup(Ref<MsgType> agentRef,
-			String groupId);
+    public Ref<T> subscribeAgentToGroup(Ref<T> agentRef,
+        String groupId);
 
-	public void subscribeAgentToGroup(Ref<MsgType> agentRef,
-			Ref<MsgType> groupRef);
+    public void subscribeAgentToGroup(Ref<T> agentRef,
+        Ref<T> groupRef);
 
-	public void unsubscribeAgentFromGroup(Ref<MsgType> agentRef, String groupId);
+    public void unsubscribeAgentFromGroup(Ref<T> agentRef, String groupId);
 
-	public void unsubscribeAgentFromGroup(Ref<MsgType> agentRef,
-			Ref<MsgType> groupRef);
+    public void unsubscribeAgentFromGroup(Ref<T> agentRef,
+        Ref<T> groupRef);
 
-	public IMsgBox<MsgType> createAgentMsgBox(String agentId);
+    public IMsgBox<T> createAgentMsgBox(String agentId);
 
-	public void removeAgentMsgBox(Ref<MsgType> agentRef);
+    public void removeAgentMsgBox(Ref<T> agentRef);
 }

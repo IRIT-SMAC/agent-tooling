@@ -31,14 +31,14 @@ import java.util.List;
  */
 public class DummyMsgContainer implements IMsgContainer<Object> {
 
-	@Override
-	public boolean putMsg(Object msg) {
-		return false;
-	}
+    @Override
+    public boolean putMsg(Object msg) {
+        return false;
+    }
 
-	@Override
-	public List<Object> getMsgs() {
-		throw new IllegalStateException(
-				"Trying to reteive messages from a disposed message box.");
-	}
+    @Override
+    public List<Object> getMsgs() {
+        throw new IllegalStateException(
+            "Trying to reteive messages from a disposed message box.");
+    }
 }

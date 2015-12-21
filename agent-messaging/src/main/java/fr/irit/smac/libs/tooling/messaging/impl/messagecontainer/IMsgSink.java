@@ -26,8 +26,8 @@ package fr.irit.smac.libs.tooling.messaging.impl.messagecontainer;
  * 
  * @author lemouzy
  *
- * @param <MsgType>
+ * @param <T>
  */
-public interface IMsgSink<MsgType> {
-	public boolean putMsg(MsgType msg);
+public interface IMsgSink<T> {
+    public boolean putMsg(T msg);
 }

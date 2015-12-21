@@ -31,28 +31,28 @@ import java.util.concurrent.LinkedBlockingQueue;
  * 
  * @author lemouzy
  *
- * @param <MsgType>
+ * @param <T>
  */
-public class BlockingQueueMsgContainer<MsgType> implements
-		IMsgContainer<MsgType> {
+public class BlockingQueueMsgContainer<T> implements
+    IMsgContainer<T> {
 
-	private BlockingQueue<MsgType> msgQueue;
+    private BlockingQueue<T> msgQueue;
 
-	public BlockingQueueMsgContainer() {
-		this.msgQueue = new LinkedBlockingQueue<MsgType>();
-	}
+    public BlockingQueueMsgContainer() {
+        this.msgQueue = new LinkedBlockingQueue<T>();
+    }
 
-	@Override
-	public boolean putMsg(MsgType msg) {
-		return this.msgQueue.offer(msg);
-	}
+    @Override
+    public boolean putMsg(T msg) {
+        return this.msgQueue.offer(msg);
+    }
 
-	@Override
-	public List<MsgType> getMsgs() {
-		List<MsgType> messages = new ArrayList<MsgType>(this.msgQueue.size());
-		this.msgQueue.drainTo(messages);
+    @Override
+    public List<T> getMsgs() {
+        List<T> messages = new ArrayList<T>(this.msgQueue.size());
+        this.msgQueue.drainTo(messages);
 
-		return messages;
-	}
+        return messages;
+    }
 
 }

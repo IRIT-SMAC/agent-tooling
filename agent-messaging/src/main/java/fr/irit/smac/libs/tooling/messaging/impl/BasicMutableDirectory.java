@@ -38,184 +38,189 @@ import fr.irit.smac.libs.tooling.messaging.IMsgBox;
  * 
  * @author lemouzy
  *
- * @param <MsgType>
+ * @param <T>
  */
-public class BasicMutableDirectory<MsgType> implements
-		IMutableDirectory<MsgType> {
+public class BasicMutableDirectory<T> implements
+    IMutableDirectory<T> {
 
-	private final Map<String, AgentMsgBox<MsgType>> agentDirectory;
-	private final Map<String, GroupMsgBox<MsgType>> groupDirectory;
+    private final Map<String, AgentMsgBox<T>> agentDirectory;
+    private final Map<String, GroupMsgBox<T>> groupDirectory;
 
-	private final ReentrantLock groupModificationLock;
-	private final ReentrantLock agentModificationLock;
+    private final ReentrantLock                     groupModificationLock;
+    private final ReentrantLock                     agentModificationLock;
 
-	private final GroupMsgBox<MsgType> broadCastMsgBox;
+    private final GroupMsgBox<T>              broadCastMsgBox;
 
-	public BasicMutableDirectory() {
-		super();
-		this.agentDirectory = new ConcurrentHashMap<String, AgentMsgBox<MsgType>>();
-		this.groupDirectory = new ConcurrentHashMap<String, GroupMsgBox<MsgType>>();
+    public BasicMutableDirectory() {
+        super();
+        this.agentDirectory = new ConcurrentHashMap<String, AgentMsgBox<T>>();
+        this.groupDirectory = new ConcurrentHashMap<String, GroupMsgBox<T>>();
 
-		this.groupModificationLock = new ReentrantLock();
-		this.agentModificationLock = new ReentrantLock();
+        this.groupModificationLock = new ReentrantLock();
+        this.agentModificationLock = new ReentrantLock();
 
-		this.broadCastMsgBox = this.getOrCreateGroupMsgBox(IDirectory.ALL);
-	}
+        this.broadCastMsgBox = this.getOrCreateGroupMsgBox(IDirectory.ALL);
+    }
 
-	// ///////////////////////////////////////////////////////////////////////////////
-	// Agent - Group Creation / Deletition
-	// ///////////////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////////////////
+    // Agent - Group Creation / Deletition
+    // ///////////////////////////////////////////////////////////////////////////////
 
-	@Override
-	public IMsgBox<MsgType> createAgentMsgBox(String agentId) {
+    @Override
+    public IMsgBox<T> createAgentMsgBox(String agentId) {
 
-		AgentMsgBox<MsgType> agentRef;
-		this.agentModificationLock.lock();
+        AgentMsgBox<T> agentRef;
+        this.agentModificationLock.lock();
 
-		if (!this.agentDirectory.containsKey(agentId)) {
-			agentRef = new AgentMsgBox<MsgType>(agentId, this);
-			this.subscribeAgentToGroup(agentRef, broadCastMsgBox);
-			this.agentDirectory.put(agentId, agentRef);
-		} else {
-			this.agentModificationLock.unlock();
-			throw new IllegalArgumentException("The agent " + agentId
-					+ " is already associated with a msgBox.");
-		}
+        if (!this.agentDirectory.containsKey(agentId)) {
+            agentRef = new AgentMsgBox<T>(agentId, this);
+            this.subscribeAgentToGroup(agentRef, broadCastMsgBox);
+            this.agentDirectory.put(agentId, agentRef);
+        }
+        else {
+            this.agentModificationLock.unlock();
+            throw new IllegalArgumentException("The agent " + agentId
+                + " is already associated with a msgBox.");
+        }
 
-		this.agentModificationLock.unlock();
+        this.agentModificationLock.unlock();
 
-		return agentRef;
-	}
+        return agentRef;
+    }
 
-	@Override
-	public void removeAgentMsgBox(Ref<MsgType> agentRef) {
-		this.agentModificationLock.lock();
-		this.groupModificationLock.lock();
-		this.agentDirectory.remove(agentRef.getId());
+    @Override
+    public void removeAgentMsgBox(Ref<T> agentRef) {
+        this.agentModificationLock.lock();
+        this.groupModificationLock.lock();
+        this.agentDirectory.remove(agentRef.getId());
 
-		for (GroupMsgBox<MsgType> group : groupDirectory.values()) {
-			this.unsubscribeAgentFromGroup(agentRef, group);
-		}
+        for (GroupMsgBox<T> group : groupDirectory.values()) {
+            this.unsubscribeAgentFromGroup(agentRef, group);
+        }
 
-		this.groupModificationLock.lock();
-		this.agentModificationLock.unlock();
-	}
+        this.groupModificationLock.lock();
+        this.agentModificationLock.unlock();
+    }
 
-	private GroupMsgBox<MsgType> getOrCreateGroupMsgBox(String groupId) {
-		GroupMsgBox<MsgType> groupRef;
+    private GroupMsgBox<T> getOrCreateGroupMsgBox(String groupId) {
+        GroupMsgBox<T> groupRef;
 
-		this.groupModificationLock.lock();
+        this.groupModificationLock.lock();
 
-		if (this.groupDirectory.containsKey(groupId)) {
-			groupRef = this.groupDirectory.get(groupId);
-		} else {
-			groupRef = new GroupMsgBox<MsgType>(groupId);
-			this.groupDirectory.put(groupId, groupRef);
-		}
+        if (this.groupDirectory.containsKey(groupId)) {
+            groupRef = this.groupDirectory.get(groupId);
+        }
+        else {
+            groupRef = new GroupMsgBox<T>(groupId);
+            this.groupDirectory.put(groupId, groupRef);
+        }
 
-		this.groupModificationLock.unlock();
+        this.groupModificationLock.unlock();
 
-		return groupRef;
-	}
+        return groupRef;
+    }
 
-	// ///////////////////////////////////////////////////////////////////////////////
-	// Agent access
-	// ///////////////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////////////////
+    // Agent access
+    // ///////////////////////////////////////////////////////////////////////////////
 
-	@Override
-	public AgentMsgBox<MsgType> getAgentRef(String agentId) {
-		return this.agentDirectory.get(agentId);
-	}
+    @Override
+    public AgentMsgBox<T> getAgentRef(String agentId) {
+        return this.agentDirectory.get(agentId);
+    }
 
-	@Override
-	public List<Ref<MsgType>> getAgentsRef() {
-		return new ArrayList<Ref<MsgType>>(agentDirectory.values());
-	}
+    @Override
+    public List<Ref<T>> getAgentsRef() {
+        return new ArrayList<Ref<T>>(agentDirectory.values());
+    }
 
-	// ///////////////////////////////////////////////////////////////////////////////
-	// Group access
-	// ///////////////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////////////////
+    // Group access
+    // ///////////////////////////////////////////////////////////////////////////////
 
-	@Override
-	public List<Ref<MsgType>> getGroupsRef() {
-		return new ArrayList<Ref<MsgType>>(groupDirectory.values());
-	}
+    @Override
+    public List<Ref<T>> getGroupsRef() {
+        return new ArrayList<Ref<T>>(groupDirectory.values());
+    }
 
-	@Override
-	public GroupMsgBox<MsgType> getGroupRef(String groupId) {
-		return this.groupDirectory.get(groupId);
-	}
+    @Override
+    public GroupMsgBox<T> getGroupRef(String groupId) {
+        return this.groupDirectory.get(groupId);
+    }
 
-	@Override
-	public Set<Ref<MsgType>> getAgentsOfGroup(Ref<MsgType> groupRef) {
-		return this.getAgentsOfGroup(groupRef.getId());
-	}
+    @Override
+    public Set<Ref<T>> getAgentsOfGroup(Ref<T> groupRef) {
+        return this.getAgentsOfGroup(groupRef.getId());
+    }
 
-	@Override
-	public Set<Ref<MsgType>> getAgentsOfGroup(String groupId) {
-		return this.groupDirectory.get(groupId).getAgents();
-	}
+    @Override
+    public Set<Ref<T>> getAgentsOfGroup(String groupId) {
+        return this.groupDirectory.get(groupId).getAgents();
+    }
 
-	// ///////////////////////////////////////////////////////////////////////////////
-	// Subscription concerns
-	// ///////////////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////////////////
+    // Subscription concerns
+    // ///////////////////////////////////////////////////////////////////////////////
 
-	@Override
-	public Ref<MsgType> subscribeAgentToGroup(Ref<MsgType> agentRef,
-			String groupId) {
-		GroupMsgBox<MsgType> groupRef = this.getOrCreateGroupMsgBox(groupId);
-		this.subscribeAgentToGroup(agentRef, groupRef);
-		return groupRef;
-	}
+    @Override
+    public Ref<T> subscribeAgentToGroup(Ref<T> agentRef,
+        String groupId) {
+        GroupMsgBox<T> groupRef = this.getOrCreateGroupMsgBox(groupId);
+        this.subscribeAgentToGroup(agentRef, groupRef);
+        return groupRef;
+    }
 
-	@Override
-	public void subscribeAgentToGroup(Ref<MsgType> agentRef,
-			Ref<MsgType> groupId) {
-		this.groupModificationLock.lock();
-		if (this.groupDirectory.containsValue(groupId)) {
-			((GroupMsgBox<MsgType>) groupId).subscribeAgent(agentRef);
-		} else {
-			this.groupModificationLock.unlock();
-			throw new IllegalArgumentException(
-					"Trying to subscribe an agent to an unknown group : "
-							+ groupId);
-		}
+    @Override
+    public void subscribeAgentToGroup(Ref<T> agentRef,
+        Ref<T> groupId) {
+        this.groupModificationLock.lock();
+        if (this.groupDirectory.containsValue(groupId)) {
+            ((GroupMsgBox<T>) groupId).subscribeAgent(agentRef);
+        }
+        else {
+            this.groupModificationLock.unlock();
+            throw new IllegalArgumentException(
+                "Trying to subscribe an agent to an unknown group : "
+                    + groupId);
+        }
 
-		this.groupModificationLock.unlock();
-	}
+        this.groupModificationLock.unlock();
+    }
 
-	@Override
-	public void unsubscribeAgentFromGroup(Ref<MsgType> agentRef,
-			Ref<MsgType> groupRef) {
-		this.groupModificationLock.lock();
+    @Override
+    public void unsubscribeAgentFromGroup(Ref<T> agentRef,
+        Ref<T> groupRef) {
+        this.groupModificationLock.lock();
 
-		if (this.groupDirectory.containsValue(groupRef)) {
-			((GroupMsgBox<MsgType>) groupRef).unsubscribeAgent(agentRef);
-		} else {
-			this.groupModificationLock.unlock();
-			throw new IllegalArgumentException(
-					"Trying to unsubscribe an agent from an unknown group : "
-							+ groupRef);
-		}
+        if (this.groupDirectory.containsValue(groupRef)) {
+            ((GroupMsgBox<T>) groupRef).unsubscribeAgent(agentRef);
+        }
+        else {
+            this.groupModificationLock.unlock();
+            throw new IllegalArgumentException(
+                "Trying to unsubscribe an agent from an unknown group : "
+                    + groupRef);
+        }
 
-		this.groupModificationLock.unlock();
-	}
+        this.groupModificationLock.unlock();
+    }
 
-	@Override
-	public void unsubscribeAgentFromGroup(Ref<MsgType> agentRef, String groupId) {
-		this.groupModificationLock.lock();
+    @Override
+    public void unsubscribeAgentFromGroup(Ref<T> agentRef, String groupId) {
+        this.groupModificationLock.lock();
 
-		GroupMsgBox<MsgType> groupMsgBox = this.groupDirectory.get(groupId);
-		if (groupMsgBox != null) {
-			groupMsgBox.unsubscribeAgent(agentRef);
-		} else {
-			this.groupModificationLock.unlock();
-			throw new IllegalArgumentException(
-					"Trying to unsubscribe an agent from an unknown group : "
-							+ groupId);
-		}
+        GroupMsgBox<T> groupMsgBox = this.groupDirectory.get(groupId);
+        if (groupMsgBox != null) {
+            groupMsgBox.unsubscribeAgent(agentRef);
+        }
+        else {
+            this.groupModificationLock.unlock();
+            throw new IllegalArgumentException(
+                "Trying to unsubscribe an agent from an unknown group : "
+                    + groupId);
+        }
 
-		this.groupModificationLock.unlock();
-	}
+        this.groupModificationLock.unlock();
+    }
 
 }

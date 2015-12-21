@@ -31,31 +31,31 @@ import fr.irit.smac.libs.tooling.messaging.impl.messagecontainer.IMsgSink;
  * 
  * @author lemouzy
  *
- * @param <MsgType>
+ * @param <T>
  */
-abstract public class Ref<MsgType> implements Comparable<Ref<MsgType>> {
-	private final String id;
+public abstract class Ref<T> implements Comparable<Ref<T>> {
+    private final String id;
 
-	public Ref(String id) {
-		this.id = id;
-	}
+    public Ref(String id) {
+        this.id = id;
+    }
 
-	@Override
-	public String toString() {
-		return "@" + id;
-	}
+    @Override
+    public String toString() {
+        return "@" + id;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	@Override
-	public int compareTo(Ref<MsgType> ref) {
-		return this.getId().compareTo(ref.getId());
-	}
+    @Override
+    public int compareTo(Ref<T> ref) {
+        return this.getId().compareTo(ref.getId());
+    }
 
-	/**
-	 * @return the external package hidden message sink
-	 */
-	abstract IMsgSink<MsgType> getMsgSink();
+    /**
+     * @return the external package hidden message sink
+     */
+    abstract IMsgSink<T> getMsgSink();
 }

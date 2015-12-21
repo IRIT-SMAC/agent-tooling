@@ -21,7 +21,6 @@
  */
 package fr.irit.smac.libs.tooling.messaging.impl;
 
-
 import fr.irit.smac.libs.tooling.messaging.IDirectory;
 import fr.irit.smac.libs.tooling.messaging.IMsgBox;
 import fr.irit.smac.libs.tooling.messaging.IMsgService;
@@ -31,52 +30,52 @@ import fr.irit.smac.libs.tooling.messaging.IMsgService;
  * 
  * @author lemouzy
  *
- * @param <MsgType>
+ * @param <T>
  */
-public class DefaultMsgService<MsgType> implements IMsgService<MsgType> {
+public class DefaultMsgService<T> implements IMsgService<T> {
 
-	private final BasicMutableDirectory<MsgType> directory;
-	private final BasicSender<MsgType> sender;
+    private final BasicMutableDirectory<T> directory;
+    private final BasicSender<T>           sender;
 
-	public DefaultMsgService() {
-		super();
-		this.directory = new BasicMutableDirectory<MsgType>();
-		this.sender = new BasicSender<MsgType>(this.directory);
-	}
+    public DefaultMsgService() {
+        super();
+        this.directory = new BasicMutableDirectory<T>();
+        this.sender = new BasicSender<T>(this.directory);
+    }
 
-	@Override
-	public IDirectory<MsgType> getDirectory() {
-		return this.directory;
-	}
+    @Override
+    public IDirectory<T> getDirectory() {
+        return this.directory;
+    }
 
-	@Override
-	public boolean send(MsgType msg, String receiverId) {
-		return this.sender.send(msg, receiverId);
-	}
+    @Override
+    public boolean send(T msg, String receiverId) {
+        return this.sender.send(msg, receiverId);
+    }
 
-	@Override
-	public boolean send(MsgType msg, Ref<MsgType> receiverRef) {
-		return this.sender.send(msg, receiverRef);
-	}
+    @Override
+    public boolean send(T msg, Ref<T> receiverRef) {
+        return this.sender.send(msg, receiverRef);
+    }
 
-	@Override
-	public boolean sendToGroup(MsgType msg, String groupId) {
-		return this.sender.sendToGroup(msg, groupId);
-	}
+    @Override
+    public boolean sendToGroup(T msg, String groupId) {
+        return this.sender.sendToGroup(msg, groupId);
+    }
 
-	@Override
-	public boolean sendToGroup(MsgType msg, Ref<MsgType> groupRef) {
-		return this.sender.sendToGroup(msg, groupRef);
-	}
+    @Override
+    public boolean sendToGroup(T msg, Ref<T> groupRef) {
+        return this.sender.sendToGroup(msg, groupRef);
+    }
 
-	@Override
-	public boolean broadcast(MsgType msg) {
-		return this.sender.broadcast(msg);
-	}
+    @Override
+    public boolean broadcast(T msg) {
+        return this.sender.broadcast(msg);
+    }
 
-	@Override
-	public IMsgBox<MsgType> getMsgBox(String agentId) {
-		return this.directory.createAgentMsgBox(agentId);
-	}
+    @Override
+    public IMsgBox<T> getMsgBox(String agentId) {
+        return this.directory.createAgentMsgBox(agentId);
+    }
 
 }

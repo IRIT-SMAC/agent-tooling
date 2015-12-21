@@ -30,30 +30,30 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * 
  * @author lemouzy
  *
- * @param <MsgType>
+ * @param <T>
  */
-public class ConcurrentQueueMsgContainer<MsgType> implements
-		IMsgContainer<MsgType> {
+public class ConcurrentQueueMsgContainer<T> implements
+    IMsgContainer<T> {
 
-	private ConcurrentLinkedQueue<MsgType> msgQueue;
+    private ConcurrentLinkedQueue<T> msgQueue;
 
-	private ConcurrentQueueMsgContainer() {
-		this.msgQueue = new ConcurrentLinkedQueue<MsgType>();
-	}
+    private ConcurrentQueueMsgContainer() {
+        this.msgQueue = new ConcurrentLinkedQueue<T>();
+    }
 
-	@Override
-	public boolean putMsg(MsgType msg) {
-		return this.msgQueue.offer(msg);
-	}
+    @Override
+    public boolean putMsg(T msg) {
+        return this.msgQueue.offer(msg);
+    }
 
-	@Override
-	public List<MsgType> getMsgs() {
-		List<MsgType> messages = new ArrayList<MsgType>(this.msgQueue.size());
-		while (!this.msgQueue.isEmpty()) {
-			messages.add(this.msgQueue.poll());
-		}
+    @Override
+    public List<T> getMsgs() {
+        List<T> messages = new ArrayList<T>(this.msgQueue.size());
+        while (!this.msgQueue.isEmpty()) {
+            messages.add(this.msgQueue.poll());
+        }
 
-		return messages;
-	}
+        return messages;
+    }
 
 }

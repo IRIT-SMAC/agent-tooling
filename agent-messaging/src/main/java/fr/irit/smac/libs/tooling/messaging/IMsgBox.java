@@ -21,7 +21,6 @@
  */
 package fr.irit.smac.libs.tooling.messaging;
 
-
 import fr.irit.smac.libs.tooling.messaging.impl.Ref;
 
 /**
@@ -30,20 +29,20 @@ import fr.irit.smac.libs.tooling.messaging.impl.Ref;
  * 
  * @author lemouzy
  *
- * @param <MsgType>
+ * @param <T>
  */
-public interface IMsgBox<MsgType> extends ISender<MsgType>, IReceiver<MsgType> {
+public interface IMsgBox<T> extends ISender<T>, IReceiver<T> {
 
-	/**
-	 * The ref of the agent using the message box
-	 * 
-	 * @return
-	 */
-	public Ref<MsgType> getRef();
+    /**
+     * The ref of the agent using the message box
+     * 
+     * @return
+     */
+    public Ref<T> getRef();
 
-	/**
-	 * Disable the message box and uninscrible it to all the previously
-	 * subscribed groups.
-	 */
-	public void dispose();
+    /**
+     * Disable the message box and uninscrible it to all the previously
+     * subscribed groups.
+     */
+    public void dispose();
 }

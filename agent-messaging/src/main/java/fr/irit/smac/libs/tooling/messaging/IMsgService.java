@@ -21,23 +21,22 @@
  */
 package fr.irit.smac.libs.tooling.messaging;
 
-
 /**
  * An IMsgService is a front end that permits to send messages to agents or
  * groups and to create messageBoxes.
  * 
  * @author lemouzy
  *
- * @param <MsgType>
+ * @param <T>
  */
-public interface IMsgService<MsgType> extends ISender<MsgType> {
+public interface IMsgService<T> extends ISender<T> {
 
-	/**
-	 * Gets or create a message box associated with the given agent id.
-	 * 
-	 * @param agentId
-	 * @return
-	 */
-	public IMsgBox<MsgType> getMsgBox(String agentId);
+    /**
+     * Gets or create a message box associated with the given agent id.
+     * 
+     * @param agentId
+     * @return
+     */
+    public IMsgBox<T> getMsgBox(String agentId);
 
 }

@@ -32,58 +32,58 @@ import fr.irit.smac.libs.tooling.messaging.impl.Ref;
  * 
  * @author lemouzy
  *
- * @param <MsgType>
+ * @param <T>
  */
-public interface IDirectory<MsgType> {
+public interface IDirectory<T> {
 
-	/**
-	 * Name of the group that will contain all the agents (used for broadcast).
-	 */
-	public final static String ALL = "all";
+    /**
+     * Name of the group that will contain all the agents (used for broadcast).
+     */
+    public static final String ALL = "all";
 
-	/**
-	 * Returns the agent ref from the given agent id
-	 * 
-	 * @param agentId
-	 * @return
-	 */
-	public Ref<MsgType> getAgentRef(String agentId);
+    /**
+     * Returns the agent ref from the given agent id
+     * 
+     * @param agentId
+     * @return
+     */
+    public Ref<T> getAgentRef(String agentId);
 
-	/**
-	 * Returns the group ref from the given agent id
-	 * 
-	 * @param agentId
-	 * @return
-	 */
-	public Ref<MsgType> getGroupRef(String groupId);
+    /**
+     * Returns the group ref from the given agent id
+     * 
+     * @param agentId
+     * @return
+     */
+    public Ref<T> getGroupRef(String groupId);
 
-	/**
-	 * Returns all the agents inscribed in a group
-	 * 
-	 * @param groupRef
-	 * @return
-	 */
-	public Set<Ref<MsgType>> getAgentsOfGroup(Ref<MsgType> groupRef);
+    /**
+     * Returns all the agents inscribed in a group
+     * 
+     * @param groupRef
+     * @return
+     */
+    public Set<Ref<T>> getAgentsOfGroup(Ref<T> groupRef);
 
-	/**
-	 * Returns all the agents inscribed in a group
-	 * 
-	 * @param groupRef
-	 * @return
-	 */
-	public Set<Ref<MsgType>> getAgentsOfGroup(String groupId);
+    /**
+     * Returns all the agents inscribed in a group
+     * 
+     * @param groupRef
+     * @return
+     */
+    public Set<Ref<T>> getAgentsOfGroup(String groupId);
 
-	/**
-	 * Returns all the agent refs inscribed in the directory
-	 * 
-	 * @return
-	 */
-	public List<Ref<MsgType>> getGroupsRef();
+    /**
+     * Returns all the agent refs inscribed in the directory
+     * 
+     * @return
+     */
+    public List<Ref<T>> getGroupsRef();
 
-	/**
-	 * Returns all the groups refs inscribed in the directory
-	 * 
-	 * @return
-	 */
-	public List<Ref<MsgType>> getAgentsRef();
+    /**
+     * Returns all the groups refs inscribed in the directory
+     * 
+     * @return
+     */
+    public List<Ref<T>> getAgentsRef();
 }

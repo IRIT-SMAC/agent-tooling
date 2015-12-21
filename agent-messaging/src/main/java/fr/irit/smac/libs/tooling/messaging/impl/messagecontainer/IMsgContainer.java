@@ -24,16 +24,16 @@ package fr.irit.smac.libs.tooling.messaging.impl.messagecontainer;
 /**
  * Interface of a kind of message pipe object.
  * 
- * It can receive messages (IMsgSink<MsgType>) and it can provide the messages
- * it received before (IMsgSource<MsgType>)
+ * It can receive messages (IMsgSink<T>) and it can provide the messages it
+ * received before (IMsgSource<T>)
  * 
  * TODO: correct generics in comments
  * 
  * @author lemouzy
  *
- * @param <MsgType>
+ * @param <T>
  */
-public interface IMsgContainer<MsgType> extends IMsgSink<MsgType>,
-		IMsgSource<MsgType> {
+public interface IMsgContainer<T> extends IMsgSink<T>,
+    IMsgSource<T> {
 
 }

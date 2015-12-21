@@ -29,43 +29,43 @@ import fr.irit.smac.libs.tooling.messaging.impl.messagecontainer.IMsgSource;
  * 
  * @author lemouzy
  *
- * @param <MsgType>
+ * @param <T>
  */
-public interface IReceiver<MsgType> extends IMsgSource<MsgType> {
+public interface IReceiver<T> extends IMsgSource<T> {
 
-	/**
-	 * Add the receiver to the given group. If the corresponding group doesn't
-	 * exists, then creates the group. Do noting if the current instance is
-	 * already inscribed
-	 * 
-	 * @param groupId
-	 * @return the group it has been added to.
-	 */
-	public Ref<MsgType> subscribeToGroup(String groupId);
+    /**
+     * Add the receiver to the given group. If the corresponding group doesn't
+     * exists, then creates the group. Do noting if the current instance is
+     * already inscribed
+     * 
+     * @param groupId
+     * @return the group it has been added to.
+     */
+    public Ref<T> subscribeToGroup(String groupId);
 
-	/**
-	 * Add the receiver to the given group Do noting if the current instance is
-	 * already inscribed
-	 * 
-	 * @param groupRef
-	 */
-	public void subscribeToGroup(Ref<MsgType> groupRef);
+    /**
+     * Add the receiver to the given group Do noting if the current instance is
+     * already inscribed
+     * 
+     * @param groupRef
+     */
+    public void subscribeToGroup(Ref<T> groupRef);
 
-	/**
-	 * Remove the receiver to the given group Do noting if the current instance
-	 * is not actually inscribed
-	 * 
-	 * @param groupId
-	 * @return
-	 */
-	public void unsubscribeToGroup(String groupId);
+    /**
+     * Remove the receiver to the given group Do noting if the current instance
+     * is not actually inscribed
+     * 
+     * @param groupId
+     * @return
+     */
+    public void unsubscribeToGroup(String groupId);
 
-	/**
-	 * Remove the receiver to the given group Do noting if the current instance
-	 * is not actually inscribed
-	 * 
-	 * @param groupRef
-	 * @return
-	 */
-	public void unsubscribeToGroup(Ref<MsgType> groupRef);
+    /**
+     * Remove the receiver to the given group Do noting if the current instance
+     * is not actually inscribed
+     * 
+     * @param groupRef
+     * @return
+     */
+    public void unsubscribeToGroup(Ref<T> groupRef);
 }

@@ -35,105 +35,105 @@ import fr.irit.smac.libs.tooling.messaging.impl.messagecontainer.IMsgSink;
  * 
  * @author lemouzy
  *
- * @param <MsgType>
+ * @param <T>
  */
-class AgentMsgBox<MsgType> extends Ref<MsgType> implements IMsgBox<MsgType> {
+class AgentMsgBox<T> extends Ref<T> implements IMsgBox<T> {
 
-	private final static DummyMsgContainer dummyMsgContainer = new DummyMsgContainer();
+    private static final DummyMsgContainer dummyMsgContainer = new DummyMsgContainer();
 
-	private final IMutableDirectory<MsgType> directory;
-	private volatile IMsgContainer<MsgType> msgContainer;
-	private final BasicSender<MsgType> sender;
+    private final IMutableDirectory<T>     directory;
+    private volatile IMsgContainer<T>      msgContainer;
+    private final BasicSender<T>           sender;
 
-	public AgentMsgBox(String agentId, IMutableDirectory<MsgType> directory) {
-		super(agentId);
-		this.directory = directory;
-		this.msgContainer = new BlockingQueueMsgContainer<MsgType>();
-		this.sender = new BasicSender<MsgType>(this.directory);
-	}
+    public AgentMsgBox(String agentId, IMutableDirectory<T> directory) {
+        super(agentId);
+        this.directory = directory;
+        this.msgContainer = new BlockingQueueMsgContainer<T>();
+        this.sender = new BasicSender<T>(this.directory);
+    }
 
-	@Override
-	public Ref<MsgType> getRef() {
-		return this;
-	}
+    @Override
+    public Ref<T> getRef() {
+        return this;
+    }
 
-	// /////////////////////////////////////////////////////////////////////////////
-	// Directory Concerns
-	// /////////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////////
+    // Directory Concerns
+    // /////////////////////////////////////////////////////////////////////////////
 
-	@Override
-	public IDirectory<MsgType> getDirectory() {
-		return this.directory;
-	}
+    @Override
+    public IDirectory<T> getDirectory() {
+        return this.directory;
+    }
 
-	@Override
-	public Ref<MsgType> subscribeToGroup(String groupId) {
-		return this.directory.subscribeAgentToGroup(this, groupId);
-	}
+    @Override
+    public Ref<T> subscribeToGroup(String groupId) {
+        return this.directory.subscribeAgentToGroup(this, groupId);
+    }
 
-	@Override
-	public void subscribeToGroup(Ref<MsgType> groupRef) {
-		this.directory.subscribeAgentToGroup(this, groupRef);
-	}
+    @Override
+    public void subscribeToGroup(Ref<T> groupRef) {
+        this.directory.subscribeAgentToGroup(this, groupRef);
+    }
 
-	@Override
-	public void unsubscribeToGroup(String groupId) {
-		this.directory.unsubscribeAgentFromGroup(this, groupId);
-	}
+    @Override
+    public void unsubscribeToGroup(String groupId) {
+        this.directory.unsubscribeAgentFromGroup(this, groupId);
+    }
 
-	@Override
-	public void unsubscribeToGroup(Ref<MsgType> groupRef) {
-		this.directory.unsubscribeAgentFromGroup(this, groupRef);
-	}
+    @Override
+    public void unsubscribeToGroup(Ref<T> groupRef) {
+        this.directory.unsubscribeAgentFromGroup(this, groupRef);
+    }
 
-	// /////////////////////////////////////////////////////////////////////////////
-	// Sending concerns
-	// /////////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////////
+    // Sending concerns
+    // /////////////////////////////////////////////////////////////////////////////
 
-	@Override
-	public boolean send(MsgType msg, String receiverId) {
-		return this.sender.send(msg, receiverId);
-	}
+    @Override
+    public boolean send(T msg, String receiverId) {
+        return this.sender.send(msg, receiverId);
+    }
 
-	@Override
-	public boolean send(MsgType msg, Ref<MsgType> receiverRef) {
-		return this.sender.send(msg, receiverRef);
-	}
+    @Override
+    public boolean send(T msg, Ref<T> receiverRef) {
+        return this.sender.send(msg, receiverRef);
+    }
 
-	@Override
-	public boolean sendToGroup(MsgType msg, String groupId) {
-		return this.sender.sendToGroup(msg, groupId);
-	}
+    @Override
+    public boolean sendToGroup(T msg, String groupId) {
+        return this.sender.sendToGroup(msg, groupId);
+    }
 
-	@Override
-	public boolean sendToGroup(MsgType msg, Ref<MsgType> groupRef) {
-		return this.sender.sendToGroup(msg, groupRef);
-	}
+    @Override
+    public boolean sendToGroup(T msg, Ref<T> groupRef) {
+        return this.sender.sendToGroup(msg, groupRef);
+    }
 
-	@Override
-	public boolean broadcast(MsgType msg) {
-		return this.sender.broadcast(msg);
-	}
+    @Override
+    public boolean broadcast(T msg) {
+        return this.sender.broadcast(msg);
+    }
 
-	// /////////////////////////////////////////////////////////////////////////////
-	// MsgContainer Concerns
-	// /////////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////////
+    // MsgContainer Concerns
+    // /////////////////////////////////////////////////////////////////////////////
 
-	@Override
-	public List<MsgType> getMsgs() {
-		return this.msgContainer.getMsgs();
-	}
+    @Override
+    public List<T> getMsgs() {
+        return this.msgContainer.getMsgs();
+    }
 
-	@Override
-	IMsgSink<MsgType> getMsgSink() {
-		return this.msgContainer;
-	}
+    @Override
+    IMsgSink<T> getMsgSink() {
+        return this.msgContainer;
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void dispose() {
-		this.directory.removeAgentMsgBox(this);
-		this.msgContainer = (IMsgContainer<MsgType>) AgentMsgBox.dummyMsgContainer;
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public void dispose() {
+        this.directory.removeAgentMsgBox(this);
+        this.msgContainer = (IMsgContainer<T>) AgentMsgBox.dummyMsgContainer;
+    }
 
 }

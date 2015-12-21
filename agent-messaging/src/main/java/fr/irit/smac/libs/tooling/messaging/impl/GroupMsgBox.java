@@ -32,44 +32,44 @@ import fr.irit.smac.libs.tooling.messaging.impl.messagecontainer.IMsgSink;
  * 
  * @author lemouzy
  *
- * @param <MsgType>
+ * @param <T>
  */
-class GroupMsgBox<MsgType> extends Ref<MsgType> implements IMsgSink<MsgType> {
+class GroupMsgBox<T> extends Ref<T> implements IMsgSink<T> {
 
-	private final Set<Ref<MsgType>> agentRefs;
+    private final Set<Ref<T>> agentRefs;
 
-	public GroupMsgBox(String groupId) {
-		super(groupId);
-		this.agentRefs = new ConcurrentSkipListSet<Ref<MsgType>>();
-	}
+    public GroupMsgBox(String groupId) {
+        super(groupId);
+        this.agentRefs = new ConcurrentSkipListSet<Ref<T>>();
+    }
 
-	public void subscribeAgent(Ref<MsgType> agentRef) {
-		this.agentRefs.add(agentRef);
-	}
+    public void subscribeAgent(Ref<T> agentRef) {
+        this.agentRefs.add(agentRef);
+    }
 
-	public void unsubscribeAgent(Ref<MsgType> agentRef) {
-		this.agentRefs.remove(agentRef);
-	}
+    public void unsubscribeAgent(Ref<T> agentRef) {
+        this.agentRefs.remove(agentRef);
+    }
 
-	public Set<Ref<MsgType>> getAgents() {
-		return this.agentRefs;
-	}
+    public Set<Ref<T>> getAgents() {
+        return this.agentRefs;
+    }
 
-	@Override
-	IMsgSink<MsgType> getMsgSink() {
-		return this;
-	}
+    @Override
+    IMsgSink<T> getMsgSink() {
+        return this;
+    }
 
-	@Override
-	public boolean putMsg(MsgType msg) {
-		boolean sentToAll = true;
+    @Override
+    public boolean putMsg(T msg) {
+        boolean sentToAll = true;
 
-		for (Ref<MsgType> ref : agentRefs) {
+        for (Ref<T> ref : agentRefs) {
 
-			sentToAll = ref.getMsgSink().putMsg(msg) && sentToAll;
-		}
+            sentToAll = ref.getMsgSink().putMsg(msg) && sentToAll;
+        }
 
-		return sentToAll;
-	}
+        return sentToAll;
+    }
 
 }
