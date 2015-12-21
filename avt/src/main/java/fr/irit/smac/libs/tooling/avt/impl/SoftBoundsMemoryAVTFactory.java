@@ -21,24 +21,24 @@
  */
 package fr.irit.smac.libs.tooling.avt.impl;
 
-import fr.irit.smac.libs.tooling.avt.AVT;
-import fr.irit.smac.libs.tooling.avt.AVTFactory;
-import fr.irit.smac.libs.tooling.avt.deltamanager.DeltaManagerFactory;
+import fr.irit.smac.libs.tooling.avt.IAVT;
+import fr.irit.smac.libs.tooling.avt.IAVTFactory;
+import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory;
 
-public class SoftBoundsMemoryAVTFactory implements AVTFactory<AVT> {
+public class SoftBoundsMemoryAVTFactory implements IAVTFactory<IAVT> {
 
-	private final int softBoundsMemory;
+    private final int softBoundsMemory;
 
-	public SoftBoundsMemoryAVTFactory(int softBoundsMemory) {
-		super();
-		this.softBoundsMemory = softBoundsMemory;
-	}
+    public SoftBoundsMemoryAVTFactory(int softBoundsMemory) {
+        super();
+        this.softBoundsMemory = softBoundsMemory;
+    }
 
-	@Override
-	public AVT createInstance(double lowerBound, double upperBound, double startValue,
-			DeltaManagerFactory<?> deltaManagerFactory) {
+    @Override
+    public IAVT createInstance(double lowerBound, double upperBound, double startValue,
+        IDeltaManagerFactory<?> deltaManagerFactory) {
 
-		return new SoftBoundsMemoryAVT(lowerBound, upperBound, startValue, deltaManagerFactory, this.softBoundsMemory);
-	}
+        return new SoftBoundsMemoryAVT(lowerBound, upperBound, startValue, deltaManagerFactory, this.softBoundsMemory);
+    }
 
 }

@@ -21,16 +21,16 @@
  */
 package fr.irit.smac.libs.tooling.avt.impl;
 
-import fr.irit.smac.libs.tooling.avt.AVT;
-import fr.irit.smac.libs.tooling.avt.AVTFactory;
-import fr.irit.smac.libs.tooling.avt.deltamanager.DeltaManagerFactory;
+import fr.irit.smac.libs.tooling.avt.IAVT;
+import fr.irit.smac.libs.tooling.avt.IAVTFactory;
+import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory;
 
-public class SoftBoundsAVTFactory implements AVTFactory<AVT> {
+public class SoftBoundsAVTFactory implements IAVTFactory<IAVT> {
 
-	@Override
-	public AVT createInstance(double lowerBound, double upperBound, double startValue,
-			DeltaManagerFactory<?> deltaManagerFactory) {
-		return new SoftBoundsAVT(lowerBound, upperBound, startValue, deltaManagerFactory);
-	}
+    @Override
+    public IAVT createInstance(double lowerBound, double upperBound, double startValue,
+        IDeltaManagerFactory<?> deltaManagerFactory) {
+        return new SoftBoundsAVT(lowerBound, upperBound, startValue, deltaManagerFactory);
+    }
 
 }

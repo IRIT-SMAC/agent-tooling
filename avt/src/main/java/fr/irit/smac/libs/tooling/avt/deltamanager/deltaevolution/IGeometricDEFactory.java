@@ -19,27 +19,9 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package fr.irit.smac.libs.tooling.avt;
+package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution;
 
-/**
- * Defines the values that can be given to the AVT <code>adjustValue(Feedback feedback)</code> method.
- * 
- * @author Sylvain Lemouzy
- */
-public enum Feedback {
-	GREATER {
-		public String toString() {
-			return "+";
-		}
-	},
-	LOWER {
-		public String toString() {
-			return "-";
-		}
-	},
-	GOOD {
-		public String toString() {
-			return "g";
-		}
-	}
+public interface IGeometricDEFactory extends IDeltaEvolutionFactory {
+    @Override
+    IGeometricDE createInstance();
 }

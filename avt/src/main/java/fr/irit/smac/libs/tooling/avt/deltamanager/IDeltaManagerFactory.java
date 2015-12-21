@@ -19,8 +19,18 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution;
+package fr.irit.smac.libs.tooling.avt.deltamanager;
 
-public interface DeltaEvolutionFactory {
-	DeltaEvolution createInstance();
+import fr.irit.smac.libs.tooling.avt.range.IRange;
+
+public interface IDeltaManagerFactory<T extends IDeltaManager> {
+
+    /**
+     * Instanciate a DeltaManager that will be used for the given AVT
+     * 
+     * @param avt
+     * @return
+     */
+    T createInstance(IRange range);
+
 }

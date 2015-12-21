@@ -21,54 +21,57 @@
  */
 package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl;
 
-import fr.irit.smac.libs.tooling.avt.deltamanager.DeltaManager.Direction;
-import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.DMDecision;
+import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection;
+import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision;
 
-public class StandardDMD implements DMDecision {
+public class StandardDMD implements IDMDecision {
 
-	private Direction lastDirection;
+    private EDirection lastDirection;
 
-	public StandardDMD() {
-		this.resetState();
-	}
+    public StandardDMD() {
+        this.resetState();
+    }
 
-	@Override
-	public Decision getNextDecision(Direction direction) {
+    @Override
+    public EDecision getNextDecision(EDirection direction) {
 
-		Decision decision = this.getNextDecisionIf(direction);
-		this.lastDirection = direction;
+        EDecision decision = this.getNextDecisionIf(direction);
+        this.lastDirection = direction;
 
-		return decision;
-	}
+        return decision;
+    }
 
-	@Override
-	public void resetState() {
-		this.lastDirection = null;
-	}
+    @Override
+    public void resetState() {
+        this.lastDirection = null;
+    }
 
-	@Override
-	public Decision getNextDecisionIf(Direction direction) {
-		if (direction == null) {
-			throw new IllegalArgumentException("direction is null");
-		}
+    @Override
+    public EDecision getNextDecisionIf(EDirection direction) {
+        if (direction == null) {
+            throw new IllegalArgumentException("direction is null");
+        }
 
-		Decision decision = null;
+        EDecision decision = null;
 
-		if (this.lastDirection == Direction.NONE) {
-			if (direction == Direction.NONE) {
-				decision = Decision.DECREASE_DELTA;
-			} else {
-				decision = Decision.INCREASE_DELTA;
-			}
-		} else if (this.lastDirection != null) {
-			if (this.lastDirection != direction) {
-				decision = Decision.DECREASE_DELTA;
-			} else {
-				decision = Decision.INCREASE_DELTA;
-			}
-		}
+        if (this.lastDirection == EDirection.NONE) {
+            if (direction == EDirection.NONE) {
+                decision = EDecision.DECREASE_DELTA;
+            }
+            else {
+                decision = EDecision.INCREASE_DELTA;
+            }
+        }
+        else if (this.lastDirection != null) {
+            if (this.lastDirection != direction) {
+                decision = EDecision.DECREASE_DELTA;
+            }
+            else {
+                decision = EDecision.INCREASE_DELTA;
+            }
+        }
 
-		return decision;
-	}
+        return decision;
+    }
 
 }

@@ -19,10 +19,40 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution;
+package fr.irit.smac.libs.tooling.avt.range;
 
-public interface GeometricDE extends DeltaEvolution {
-	public double getIncreaseFactor();
+import java.math.BigDecimal;
 
-	public double getDecreaseFactor();
+public interface IRange {
+
+    /**
+     * The lower bound of this range.
+     * 
+     * @return the lower bound
+     */
+    public double getLowerBound();
+
+    /**
+     * The upper bound of this range.
+     * 
+     * @return the upper bound
+     */
+    public double getUpperBound();
+
+    /**
+     * 
+     * @param value
+     * @return true if value is inside lower et upper bounds, including bounds
+     */
+    public boolean isInsideRange(double value);
+
+    /**
+     * Computes the size of the range
+     */
+    public BigDecimal computeRangeSize();
+
+    /**
+     * @return isInfinite
+     */
+    public boolean hasInfiniteSize();
 }

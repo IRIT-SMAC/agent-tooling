@@ -21,40 +21,46 @@
  */
 package fr.irit.smac.libs.tooling.avt.example;
 
-import fr.irit.smac.libs.tooling.avt.AVT;
+import fr.irit.smac.libs.tooling.avt.IAVT;
 import fr.irit.smac.libs.tooling.avt.AVTBuilder;
-import fr.irit.smac.libs.tooling.avt.Feedback;
+import fr.irit.smac.libs.tooling.avt.EFeedback;
 
 public class SearchValueExample {
 
-	public static void main(String[] args) {
-		double searchedValue = 9.208;
-		double minValue = 0;
-		double maxValue = 10;
-		double precision = .001;
-		int nbCycles = 0;
+    private SearchValueExample() {
 
-		AVT avt = new AVTBuilder().lowerBound(minValue).upperBound(maxValue).deltaMin(precision).deltaDecreaseDelay(1)
-				.deltaIncreaseDelay(1).startValue(1.).build();
+    }
 
-		while (Math.abs(avt.getValue() - searchedValue) > precision) {
-			System.out.println("============================");
-			System.out.println("Cycle number " + ++nbCycles);
-			System.out.println("DeltaValue = " + avt.getAdvancedAVT().getDeltaManager().getDelta());
-			System.out.println("CurrentValue = " + avt.getValue());
-			if (avt.getValue() < searchedValue) {
-				avt.adjustValue(Feedback.GREATER);
-				System.out.println("-> Increasing value");
+    public static void main(String[] args) {
+        double searchedValue = 9.208;
+        double minValue = 0;
+        double maxValue = 10;
+        double precision = .001;
+        int nbCycles = 0;
 
-			} else if (avt.getValue() > searchedValue) {
-				avt.adjustValue(Feedback.LOWER);
-				System.out.println("-> Decreasing value");
-			} else {
-				avt.adjustValue(Feedback.GOOD);
-				System.out.println("-> Good value");
-			}
-			System.out.println("DeltaValue = " + avt.getAdvancedAVT().getDeltaManager().getDelta());
-			System.out.println("CurrentValue = " + avt.getValue());
-		}
-	}
+        IAVT avt = new AVTBuilder().lowerBound(minValue).upperBound(maxValue).deltaMin(precision).deltaDecreaseDelay(1)
+            .deltaIncreaseDelay(1).startValue(1.).build();
+
+        while (Math.abs(avt.getValue() - searchedValue) > precision) {
+            System.out.println("============================");
+            System.out.println("Cycle number " + ++nbCycles);
+            System.out.println("DeltaValue = " + avt.getAdvancedAVT().getDeltaManager().getDelta());
+            System.out.println("CurrentValue = " + avt.getValue());
+            if (avt.getValue() < searchedValue) {
+                avt.adjustValue(EFeedback.GREATER);
+                System.out.println("-> Increasing value");
+
+            }
+            else if (avt.getValue() > searchedValue) {
+                avt.adjustValue(EFeedback.LOWER);
+                System.out.println("-> Decreasing value");
+            }
+            else {
+                avt.adjustValue(EFeedback.GOOD);
+                System.out.println("-> Good value");
+            }
+            System.out.println("DeltaValue = " + avt.getAdvancedAVT().getDeltaManager().getDelta());
+            System.out.println("CurrentValue = " + avt.getValue());
+        }
+    }
 }

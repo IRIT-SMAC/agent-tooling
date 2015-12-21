@@ -21,39 +21,39 @@
  */
 package fr.irit.smac.libs.tooling.avt.range.impl;
 
-import fr.irit.smac.libs.tooling.avt.range.MutableRange;
+import fr.irit.smac.libs.tooling.avt.range.IMutableRange;
 
-public class MutableRangeImpl extends AbstractRange implements MutableRange {
+public class MutableRangeImpl extends AbstractRange implements IMutableRange {
 
-	private double lowerBound;
-	private double upperBound;
+    private double lowerBound;
+    private double upperBound;
 
-	public MutableRangeImpl(double lowerBound, double upperBound) {
-		super();
-		this.lowerBound = lowerBound;
-		this.upperBound = upperBound;
-	}
+    public MutableRangeImpl(double lowerBound, double upperBound) {
+        super();
+        this.lowerBound = lowerBound;
+        this.upperBound = upperBound;
+    }
 
-	@Override
-	public double getLowerBound() {
-		return this.lowerBound;
-	}
+    @Override
+    public double getLowerBound() {
+        return this.lowerBound;
+    }
 
-	@Override
-	public double getUpperBound() {
-		return this.upperBound;
-	}
+    @Override
+    public double getUpperBound() {
+        return this.upperBound;
+    }
 
-	@Override
-	public void setLowerBound(double lowerBound) {
-		this.lowerBound = lowerBound;
-		this.checkBoundsConsistency();
-	}
+    @Override
+    public void setLowerBound(double lowerBound) {
+        this.lowerBound = lowerBound;
+        this.checkBoundsConsistency();
+    }
 
-	@Override
-	public void setUpperBound(double upperBound) {
-		this.upperBound = upperBound;
-		this.checkBoundsConsistency();
-	}
+    @Override
+    public void setUpperBound(double upperBound) {
+        this.upperBound = upperBound;
+        this.checkBoundsConsistency();
+    }
 
 }

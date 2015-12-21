@@ -21,34 +21,34 @@
  */
 package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl;
 
-import fr.irit.smac.libs.tooling.avt.deltamanager.DeltaManager.Direction;
-import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.DMDecision;
+import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection;
+import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision;
 
-public class ForwardingDMD implements DMDecision {
+public class ForwardingDMD implements IDMDecision {
 
-	private final DMDecision dmDecison;
+    private final IDMDecision dmDecison;
 
-	public ForwardingDMD(DMDecision dmDecison) {
-		super();
-		if (dmDecison == null) {
-			throw new IllegalArgumentException("dmDecison == null");
-		}
-		this.dmDecison = dmDecison;
-	}
+    public ForwardingDMD(IDMDecision dmDecison) {
+        super();
+        if (dmDecison == null) {
+            throw new IllegalArgumentException("dmDecison == null");
+        }
+        this.dmDecison = dmDecison;
+    }
 
-	@Override
-	public Decision getNextDecision(Direction direction) {
-		return this.dmDecison.getNextDecision(direction);
-	}
+    @Override
+    public EDecision getNextDecision(EDirection direction) {
+        return this.dmDecison.getNextDecision(direction);
+    }
 
-	@Override
-	public void resetState() {
-		this.dmDecison.resetState();
-	}
+    @Override
+    public void resetState() {
+        this.dmDecison.resetState();
+    }
 
-	@Override
-	public Decision getNextDecisionIf(Direction direction) {
-		return this.dmDecison.getNextDecisionIf(direction);
-	}
+    @Override
+    public EDecision getNextDecisionIf(EDirection direction) {
+        return this.dmDecison.getNextDecisionIf(direction);
+    }
 
 }

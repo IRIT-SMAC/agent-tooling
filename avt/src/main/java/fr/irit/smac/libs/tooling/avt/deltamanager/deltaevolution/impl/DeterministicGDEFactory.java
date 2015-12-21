@@ -21,23 +21,23 @@
  */
 package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl;
 
-import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.GeometricDE;
-import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.GeometricDEFactory;
+import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDE;
+import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDEFactory;
 
-public class DeterministicGDEFactory implements GeometricDEFactory {
+public class DeterministicGDEFactory implements IGeometricDEFactory {
 
-	private final double increaseFactor;
-	private final double decreaseFactor;
+    private final double increaseFactor;
+    private final double decreaseFactor;
 
-	public DeterministicGDEFactory(double increaseFactor, double decreaseFactor) {
-		super();
-		this.increaseFactor = increaseFactor;
-		this.decreaseFactor = decreaseFactor;
-	}
+    public DeterministicGDEFactory(double increaseFactor, double decreaseFactor) {
+        super();
+        this.increaseFactor = increaseFactor;
+        this.decreaseFactor = decreaseFactor;
+    }
 
-	@Override
-	public GeometricDE createInstance() {
-		return new DeterministicGDE(increaseFactor, decreaseFactor);
-	}
+    @Override
+    public IGeometricDE createInstance() {
+        return new DeterministicGDE(increaseFactor, decreaseFactor);
+    }
 
 }

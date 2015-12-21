@@ -23,53 +23,53 @@ package fr.irit.smac.libs.tooling.avt.deltamanager.impl;
 
 import java.math.BigDecimal;
 
-import fr.irit.smac.libs.tooling.avt.deltamanager.DeltaManager;
+import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager;
 
 public class BoundedDM extends ForwardingDM {
 
-	/**
-	 * @param dm
-	 * @throws IllegalArgumentException
-	 *             if dm == null
-	 */
-	public BoundedDM(DeltaManager dm) {
-		super(dm);
-	}
+    /**
+     * @param dm
+     * @throws IllegalArgumentException
+     *             if dm == null
+     */
+    public BoundedDM(IDeltaManager dm) {
+        super(dm);
+    }
 
-	@Override
-	public void adjustDelta(Direction direction) {
-		super.adjustDelta(direction);
-		this.ensureBoundedDelta();
-	}
+    @Override
+    public void adjustDelta(EDirection direction) {
+        super.adjustDelta(direction);
+        this.ensureBoundedDelta();
+    }
 
-	@Override
-	public void reconfigure(double deltaMin, BigDecimal range) {
-		super.reconfigure(deltaMin, range);
-		this.ensureBoundedDelta();
-	}
+    @Override
+    public void reconfigure(double deltaMin, BigDecimal range) {
+        super.reconfigure(deltaMin, range);
+        this.ensureBoundedDelta();
+    }
 
-	private void ensureBoundedDelta() {
-		double currentDelta = this.getBoundedDelta(this.dm.getDelta());
-		if (currentDelta != this.dm.getDelta()) {
-			this.dm.getAdvancedDM().setDelta(currentDelta);
-		}
-	}
+    private void ensureBoundedDelta() {
+        double currentDelta = this.getBoundedDelta(this.dm.getDelta());
+        if (currentDelta != this.dm.getDelta()) {
+            this.dm.getAdvancedDM().setDelta(currentDelta);
+        }
+    }
 
-	private double getBoundedDelta(double delta) {
-		if (Double.isNaN(delta)) {
-			throw new IllegalArgumentException("delta isNaN");
-		}
-		double currentDelta = delta;
-		if (currentDelta < this.dm.getAdvancedDM().getDeltaMin()) {
-			currentDelta = this.dm.getAdvancedDM().getDeltaMin();
-		}
-		return currentDelta;
-	}
+    private double getBoundedDelta(double delta) {
+        if (Double.isNaN(delta)) {
+            throw new IllegalArgumentException("delta isNaN");
+        }
+        double currentDelta = delta;
+        if (currentDelta < this.dm.getAdvancedDM().getDeltaMin()) {
+            currentDelta = this.dm.getAdvancedDM().getDeltaMin();
+        }
+        return currentDelta;
+    }
 
-	@Override
-	public double getDeltaIf(Direction direction) {
-		double delta = super.getDeltaIf(direction);
-		return this.getBoundedDelta(delta);
-	}
+    @Override
+    public double getDeltaIf(EDirection direction) {
+        double delta = super.getDeltaIf(direction);
+        return this.getBoundedDelta(delta);
+    }
 
 }

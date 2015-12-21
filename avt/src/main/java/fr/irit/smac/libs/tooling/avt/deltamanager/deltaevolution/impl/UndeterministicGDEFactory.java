@@ -21,36 +21,37 @@
  */
 package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl;
 
-import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.GeometricDE;
-import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.GeometricDEFactory;
+import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDE;
+import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDEFactory;
 
-public class UndeterministicGDEFactory implements GeometricDEFactory {
+public class UndeterministicGDEFactory implements IGeometricDEFactory {
 
-	private final double increaseFactor;
-	private final double decreaseFactor;
-	private final double decreaseNoise;
-	private final Long randomSeed;
+    private final double increaseFactor;
+    private final double decreaseFactor;
+    private final double decreaseNoise;
+    private final Long   randomSeed;
 
-	public UndeterministicGDEFactory(double increaseFactor, double decreaseFactor, double decreaseNoise) {
-		this(increaseFactor, decreaseFactor, decreaseNoise, null);
-	}
+    public UndeterministicGDEFactory(double increaseFactor, double decreaseFactor, double decreaseNoise) {
+        this(increaseFactor, decreaseFactor, decreaseNoise, null);
+    }
 
-	public UndeterministicGDEFactory(double increaseFactor, double decreaseFactor, double decreaseNoise,
-			Long randomSeed) {
-		super();
-		this.increaseFactor = increaseFactor;
-		this.decreaseFactor = decreaseFactor;
-		this.decreaseNoise = decreaseNoise;
-		this.randomSeed = randomSeed;
-	}
+    public UndeterministicGDEFactory(double increaseFactor, double decreaseFactor, double decreaseNoise,
+        Long randomSeed) {
+        super();
+        this.increaseFactor = increaseFactor;
+        this.decreaseFactor = decreaseFactor;
+        this.decreaseNoise = decreaseNoise;
+        this.randomSeed = randomSeed;
+    }
 
-	@Override
-	public GeometricDE createInstance() {
-		if (this.randomSeed == null) {
-			return new UndeterministicGDE(increaseFactor, decreaseFactor, decreaseNoise);
-		} else {
-			return new UndeterministicGDE(increaseFactor, decreaseFactor, decreaseNoise, randomSeed);
-		}
-	}
+    @Override
+    public IGeometricDE createInstance() {
+        if (this.randomSeed == null) {
+            return new UndeterministicGDE(increaseFactor, decreaseFactor, decreaseNoise);
+        }
+        else {
+            return new UndeterministicGDE(increaseFactor, decreaseFactor, decreaseNoise, randomSeed);
+        }
+    }
 
 }

@@ -1,6 +1,6 @@
 /*
  * #%L
- * agent-tooling
+ * avt
  * %%
  * Copyright (C) 2014 - 2015 IRIT - SMAC Team
  * %%
@@ -19,41 +19,13 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package fr.irit.smac.libs.tooling;
+package fr.irit.smac.libs.tooling.avt;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
-    }
+public interface IAVTFactory<T extends IAVT> {
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
+    T createInstance(double lowerBound, double upperBound, double startValue,
+        IDeltaManagerFactory<?> deltaManagerFactory);
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
-    }
 }

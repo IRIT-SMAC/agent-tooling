@@ -23,45 +23,46 @@ package fr.irit.smac.libs.tooling.avt.range.impl;
 
 import java.math.BigDecimal;
 
-import fr.irit.smac.libs.tooling.avt.range.Range;
+import fr.irit.smac.libs.tooling.avt.range.IRange;
 
-public abstract class AbstractRange implements Range {
+public abstract class AbstractRange implements IRange {
 
-	@Override
-	public BigDecimal computeRangeSize() {
-		if (this.hasInfiniteSize()) {
-			return BigDecimal.valueOf(Double.MAX_VALUE).subtract(BigDecimal.valueOf(-Double.MAX_VALUE));
-		} else {
-			return BigDecimal.valueOf(this.getUpperBound()).subtract(BigDecimal.valueOf(this.getLowerBound()));
-		}
-	}
+    @Override
+    public BigDecimal computeRangeSize() {
+        if (this.hasInfiniteSize()) {
+            return BigDecimal.valueOf(Double.MAX_VALUE).subtract(BigDecimal.valueOf(-Double.MAX_VALUE));
+        }
+        else {
+            return BigDecimal.valueOf(this.getUpperBound()).subtract(BigDecimal.valueOf(this.getLowerBound()));
+        }
+    }
 
-	@Override
-	public boolean hasInfiniteSize() {
-		return this.getUpperBound() == Double.POSITIVE_INFINITY || this.getLowerBound() == Double.NEGATIVE_INFINITY;
-	}
+    @Override
+    public boolean hasInfiniteSize() {
+        return this.getUpperBound() == Double.POSITIVE_INFINITY || this.getLowerBound() == Double.NEGATIVE_INFINITY;
+    }
 
-	protected void checkBoundsConsistency() {
-		if (Double.isNaN(this.getLowerBound())) {
-			throw new IllegalArgumentException("lowerBound isNaN");
-		}
-		if (Double.isNaN(this.getUpperBound())) {
-			throw new IllegalArgumentException("upperBound isNaN");
-		}
+    protected void checkBoundsConsistency() {
+        if (Double.isNaN(this.getLowerBound())) {
+            throw new IllegalArgumentException("lowerBound isNaN");
+        }
+        if (Double.isNaN(this.getUpperBound())) {
+            throw new IllegalArgumentException("upperBound isNaN");
+        }
 
-		if (this.getLowerBound() > this.getUpperBound()) {
-			throw new IllegalArgumentException("lowerBound > upperBound");
-		}
-	}
+        if (this.getLowerBound() > this.getUpperBound()) {
+            throw new IllegalArgumentException("lowerBound > upperBound");
+        }
+    }
 
-	@Override
-	public boolean isInsideRange(double value) {
-		return value >= this.getLowerBound() && value <= this.getUpperBound();
-	}
+    @Override
+    public boolean isInsideRange(double value) {
+        return value >= this.getLowerBound() && value <= this.getUpperBound();
+    }
 
-	@Override
-	public String toString() {
-		return "[" + this.getLowerBound() + " ; " + this.getUpperBound() + "]";
-	}
+    @Override
+    public String toString() {
+        return "[" + this.getLowerBound() + " ; " + this.getUpperBound() + "]";
+    }
 
 }

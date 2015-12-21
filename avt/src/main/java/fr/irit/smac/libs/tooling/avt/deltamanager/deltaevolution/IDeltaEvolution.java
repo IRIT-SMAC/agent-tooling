@@ -21,8 +21,8 @@
  */
 package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution;
 
-public interface DeltaEvolution {
-	public double getIncreasedDelta(double delta);
+public interface IDeltaEvolution {
+    public double getIncreasedDelta(double delta);
 
-	public double getDecreasedDelta(double delta);
+    public double getDecreasedDelta(double delta);
 }

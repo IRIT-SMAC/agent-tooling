@@ -19,18 +19,18 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package fr.irit.smac.libs.tooling.avt.deltamanager;
+package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision;
 
-import fr.irit.smac.libs.tooling.avt.range.Range;
+import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection;
 
-public interface DeltaManagerFactory<DeltaManagerType extends DeltaManager> {
+public interface IDMDecision {
+    public enum EDecision {
+        INCREASE_DELTA, DECREASE_DELTA, SAME_DELTA
+    }
 
-	/**
-	 * Instanciate a DeltaManager that will be used for the given AVT
-	 * 
-	 * @param avt
-	 * @return
-	 */
-	DeltaManagerType createInstance(Range range);
+    public EDecision getNextDecision(EDirection direction);
 
+    public EDecision getNextDecisionIf(EDirection direction);
+
+    public void resetState();
 }

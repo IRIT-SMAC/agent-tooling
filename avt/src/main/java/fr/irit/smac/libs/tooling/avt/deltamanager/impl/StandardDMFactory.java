@@ -21,41 +21,42 @@
  */
 package fr.irit.smac.libs.tooling.avt.deltamanager.impl;
 
-import fr.irit.smac.libs.tooling.avt.deltamanager.DeltaManager;
-import fr.irit.smac.libs.tooling.avt.deltamanager.DeltaManagerFactory;
-import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.GeometricDEFactory;
-import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.DMDecisionFactory;
-import fr.irit.smac.libs.tooling.avt.range.Range;
+import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager;
+import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory;
+import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDEFactory;
+import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecisionFactory;
+import fr.irit.smac.libs.tooling.avt.range.IRange;
 
-public class StandardDMFactory implements DeltaManagerFactory<DeltaManager> {
+public class StandardDMFactory implements IDeltaManagerFactory<IDeltaManager> {
 
-	private final GeometricDEFactory deltaEvolutionFactory;
-	private final DMDecisionFactory dmDecisionFactory;
-	private final double deltaMin;
-	private final double deltaMax;
+    private final IGeometricDEFactory deltaEvolutionFactory;
+    private final IDMDecisionFactory  dmDecisionFactory;
+    private final double              deltaMin;
+    private final double              deltaMax;
 
-	public StandardDMFactory(GeometricDEFactory deltaEvolutionFactory, DMDecisionFactory dmDecisionFactory,
-			double deltaMin) {
-		this(deltaEvolutionFactory, dmDecisionFactory, deltaMin, Double.NaN);
-	}
+    public StandardDMFactory(IGeometricDEFactory deltaEvolutionFactory, IDMDecisionFactory dmDecisionFactory,
+        double deltaMin) {
+        this(deltaEvolutionFactory, dmDecisionFactory, deltaMin, Double.NaN);
+    }
 
-	public StandardDMFactory(GeometricDEFactory deltaEvolutionFatory, DMDecisionFactory dmDecisionFactory,
-			double deltaMin, double deltaMax) {
-		super();
-		this.deltaEvolutionFactory = deltaEvolutionFatory;
-		this.dmDecisionFactory = dmDecisionFactory;
-		this.deltaMin = deltaMin;
-		this.deltaMax = deltaMax;
-	}
+    public StandardDMFactory(IGeometricDEFactory deltaEvolutionFatory, IDMDecisionFactory dmDecisionFactory,
+        double deltaMin, double deltaMax) {
+        super();
+        this.deltaEvolutionFactory = deltaEvolutionFatory;
+        this.dmDecisionFactory = dmDecisionFactory;
+        this.deltaMin = deltaMin;
+        this.deltaMax = deltaMax;
+    }
 
-	@Override
-	public DeltaManager createInstance(Range range) {
-		if (Double.isNaN(this.deltaMax)) {
-			return new StandardDM(deltaMin, range, this.deltaEvolutionFactory.createInstance(),
-					this.dmDecisionFactory.createInstance());
-		} else {
-			return new StandardDM(deltaMin, deltaMax, range, this.deltaEvolutionFactory.createInstance(),
-					this.dmDecisionFactory.createInstance());
-		}
-	}
+    @Override
+    public IDeltaManager createInstance(IRange range) {
+        if (Double.isNaN(this.deltaMax)) {
+            return new StandardDM(deltaMin, range, this.deltaEvolutionFactory.createInstance(),
+                this.dmDecisionFactory.createInstance());
+        }
+        else {
+            return new StandardDM(deltaMin, deltaMax, range, this.deltaEvolutionFactory.createInstance(),
+                this.dmDecisionFactory.createInstance());
+        }
+    }
 }

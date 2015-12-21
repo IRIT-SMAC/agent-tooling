@@ -21,20 +21,20 @@
  */
 package fr.irit.smac.libs.tooling.avt.deltamanager.impl;
 
-import fr.irit.smac.libs.tooling.avt.deltamanager.DeltaManager;
-import fr.irit.smac.libs.tooling.avt.deltamanager.DeltaManagerFactory;
-import fr.irit.smac.libs.tooling.avt.range.Range;
+import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager;
+import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory;
+import fr.irit.smac.libs.tooling.avt.range.IRange;
 
-public class BoundedDMFactory implements DeltaManagerFactory<DeltaManager> {
+public class BoundedDMFactory implements IDeltaManagerFactory<IDeltaManager> {
 
-	private final DeltaManagerFactory<?> nestedDeltaManagerFactory;
+    private final IDeltaManagerFactory<?> nestedDeltaManagerFactory;
 
-	public BoundedDMFactory(DeltaManagerFactory<?> nestedDeltaManagerFactory) {
-		this.nestedDeltaManagerFactory = nestedDeltaManagerFactory;
-	}
+    public BoundedDMFactory(IDeltaManagerFactory<?> nestedDeltaManagerFactory) {
+        this.nestedDeltaManagerFactory = nestedDeltaManagerFactory;
+    }
 
-	@Override
-	public DeltaManager createInstance(Range range) {
-		return new BoundedDM(this.nestedDeltaManagerFactory.createInstance(range));
-	}
+    @Override
+    public IDeltaManager createInstance(IRange range) {
+        return new BoundedDM(this.nestedDeltaManagerFactory.createInstance(range));
+    }
 }

@@ -30,29 +30,31 @@ import fr.irit.smac.libs.tooling.avt.impl.StandardAVTFactory;
  * 
  * @author Sylvain Lemouzy
  */
-public class AVTBuilder extends AbstractAVTBuilder<AVT> {
+public class AVTBuilder extends AbstractAVTBuilder<IAVT> {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see fr.irit.smac.util.avt.IAVTBuilder#build()
-	 */
-	@Override
-	public AVT build() {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.util.avt.IAVTBuilder#build()
+     */
+    @Override
+    public IAVT build() {
 
-		if (this.avtFactory == null) {
+        if (this.avtFactory == null) {
 
-			if (!this.isHardBounds) {
-				if (this.softBoundsMemory > 0) {
-					this.avtFactory = new SoftBoundsMemoryAVTFactory(this.softBoundsMemory);
-				} else {
-					this.avtFactory = new SoftBoundsAVTFactory();
-				}
-			} else {
-				this.avtFactory = new StandardAVTFactory();
-			}
-		}
+            if (!this.isHardBounds) {
+                if (this.softBoundsMemory > 0) {
+                    this.avtFactory = new SoftBoundsMemoryAVTFactory(this.softBoundsMemory);
+                }
+                else {
+                    this.avtFactory = new SoftBoundsAVTFactory();
+                }
+            }
+            else {
+                this.avtFactory = new StandardAVTFactory();
+            }
+        }
 
-		return super.build();
-	}
+        return super.build();
+    }
 }

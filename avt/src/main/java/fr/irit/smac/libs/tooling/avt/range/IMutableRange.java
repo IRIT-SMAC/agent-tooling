@@ -21,27 +21,28 @@
  */
 package fr.irit.smac.libs.tooling.avt.range;
 
-public interface MutableRange extends Range {
-	/**
-	 * Sets the lower bound of this range.
-	 *
-	 * @param lowerBound
-	 *            lower bound to be set
-	 * @throws IllegalArgumentException
-	 *             if the lowerBound to set is greater than the current upperBound (
-	 *             <code>if (lowerBound > this.getUpperBound())</code>)
-	 */
-	public void setLowerBound(double lowerBound);
+public interface IMutableRange extends IRange {
+    /**
+     * Sets the lower bound of this range.
+     *
+     * @param lowerBound
+     *            lower bound to be set
+     * @throws IllegalArgumentException
+     *             if the lowerBound to set is greater than the current
+     *             upperBound (
+     *             <code>if (lowerBound > this.getUpperBound())</code>)
+     */
+    public void setLowerBound(double lowerBound);
 
-	/**
-	 * Sets the upper bound of this range.
-	 *
-	 * @param upperBound
-	 *            upper bound to be set
-	 * @throws IllegalArgumentException
-	 *             if the upperBound to set is lower than the current lowerBound (
-	 *             <code>if (upperBound < this.getLowerBound())</code>)
-	 */
-	public void setUpperBound(double upperBound);
+    /**
+     * Sets the upper bound of this range.
+     *
+     * @param upperBound
+     *            upper bound to be set
+     * @throws IllegalArgumentException
+     *             if the upperBound to set is lower than the current lowerBound
+     *             ( <code>if (upperBound < this.getLowerBound())</code>)
+     */
+    public void setUpperBound(double upperBound);
 
 }

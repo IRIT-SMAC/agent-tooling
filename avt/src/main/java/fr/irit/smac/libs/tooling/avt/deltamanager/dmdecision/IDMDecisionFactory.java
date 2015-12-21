@@ -19,13 +19,8 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package fr.irit.smac.libs.tooling.avt;
+package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision;
 
-import fr.irit.smac.libs.tooling.avt.deltamanager.DeltaManagerFactory;
-
-public interface AVTFactory<AVTType extends AVT> {
-
-	AVTType createInstance(double lowerBound, double upperBound, double startValue,
-			DeltaManagerFactory<?> deltaManagerFactory);
-
+public interface IDMDecisionFactory {
+    IDMDecision createInstance();
 }

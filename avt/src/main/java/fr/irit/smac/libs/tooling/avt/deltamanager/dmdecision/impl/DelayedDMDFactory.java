@@ -21,25 +21,25 @@
  */
 package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl;
 
-import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.DMDecision;
-import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.DMDecisionFactory;
+import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision;
+import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecisionFactory;
 
-public class DelayedDMDFactory implements DMDecisionFactory {
+public class DelayedDMDFactory implements IDMDecisionFactory {
 
-	private final DMDecisionFactory nestedDMDecisonFactory;
-	private final int increaseDelay;
-	private final int decreaseDelay;
+    private final IDMDecisionFactory nestedDMDecisonFactory;
+    private final int                increaseDelay;
+    private final int                decreaseDelay;
 
-	public DelayedDMDFactory(DMDecisionFactory nestedDMDecisonFactory, int increaseDelay, int decreaseDelay) {
-		super();
-		this.nestedDMDecisonFactory = nestedDMDecisonFactory;
-		this.increaseDelay = increaseDelay;
-		this.decreaseDelay = decreaseDelay;
-	}
+    public DelayedDMDFactory(IDMDecisionFactory nestedDMDecisonFactory, int increaseDelay, int decreaseDelay) {
+        super();
+        this.nestedDMDecisonFactory = nestedDMDecisonFactory;
+        this.increaseDelay = increaseDelay;
+        this.decreaseDelay = decreaseDelay;
+    }
 
-	@Override
-	public DMDecision createInstance() {
-		return new DelayedDMD(this.nestedDMDecisonFactory.createInstance(), this.increaseDelay, this.decreaseDelay);
-	}
+    @Override
+    public IDMDecision createInstance() {
+        return new DelayedDMD(this.nestedDMDecisonFactory.createInstance(), this.increaseDelay, this.decreaseDelay);
+    }
 
 }

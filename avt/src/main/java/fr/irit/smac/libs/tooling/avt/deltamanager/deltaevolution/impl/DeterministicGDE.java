@@ -21,72 +21,72 @@
  */
 package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl;
 
-import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.GeometricDE;
+import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDE;
 
-public class DeterministicGDE implements GeometricDE {
+public class DeterministicGDE implements IGeometricDE {
 
-	protected final double decreaseFactor;
-	protected final double increaseFactor;
+    protected final double decreaseFactor;
+    protected final double increaseFactor;
 
-	/**
-	 * 
-	 * @param decreaseFactor
-	 *            the decrease factor used for delta decrease
-	 * @param increaseFactor
-	 *            the increase factor used for delta decrease
-	 * @throws IllegalArgumentException
-	 *             if decreaseFactor < 1
-	 * @throws IllegalArgumentException
-	 *             if increaseFactor < 1
-	 */
-	public DeterministicGDE(double increaseFactor, double decreaseFactor) {
+    /**
+     * 
+     * @param decreaseFactor
+     *            the decrease factor used for delta decrease
+     * @param increaseFactor
+     *            the increase factor used for delta decrease
+     * @throws IllegalArgumentException
+     *             if decreaseFactor < 1
+     * @throws IllegalArgumentException
+     *             if increaseFactor < 1
+     */
+    public DeterministicGDE(double increaseFactor, double decreaseFactor) {
 
-		if (Double.isNaN(increaseFactor)) {
-			throw new IllegalArgumentException("increaseFactor isNaN");
-		}
+        if (Double.isNaN(increaseFactor)) {
+            throw new IllegalArgumentException("increaseFactor isNaN");
+        }
 
-		if (Double.isNaN(decreaseFactor)) {
-			throw new IllegalArgumentException("decreaseFactor isNaN");
-		}
+        if (Double.isNaN(decreaseFactor)) {
+            throw new IllegalArgumentException("decreaseFactor isNaN");
+        }
 
-		if (decreaseFactor < 1) {
-			throw new IllegalArgumentException("decrease factor < 1");
-		}
+        if (decreaseFactor < 1) {
+            throw new IllegalArgumentException("decrease factor < 1");
+        }
 
-		if (increaseFactor < 1) {
-			throw new IllegalArgumentException("increase factor < 1");
-		}
+        if (increaseFactor < 1) {
+            throw new IllegalArgumentException("increase factor < 1");
+        }
 
-		this.increaseFactor = increaseFactor;
-		this.decreaseFactor = decreaseFactor;
-	}
+        this.increaseFactor = increaseFactor;
+        this.decreaseFactor = decreaseFactor;
+    }
 
-	@Override
-	public double getIncreasedDelta(double delta) {
-		if (Double.isNaN(delta)) {
-			throw new IllegalArgumentException("increaseFactor delta");
-		}
+    @Override
+    public double getIncreasedDelta(double delta) {
+        if (Double.isNaN(delta)) {
+            throw new IllegalArgumentException("increaseFactor delta");
+        }
 
-		return delta * this.increaseFactor;
-	}
+        return delta * this.increaseFactor;
+    }
 
-	@Override
-	public double getDecreasedDelta(double delta) {
-		if (Double.isNaN(delta)) {
-			throw new IllegalArgumentException("increaseFactor delta");
-		}
+    @Override
+    public double getDecreasedDelta(double delta) {
+        if (Double.isNaN(delta)) {
+            throw new IllegalArgumentException("increaseFactor delta");
+        }
 
-		return delta / this.decreaseFactor;
-	}
+        return delta / this.decreaseFactor;
+    }
 
-	@Override
-	public double getIncreaseFactor() {
-		return this.increaseFactor;
-	}
+    @Override
+    public double getIncreaseFactor() {
+        return this.increaseFactor;
+    }
 
-	@Override
-	public double getDecreaseFactor() {
-		return this.decreaseFactor;
-	}
+    @Override
+    public double getDecreaseFactor() {
+        return this.decreaseFactor;
+    }
 
 }

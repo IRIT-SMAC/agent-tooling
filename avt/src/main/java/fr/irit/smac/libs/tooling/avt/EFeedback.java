@@ -1,6 +1,6 @@
 /*
  * #%L
- * agent-tooling
+ * avt
  * %%
  * Copyright (C) 2014 - 2015 IRIT - SMAC Team
  * %%
@@ -19,16 +19,31 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package fr.irit.smac.libs.tooling;
+package fr.irit.smac.libs.tooling.avt;
 
 /**
- * Hello world!
- *
+ * Defines the values that can be given to the AVT
+ * <code>adjustValue(Feedback feedback)</code> method.
+ * 
+ * @author Sylvain Lemouzy
  */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+public enum EFeedback {
+    GREATER {
+        @Override
+        public String toString() {
+            return "+";
+        }
+    },
+    LOWER {
+        @Override
+        public String toString() {
+            return "-";
+        }
+    },
+    GOOD {
+        @Override
+        public String toString() {
+            return "g";
+        }
     }
 }

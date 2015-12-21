@@ -23,26 +23,26 @@ package fr.irit.smac.libs.tooling.avt.range.impl;
 
 public class ImmutableRangeImpl extends AbstractRange {
 
-	private final double lowerBound;
-	private final double upperBound;
+    private final double lowerBound;
+    private final double upperBound;
 
-	public ImmutableRangeImpl(double lowerBound, double upperBound) {
-		super();
+    public ImmutableRangeImpl(double lowerBound, double upperBound) {
+        super();
 
-		this.lowerBound = lowerBound;
-		this.upperBound = upperBound;
+        this.lowerBound = lowerBound;
+        this.upperBound = upperBound;
 
-		this.checkBoundsConsistency();
-	}
+        this.checkBoundsConsistency();
+    }
 
-	@Override
-	public double getLowerBound() {
-		return this.lowerBound;
-	}
+    @Override
+    public double getLowerBound() {
+        return this.lowerBound;
+    }
 
-	@Override
-	public double getUpperBound() {
-		return this.upperBound;
-	}
+    @Override
+    public double getUpperBound() {
+        return this.upperBound;
+    }
 
 }

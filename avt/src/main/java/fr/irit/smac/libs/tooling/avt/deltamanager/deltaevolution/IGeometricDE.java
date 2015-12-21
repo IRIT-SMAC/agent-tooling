@@ -19,8 +19,10 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision;
+package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution;
 
-public interface DMDecisionFactory {
-	DMDecision createInstance();
+public interface IGeometricDE extends IDeltaEvolution {
+    public double getIncreaseFactor();
+
+    public double getDecreaseFactor();
 }

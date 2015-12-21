@@ -25,71 +25,71 @@ import java.util.Random;
 
 public class UndeterministicGDE extends DeterministicGDE {
 
-	private final double decreaseNoise;
-	private final Random random;
+    private final double decreaseNoise;
+    private final Random random;
 
-	/**
-	 * 
-	 * @param increaseFactor
-	 * @param decreaseFactor
-	 * @param decreaseNoise
-	 * @throws IllegalArgumentException
-	 *             if increaseFactor < 1
-	 * @throws IllegalArgumentException
-	 *             if decreaseFactor < 1
-	 * @throws IllegalArgumentException
-	 *             if decreaseNoise <= 0
-	 * @throws IllegalArgumentException
-	 *             if decreaseFactor - decreaseNoise < 1 in order to insure that the average decrease factor is near
-	 *             decreaseFactor
-	 */
-	public UndeterministicGDE(double increaseFactor, double decreaseFactor, double decreaseNoise) {
-		this(increaseFactor, decreaseFactor, decreaseNoise, null);
-	}
+    /**
+     * 
+     * @param increaseFactor
+     * @param decreaseFactor
+     * @param decreaseNoise
+     * @throws IllegalArgumentException
+     *             if increaseFactor < 1
+     * @throws IllegalArgumentException
+     *             if decreaseFactor < 1
+     * @throws IllegalArgumentException
+     *             if decreaseNoise <= 0
+     * @throws IllegalArgumentException
+     *             if decreaseFactor - decreaseNoise < 1 in order to insure that
+     *             the average decrease factor is near decreaseFactor
+     */
+    public UndeterministicGDE(double increaseFactor, double decreaseFactor, double decreaseNoise) {
+        this(increaseFactor, decreaseFactor, decreaseNoise, null);
+    }
 
-	/**
-	 * 
-	 * @param increaseFactor
-	 * @param decreaseFactor
-	 * @param decreaseNoise
-	 * @param seed
-	 * @throws IllegalArgumentException
-	 *             if increaseFactor < 1
-	 * @throws IllegalArgumentException
-	 *             if decreaseFactor < 1
-	 * @throws IllegalArgumentException
-	 *             if decreaseNoise <= 0
-	 * @throws IllegalArgumentException
-	 *             if decreaseFactor - decreaseNoise < 1 in order to insure that the average decrease factor is near
-	 *             decreaseFactor
-	 */
-	public UndeterministicGDE(double increaseFactor, double decreaseFactor, double decreaseNoise, Long seed) {
-		super(increaseFactor, decreaseFactor);
+    /**
+     * 
+     * @param increaseFactor
+     * @param decreaseFactor
+     * @param decreaseNoise
+     * @param seed
+     * @throws IllegalArgumentException
+     *             if increaseFactor < 1
+     * @throws IllegalArgumentException
+     *             if decreaseFactor < 1
+     * @throws IllegalArgumentException
+     *             if decreaseNoise <= 0
+     * @throws IllegalArgumentException
+     *             if decreaseFactor - decreaseNoise < 1 in order to insure that
+     *             the average decrease factor is near decreaseFactor
+     */
+    public UndeterministicGDE(double increaseFactor, double decreaseFactor, double decreaseNoise, Long seed) {
+        super(increaseFactor, decreaseFactor);
 
-		if (decreaseNoise <= 0.) {
-			throw new IllegalArgumentException("decreaseNoise <= 0");
-		}
+        if (decreaseNoise <= 0.) {
+            throw new IllegalArgumentException("decreaseNoise <= 0");
+        }
 
-		if (Double.isNaN(decreaseNoise)) {
-			throw new IllegalArgumentException("decreaseNoise isNaN");
-		}
+        if (Double.isNaN(decreaseNoise)) {
+            throw new IllegalArgumentException("decreaseNoise isNaN");
+        }
 
-		if (decreaseFactor - decreaseNoise < 1.) {
-			throw new IllegalArgumentException("decreaseFactor - decreaseNoise < 1");
-		}
+        if (decreaseFactor - decreaseNoise < 1.) {
+            throw new IllegalArgumentException("decreaseFactor - decreaseNoise < 1");
+        }
 
-		this.decreaseNoise = decreaseNoise;
-		this.random = seed != null ? new Random(seed) : new Random();
-	}
+        this.decreaseNoise = decreaseNoise;
+        this.random = seed != null ? new Random(seed) : new Random();
+    }
 
-	@Override
-	public double getDecreasedDelta(double delta) {
+    @Override
+    public double getDecreasedDelta(double delta) {
 
-		if (Double.isNaN(delta)) {
-			throw new IllegalArgumentException("delta isNaN");
-		}
+        if (Double.isNaN(delta)) {
+            throw new IllegalArgumentException("delta isNaN");
+        }
 
-		return delta / Math.max(1.0, this.decreaseFactor - decreaseNoise + random.nextDouble() * decreaseNoise * 2.);
-	}
+        return delta / Math.max(1.0, this.decreaseFactor - decreaseNoise + random.nextDouble() * decreaseNoise * 2.);
+    }
 
 }

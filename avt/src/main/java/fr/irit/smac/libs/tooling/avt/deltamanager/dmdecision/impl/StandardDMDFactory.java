@@ -21,14 +21,14 @@
  */
 package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl;
 
-import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.DMDecision;
-import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.DMDecisionFactory;
+import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision;
+import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecisionFactory;
 
-public class StandardDMDFactory implements DMDecisionFactory {
+public class StandardDMDFactory implements IDMDecisionFactory {
 
-	@Override
-	public DMDecision createInstance() {
-		return new StandardDMD();
-	}
+    @Override
+    public IDMDecision createInstance() {
+        return new StandardDMD();
+    }
 
 }
