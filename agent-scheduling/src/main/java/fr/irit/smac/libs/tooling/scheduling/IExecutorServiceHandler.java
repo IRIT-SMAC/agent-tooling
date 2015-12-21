@@ -37,20 +37,20 @@ import java.util.concurrent.ExecutorService;
  */
 public interface IExecutorServiceHandler {
 
-	/**
-	 * 
-	 * @return the currently used {@link ExecutorService}
-	 */
-	public ExecutorService getExecutorService();
+    /**
+     * 
+     * @return the currently used {@link ExecutorService}
+     */
+    public ExecutorService getExecutorService();
 
-	/**
-	 * 
-	 * Replace the current {@link ExecutorService} with a new one. The old
-	 * {@link ExecutorService} is automatically shut down.
-	 * 
-	 * @param executor
-	 *            the new executor service to use
-	 */
-	public void setExecutorService(ExecutorService executor);
+    /**
+     * 
+     * Replace the current {@link ExecutorService} with a new one. The old
+     * {@link ExecutorService} is automatically shut down.
+     * 
+     * @param executor
+     *            the new executor service to use
+     */
+    public void setExecutorService(ExecutorService executor);
 
 }

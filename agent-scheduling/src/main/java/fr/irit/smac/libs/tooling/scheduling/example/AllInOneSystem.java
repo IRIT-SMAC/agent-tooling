@@ -33,24 +33,24 @@ import fr.irit.smac.libs.tooling.scheduling.impl.system.SynchronizedSystemStrate
 
 public class AllInOneSystem extends SynchronizedSystemStrategy {
 
-	@SuppressWarnings("serial")
-	JFrame frame = new JFrame() {
-		{
-			this.add(new SystemControllerPanel(AllInOneSystem.this, 500));
-			this.addWindowListener(new WindowAdapter() {
-				@Override
-				public void windowClosing(WindowEvent e) {
-					AllInOneSystem.this.shutdown();
-				}
-			});
-			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		}
-	};
+    @SuppressWarnings("serial")
+    JFrame frame = new JFrame() {
+        {
+            this.add(new SystemControllerPanel(AllInOneSystem.this, 500));
+            this.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    AllInOneSystem.this.shutdown();
+                }
+            });
+            this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        }
+    };
 
-	public AllInOneSystem() {
-		super(new HashSet<IAgentStrategy>());
-		frame.pack();
-		frame.setVisible(true);
-	}
+    public AllInOneSystem() {
+        super(new HashSet<IAgentStrategy>());
+        frame.pack();
+        frame.setVisible(true);
+    }
 
 }

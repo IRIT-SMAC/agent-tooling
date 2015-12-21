@@ -30,8 +30,8 @@ package fr.irit.smac.libs.tooling.scheduling.contrib.twosteps;
  */
 public interface ITwoStepsAgent {
 
-	public void perceive();
+    public void perceive();
 
-	public void decideAndAct();
+    public void decideAndAct();
 
 }

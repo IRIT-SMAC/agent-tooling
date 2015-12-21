@@ -33,20 +33,20 @@ import fr.irit.smac.libs.tooling.scheduling.ISystemControlHandler;
  */
 public class SystemControllerFrame extends JFrame {
 
-	private static final long serialVersionUID = 147438810874039124L;
+    private static final long serialVersionUID = 147438810874039124L;
 
-	public SystemControllerFrame(ISystemControlHandler systemControlHandler) {
-		this(systemControlHandler, 500);
-	}
+    public SystemControllerFrame(ISystemControlHandler systemControlHandler) {
+        this(systemControlHandler, 500);
+    }
 
-	public SystemControllerFrame(ISystemControlHandler systemControlHandler,
-			int delay) {
-		SystemControllerPanel controlPannel = new SystemControllerPanel(
-				systemControlHandler, delay);
-		this.add(controlPannel);
-		this.pack();
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setVisible(true);
-	}
+    public SystemControllerFrame(ISystemControlHandler systemControlHandler,
+        int delay) {
+        SystemControllerPanel controlPannel = new SystemControllerPanel(
+            systemControlHandler, delay);
+        this.add(controlPannel);
+        this.pack();
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setVisible(true);
+    }
 
 }

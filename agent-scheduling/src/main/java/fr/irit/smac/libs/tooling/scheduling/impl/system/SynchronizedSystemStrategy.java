@@ -42,65 +42,67 @@ import fr.irit.smac.libs.tooling.scheduling.IAgentStrategy;
  * 
  */
 public class SynchronizedSystemStrategy extends
-		AbstractSystemStrategy<IAgentStrategy> {
+    AbstractSystemStrategy<IAgentStrategy> {
 
-	public SynchronizedSystemStrategy(Collection<IAgentStrategy> agents,
-			ExecutorService agentExecutor) {
-		super(agentExecutor);
+    private final Map<IAgentStrategy, Callable<?>> agentsCallables = Collections
+        .synchronizedMap(new HashMap<IAgentStrategy, Callable<?>>());
 
-		this.addAgents(agents);
-	}
+    public SynchronizedSystemStrategy(Collection<IAgentStrategy> agents,
+        ExecutorService agentExecutor) {
+        super(agentExecutor);
 
-	public SynchronizedSystemStrategy(Collection<IAgentStrategy> agents) {
-		this(agents, Executors.newFixedThreadPool(1));
-	}
+        this.addAgents(agents);
+    }
 
-	private final Map<IAgentStrategy, Callable<?>> agentsCallables = Collections
-			.synchronizedMap(new HashMap<IAgentStrategy, Callable<?>>());
+    public SynchronizedSystemStrategy(Collection<IAgentStrategy> agents) {
+        this(agents, Executors.newFixedThreadPool(1));
+    }
 
-	@Override
-	protected void doStep() {
-		Set<Future<?>> executionResults = new HashSet<Future<?>>();
+    @Override
+    protected void doStep() {
+        Set<Future<?>> executionResults = new HashSet<Future<?>>();
 
-		// start the execution of the agents
-		for (Callable<?> c : agentsCallables.values()) {
-			executionResults.add(agentExecutor.submit(c));
-		}
+        // start the execution of the agents
+        for (Callable<?> c : agentsCallables.values()) {
+            executionResults.add(agentExecutor.submit(c));
+        }
 
-		// wait for all agents to finish
-		for (Future<?> f : executionResults) {
-			try {
-				f.get();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+        // wait for all agents to finish
+        for (Future<?> f : executionResults) {
+            try {
+                f.get();
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-	@Override
-	public void addAgent(final IAgentStrategy agent) {
-		if (!this.agents.contains(agent)) {
-			super.addAgent(agent);
-			this.agentsCallables.put(agent, new Callable<Object>() {
+    @Override
+    public void addAgent(final IAgentStrategy agent) {
+        if (!this.agents.contains(agent)) {
+            super.addAgent(agent);
+            this.agentsCallables.put(agent, new Callable<Object>() {
 
-				@Override
-				public Object call() throws Exception {
-					agent.nextStep();
-					return this;
-				}
+                @Override
+                public Object call() throws Exception {
+                    agent.nextStep();
+                    return this;
+                }
 
-			});
-		}
-	}
+            });
+        }
+    }
 
-	@Override
-	public void removeAgent(IAgentStrategy agent) {
-		if (this.agents.contains(agent)) {
-			super.removeAgent(agent);
-			this.agentsCallables.remove(agent);
-		}
-	}
+    @Override
+    public void removeAgent(IAgentStrategy agent) {
+        if (this.agents.contains(agent)) {
+            super.removeAgent(agent);
+            this.agentsCallables.remove(agent);
+        }
+    }
 
 }

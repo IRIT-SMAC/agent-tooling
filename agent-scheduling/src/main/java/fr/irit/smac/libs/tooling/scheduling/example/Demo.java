@@ -25,33 +25,36 @@ import fr.irit.smac.libs.tooling.scheduling.IAgentStrategy;
 
 public class Demo {
 
-	static class MyAgent implements IAgentStrategy {
+    private Demo() {
 
-		private final int id;
-		
-		MyAgent(int id){
-			this.id = id;
-		}
+    }
 
-		@Override
-		public void nextStep() {
-			System.out.println("Agent " + id + ": doing a step");
+    static class MyAgent implements IAgentStrategy {
 
-		}
+        private final int id;
 
-	}
+        MyAgent(int id) {
+            this.id = id;
+        }
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		AllInOneSystem system = new AllInOneSystem();
+        @Override
+        public void nextStep() {
+            System.out.println("Agent " + id + ": doing a step");
 
-		for(int i = 0; i < 10; i++){
-			system.addAgent(new MyAgent(i));
-		}
-	
-		
-	}
+        }
+
+    }
+
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+        AllInOneSystem system = new AllInOneSystem();
+
+        for (int i = 0; i < 10; i++) {
+            system.addAgent(new MyAgent(i));
+        }
+
+    }
 
 }

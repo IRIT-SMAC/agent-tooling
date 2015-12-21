@@ -32,10 +32,10 @@ package fr.irit.smac.libs.tooling.scheduling;
  */
 public interface IAgentStrategy {
 
-	/**
-	 * The next step to be executed according to the execution strategy of the
-	 * agent.
-	 */
-	public void nextStep();
+    /**
+     * The next step to be executed according to the execution strategy of the
+     * agent.
+     */
+    public void nextStep();
 
 }

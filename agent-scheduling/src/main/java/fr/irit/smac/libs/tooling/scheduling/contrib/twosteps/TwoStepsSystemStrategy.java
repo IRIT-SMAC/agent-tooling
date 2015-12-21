@@ -44,175 +44,179 @@ import fr.irit.smac.libs.tooling.scheduling.impl.system.SynchronizedSystemStrate
  * 
  */
 public class TwoStepsSystemStrategy extends
-		AbstractSystemStrategy<ITwoStepsAgent> {
+    AbstractSystemStrategy<ITwoStepsAgent> {
 
-	private static enum STATE {
-		PERCEIVE, DECIDE_ACT
-	};
+    private static enum EState {
+        PERCEIVE, DECIDE_ACT
+    }
 
-	private volatile STATE currentState = STATE.PERCEIVE;
+    private volatile EState currentState = EState.PERCEIVE;
 
-	protected class AgentWrapper implements IAgentStrategy {
+    protected class AgentWrapper implements IAgentStrategy {
 
-		private final ITwoStepsAgent agent;
+        private final ITwoStepsAgent agent;
 
-		public AgentWrapper(ITwoStepsAgent agent) {
-			this.agent = agent;
-		}
+        public AgentWrapper(ITwoStepsAgent agent) {
+            this.agent = agent;
+        }
 
-		@Override
-		public void nextStep() {
+        @Override
+        public void nextStep() {
 
-			switch (TwoStepsSystemStrategy.this.currentState) {
-			case PERCEIVE:
-				agent.perceive();
-				break;
+            switch (TwoStepsSystemStrategy.this.currentState) {
+                case PERCEIVE:
+                    agent.perceive();
+                    break;
 
-			case DECIDE_ACT:
-				agent.decideAndAct();
-				break;
+                case DECIDE_ACT:
+                    agent.decideAndAct();
+                    break;
 
-			default:
-				throw new RuntimeException("case not covered");
-			}
+                default:
+                    throw new RuntimeException("case not covered");
+            }
 
-		}
+        }
 
-	}
+    }
 
-	private final Map<ITwoStepsAgent, AgentWrapper> agentWrappers = new ConcurrentHashMap<ITwoStepsAgent, AgentWrapper>();
+    private final Map<ITwoStepsAgent, AgentWrapper>      agentWrappers        = new ConcurrentHashMap<ITwoStepsAgent, AgentWrapper>();
 
-	// NOTE: BlockingQueue implem is thread-safe
-	private final BlockingQueue<ITwoStepsAgent> pendingAddedAgents = new LinkedBlockingDeque<ITwoStepsAgent>();
-	private final BlockingQueue<ITwoStepsAgent> pendingRemovedAgents = new LinkedBlockingDeque<ITwoStepsAgent>();
+    // NOTE: BlockingQueue implem is thread-safe
+    private final BlockingQueue<ITwoStepsAgent>          pendingAddedAgents   = new LinkedBlockingDeque<ITwoStepsAgent>();
+    private final BlockingQueue<ITwoStepsAgent>          pendingRemovedAgents = new LinkedBlockingDeque<ITwoStepsAgent>();
 
-	private final AbstractSystemStrategy<IAgentStrategy> internalSystemStrategy;
+    private final AbstractSystemStrategy<IAgentStrategy> internalSystemStrategy;
 
-	public TwoStepsSystemStrategy(Collection<ITwoStepsAgent> agents,
-			ExecutorService agentExecutor) {
-		super(agentExecutor);
+    public TwoStepsSystemStrategy(Collection<ITwoStepsAgent> agents,
+        ExecutorService agentExecutor) {
+        super(agentExecutor);
 
-		internalSystemStrategy = new SynchronizedSystemStrategy(
-				new LinkedHashSet<IAgentStrategy>(), agentExecutor);
-		this.addAgents(agents);
+        internalSystemStrategy = new SynchronizedSystemStrategy(
+            new LinkedHashSet<IAgentStrategy>(), agentExecutor);
+        this.addAgents(agents);
 
-		// replace inherited shutdownRunnable by its own
-		final Runnable inheritedShutdownRunnable = shutdownRunnable;
-		shutdownRunnable = new Runnable() {
+        // replace inherited shutdownRunnable by its own
+        final Runnable inheritedShutdownRunnable = shutdownRunnable;
+        shutdownRunnable = new Runnable() {
 
-			@Override
-			public void run() {
-				// shutdown internalSystemStrategy
-				//
-				// NOTE: since internalSystemStrategy is only accessed by
-				// ourself on a step-by-step basis, it is guaranteed that its
-				// execution queue will be empty by the time we reach
-				// shutdown(). Meaning that no lingering agent execution task
-				// will be present in its queue.
-				// Consequently we do not need to block to satisfy the interface
-				// contract that now agent will be executed after shutdown() has
-				// returned.
-				internalSystemStrategy.shutdown();
+            @Override
+            public void run() {
+                // shutdown internalSystemStrategy
+                //
+                // NOTE: since internalSystemStrategy is only accessed by
+                // ourself on a step-by-step basis, it is guaranteed that its
+                // execution queue will be empty by the time we reach
+                // shutdown(). Meaning that no lingering agent execution task
+                // will be present in its queue.
+                // Consequently we do not need to block to satisfy the interface
+                // contract that now agent will be executed after shutdown() has
+                // returned.
+                internalSystemStrategy.shutdown();
 
-				// propagate to inherited shutdown task
-				inheritedShutdownRunnable.run();
+                // propagate to inherited shutdown task
+                inheritedShutdownRunnable.run();
 
-			}
-		};
-	}
+            }
+        };
+    }
 
-	public TwoStepsSystemStrategy(Collection<ITwoStepsAgent> agents) {
-		// setting a "reasonable" default size for the thread pool of 2xNbCores
-		// (according to e.g.
-		// http://codeidol.com/java/java-concurrency/Applying-Thread-Pools/Sizing-Thread-Pools/)
-		// user should probably override it to a more suitable value
-		this(agents, Executors.newFixedThreadPool(Runtime.getRuntime()
-				.availableProcessors() * 2));
+    public TwoStepsSystemStrategy(Collection<ITwoStepsAgent> agents) {
+        // setting a "reasonable" default size for the thread pool of 2xNbCores
+        // (according to e.g.
+        // http://codeidol.com/java/java-concurrency/Applying-Thread-Pools/Sizing-Thread-Pools/)
+        // user should probably override it to a more suitable value
+        this(agents, Executors.newFixedThreadPool(Runtime.getRuntime()
+            .availableProcessors() * 2));
 
-	}
+    }
 
-	private void addPendingAgents() {
+    private void addPendingAgents() {
 
-		Collection<ITwoStepsAgent> drainedAgents = new HashSet<ITwoStepsAgent>();
-		pendingAddedAgents.drainTo(drainedAgents);
+        Collection<ITwoStepsAgent> drainedAgents = new HashSet<ITwoStepsAgent>();
+        pendingAddedAgents.drainTo(drainedAgents);
 
-		for (ITwoStepsAgent agent : drainedAgents) {
-			AgentWrapper wrapper = new AgentWrapper(agent);
-			agentWrappers.put(agent, wrapper);
-			internalSystemStrategy.addAgent(wrapper);
-		}
+        for (ITwoStepsAgent agent : drainedAgents) {
+            AgentWrapper wrapper = new AgentWrapper(agent);
+            agentWrappers.put(agent, wrapper);
+            internalSystemStrategy.addAgent(wrapper);
+        }
 
-	}
+    }
 
-	private void removePendingAgents() {
-		Collection<ITwoStepsAgent> drainedAgents = new HashSet<ITwoStepsAgent>();
-		pendingRemovedAgents.drainTo(drainedAgents);
+    private void removePendingAgents() {
+        Collection<ITwoStepsAgent> drainedAgents = new HashSet<ITwoStepsAgent>();
+        pendingRemovedAgents.drainTo(drainedAgents);
 
-		for (ITwoStepsAgent agent : drainedAgents) {
-			internalSystemStrategy.removeAgent(agentWrappers.get(agent));
-			agentWrappers.remove(agent);
+        for (ITwoStepsAgent agent : drainedAgents) {
+            internalSystemStrategy.removeAgent(agentWrappers.get(agent));
+            agentWrappers.remove(agent);
 
-		}
-	}
+        }
+    }
 
-	@Override
-	protected void doStep() {
+    @Override
+    protected void doStep() {
 
-		addPendingAgents();
+        addPendingAgents();
 
-		// start the perceive of the agents and block
-		currentState = STATE.PERCEIVE;
-		try {
-			internalSystemStrategy.step().get();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
+        // start the perceive of the agents and block
+        currentState = EState.PERCEIVE;
+        try {
+            internalSystemStrategy.step().get();
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
-		// start the decide-and-act of the agents
-		currentState = STATE.DECIDE_ACT;
-		try {
-			internalSystemStrategy.step().get();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
+        // start the decide-and-act of the agents
+        currentState = EState.DECIDE_ACT;
+        try {
+            internalSystemStrategy.step().get();
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
-		removePendingAgents();
+        removePendingAgents();
 
-	}
+    }
 
-	/*** Executor Handling ***/
+    /*** Executor Handling ***/
 
-	@Override
-	public ExecutorService getExecutorService() {
-		return internalSystemStrategy.getExecutorService();
-	}
+    @Override
+    public ExecutorService getExecutorService() {
+        return internalSystemStrategy.getExecutorService();
+    }
 
-	@Override
-	public void setExecutorService(ExecutorService executor) {
-		internalSystemStrategy.setExecutorService(executor);
-	}
+    @Override
+    public void setExecutorService(ExecutorService executor) {
+        internalSystemStrategy.setExecutorService(executor);
+    }
 
-	/*** Agent Handling ***/
+    /*** Agent Handling ***/
 
-	@Override
-	public void addAgent(final ITwoStepsAgent agent) {
-		if (!this.agents.contains(agent)) {
-			super.addAgent(agent);
-			pendingAddedAgents.add(agent);
-		}
-	}
+    @Override
+    public void addAgent(final ITwoStepsAgent agent) {
+        if (!this.agents.contains(agent)) {
+            super.addAgent(agent);
+            pendingAddedAgents.add(agent);
+        }
+    }
 
-	@Override
-	public void removeAgent(ITwoStepsAgent agent) {
-		if (this.agents.contains(agent)) {
-			super.removeAgent(agent);
-			pendingRemovedAgents.add(agent);
+    @Override
+    public void removeAgent(ITwoStepsAgent agent) {
+        if (this.agents.contains(agent)) {
+            super.removeAgent(agent);
+            pendingRemovedAgents.add(agent);
 
-		}
-	}
+        }
+    }
 
 }

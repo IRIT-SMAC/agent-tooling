@@ -41,48 +41,48 @@ import java.util.Collection;
  * 
  * @author jorquera
  * 
- * @param <Agent>
+ * @param <T>
  *            the type of agents to be handled by the system
  */
-public interface IAgentsHandler<Agent> {
+public interface IAgentsHandler<T> {
 
-	/**
-	 * 
-	 * @return a collection containing the agents currently handled by the
-	 *         system
-	 */
-	Collection<Agent> getAgents();
+    /**
+     * 
+     * @return a collection containing the agents currently handled by the
+     *         system
+     */
+    Collection<T> getAgents();
 
-	/**
-	 * Add an agent to the system
-	 * 
-	 * @param agent
-	 *            the agent to be added to the system
-	 */
-	void addAgent(Agent agent);
+    /**
+     * Add an agent to the system
+     * 
+     * @param agent
+     *            the agent to be added to the system
+     */
+    void addAgent(T agent);
 
-	/**
-	 * Remove an agent from the system
-	 * 
-	 * @param agent
-	 *            the agent to be removed from the system
-	 */
-	void removeAgent(Agent agent);
+    /**
+     * Remove an agent from the system
+     * 
+     * @param agent
+     *            the agent to be removed from the system
+     */
+    void removeAgent(T agent);
 
-	/**
-	 * Add a collection of agents to the system
-	 * 
-	 * @param agents
-	 *            the agents to be added to the system
-	 */
-	void addAgents(Collection<Agent> agents);
+    /**
+     * Add a collection of agents to the system
+     * 
+     * @param agents
+     *            the agents to be added to the system
+     */
+    void addAgents(Collection<T> agents);
 
-	/**
-	 * Remove a collection of agents from the system
-	 * 
-	 * @param agents
-	 *            the agents to be removed
-	 */
-	void removeAgents(Collection<Agent> agents);
+    /**
+     * Remove a collection of agents from the system
+     * 
+     * @param agents
+     *            the agents to be removed
+     */
+    void removeAgents(Collection<T> agents);
 
 }

@@ -46,86 +46,86 @@ import fr.irit.smac.libs.tooling.scheduling.ISystemControlHandler;
  */
 public class SystemControllerPanel extends JPanel {
 
-	private static final long serialVersionUID = -8768099103951586071L;
+    private static final long           serialVersionUID = -8768099103951586071L;
 
-	private final ISystemControlHandler system;
+    private final ISystemControlHandler system;
 
-	private int ms;
+    private int                         ms;
 
-	private final SchedulerSlider speedSlider;
-	private final JButton stepButton = new JButton("step");
+    private final SchedulerSlider       speedSlider;
+    private final JButton               stepButton       = new JButton("step");
 
-	public SystemControllerPanel(final ISystemControlHandler system, int ms) {
-		super();
+    public SystemControllerPanel(final ISystemControlHandler system, int ms) {
+        super();
 
-		this.system = system;
-		this.ms = ms;
+        this.system = system;
+        this.ms = ms;
 
-		this.setLayout(new FlowLayout());
+        this.setLayout(new FlowLayout());
 
-		speedSlider = new SchedulerSlider();
+        speedSlider = new SchedulerSlider();
 
-		this.add(speedSlider);
-		this.add(stepButton);
+        this.add(speedSlider);
+        this.add(stepButton);
 
-		this.stepButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if (stepButton.isEnabled()) {
-					SystemControllerPanel.this.system.step();
-				}
-			}
-		});
-	}
+        this.stepButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                if (stepButton.isEnabled()) {
+                    SystemControllerPanel.this.system.step();
+                }
+            }
+        });
+    }
 
-	public SystemControllerPanel(final ISystemControlHandler system) {
-		this(system, 500);
-	}
+    public SystemControllerPanel(final ISystemControlHandler system) {
+        this(system, 500);
+    }
 
-	private class SchedulerSlider extends JSlider {
+    private class SchedulerSlider extends JSlider {
 
-		private static final long serialVersionUID = -5591439208368228848L;
+        private static final long serialVersionUID = -5591439208368228848L;
 
-		public SchedulerSlider() {
+        public SchedulerSlider() {
 
-			super(SwingConstants.HORIZONTAL, 1, 3, 1);
+            super(SwingConstants.HORIZONTAL, 1, 3, 1);
 
-			Dictionary<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();
-			labelTable.put(new Integer(1), new JLabel("Pause"));
-			labelTable.put(new Integer(2), new JLabel("Slow (" + ms + "msec)"));
-			labelTable.put(new Integer(3), new JLabel("Fast "));
-			setLabelTable(labelTable);
+            Dictionary<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();
+            labelTable.put(new Integer(1), new JLabel("Pause"));
+            labelTable.put(new Integer(2), new JLabel("Slow (" + ms + "msec)"));
+            labelTable.put(new Integer(3), new JLabel("Fast "));
+            setLabelTable(labelTable);
 
-			setMinorTickSpacing(1);
-			setPaintTicks(true);
-			setPaintLabels(true);
+            setMinorTickSpacing(1);
+            setPaintTicks(true);
+            setPaintLabels(true);
 
-			this.addChangeListener(new ChangeListener() {
-				@Override
-				public void stateChanged(ChangeEvent e) {
-					JSlider source = (JSlider) e.getSource();
-					if (!source.getValueIsAdjusting()) {
-						int state = source.getValue();
-						switch (state) {
-						case 1:
-							system.pause();
-							stepButton.setEnabled(true);
-							break;
+            this.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    JSlider source = (JSlider) e.getSource();
+                    if (!source.getValueIsAdjusting()) {
+                        int state = source.getValue();
+                        switch (state) {
+                            case 1:
+                                system.pause();
+                                stepButton.setEnabled(true);
+                                break;
+                            case 2:
+                                stepButton.setEnabled(false);
+                                system.run(ms);
+                                break;
+                            case 3:
+                                stepButton.setEnabled(false);
+                                system.run(0);
+                            default:
+                                break;
+                        }
+                    }
 
-						case 2:
-							stepButton.setEnabled(false);
-							system.run(ms);
-							break;
-
-						case 3:
-							stepButton.setEnabled(false);
-							system.run(0);
-						}
-					}
-
-				}
-			});
-		}
-	}
+                }
+            });
+        }
+    }
 
 }

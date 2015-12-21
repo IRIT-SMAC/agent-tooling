@@ -41,213 +41,214 @@ import fr.irit.smac.libs.tooling.scheduling.ISystemControlHandler;
  * 
  * @author jorquera
  * 
- * @param <AgentType>
+ * @param <T>
  *            the type of agents handled by the strategy
  */
-public abstract class AbstractSystemStrategy<AgentType> implements
-		ISystemControlHandler, IAgentsHandler<AgentType>,
-		IExecutorServiceHandler, IHookHandler {
+public abstract class AbstractSystemStrategy<T> implements
+    ISystemControlHandler, IAgentsHandler<T>,
+    IExecutorServiceHandler, IHookHandler {
 
-	protected final Set<AgentType> agents = Collections
-			.synchronizedSet(new HashSet<AgentType>());
+    protected final Set<T>     agents         = Collections
+                                                          .synchronizedSet(new HashSet<T>());
 
-	protected final Set<Runnable> preStepHooks = Collections
-			.synchronizedSet(new LinkedHashSet<Runnable>());
+    protected final Set<Runnable>      preStepHooks   = Collections
+                                                          .synchronizedSet(new LinkedHashSet<Runnable>());
 
-	protected final Set<Runnable> postStepHooks = Collections
-			.synchronizedSet(new LinkedHashSet<Runnable>());
+    protected final Set<Runnable>      postStepHooks  = Collections
+                                                          .synchronizedSet(new LinkedHashSet<Runnable>());
 
-	protected volatile ExecutorService agentExecutor;
-	protected final ExecutorService systemExecutor = Executors
-			.newFixedThreadPool(1);
+    protected volatile ExecutorService agentExecutor;
+    protected final ExecutorService    systemExecutor = Executors
+                                                          .newFixedThreadPool(1);
 
-	private volatile Boolean doRun = false;
-	private volatile long delay = 0L;
+    private volatile Boolean           doRun          = false;
+    private volatile long              delay          = 0L;
 
-	public AbstractSystemStrategy(ExecutorService agentExecutor) {
-		this.agentExecutor = agentExecutor;
-	}
+    public AbstractSystemStrategy(ExecutorService agentExecutor) {
+        this.agentExecutor = agentExecutor;
+    }
 
-	/**
-	 * TODO: comment (very important)
-	 */
-	abstract protected void doStep();
+    /**
+     * TODO: comment (very important)
+     */
+    protected abstract void doStep();
 
-	protected void preStep() {
-		synchronized (preStepHooks) {
-			for (Runnable hook : preStepHooks) {
-				hook.run();
-			}
-		}
-	}
+    protected void preStep() {
+        synchronized (preStepHooks) {
+            for (Runnable hook : preStepHooks) {
+                hook.run();
+            }
+        }
+    }
 
-	protected void postStep() {
-		synchronized (postStepHooks) {
-			for (Runnable hook : postStepHooks) {
-				hook.run();
-			}
-		}
-	}
+    protected void postStep() {
+        synchronized (postStepHooks) {
+            for (Runnable hook : postStepHooks) {
+                hook.run();
+            }
+        }
+    }
 
-	protected void stepAndHooks() {
+    protected void stepAndHooks() {
 
-		preStep();
-		doStep();
-		postStep();
+        preStep();
+        doStep();
+        postStep();
 
-	}
+    }
 
-	protected Runnable loopingRunnable = new Runnable() {
-		@Override
-		public void run() {
-			if (doRun) {
+    protected Runnable loopingRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (doRun) {
 
-				stepAndHooks();
+                stepAndHooks();
 
-				// TODO: change it for the delay to be the *max* time waited
-				//
-				// if the agents take alpha milis (alpha < delay) to execute
-				// the system should wait for an additional (delay - alpha)
-				//
-				// if the agents take beta milis (beta >= delay) to execute
-				// the system should not wait any further
-				//
-				// (could do some optim when delay == 0)
-				//
-				try {
-					Thread.sleep(delay);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+                // TODO: change it for the delay to be the *max* time waited
+                //
+                // if the agents take alpha milis (alpha < delay) to execute
+                // the system should wait for an additional (delay - alpha)
+                //
+                // if the agents take beta milis (beta >= delay) to execute
+                // the system should not wait any further
+                //
+                // (could do some optim when delay == 0)
+                //
+                try {
+                    Thread.sleep(delay);
+                }
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-				// plan next execution
-				systemExecutor.execute(this);
-			}
-		}
-	};
+                // plan next execution
+                systemExecutor.execute(this);
+            }
+        }
+    };
 
-	@Override
-	public void run(long milis) {
-		delay = milis;
-		if (!doRun) {
-			doRun = true;
-			systemExecutor.execute(loopingRunnable);
-		}
-	}
+    @Override
+    public void run(long milis) {
+        delay = milis;
+        if (!doRun) {
+            doRun = true;
+            systemExecutor.execute(loopingRunnable);
+        }
+    }
 
-	protected Runnable steppingRunnable = new Runnable() {
-		@Override
-		public void run() {
-			if (!doRun) {
-				stepAndHooks();
-			}
-		}
-	};
+    protected Runnable steppingRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (!doRun) {
+                stepAndHooks();
+            }
+        }
+    };
 
-	@Override
-	public Future<?> step() {
-		return systemExecutor.submit(steppingRunnable);
-	}
+    @Override
+    public Future<?> step() {
+        return systemExecutor.submit(steppingRunnable);
+    }
 
-	protected Runnable pausingRunnable = new Runnable() {
-		@Override
-		public void run() {
-			doRun = false;
-			delay = 0L;
-		}
-	};
+    protected Runnable pausingRunnable = new Runnable() {
+        @Override
+        public void run() {
+            doRun = false;
+            delay = 0L;
+        }
+    };
 
-	@Override
-	public Future<?> pause() {
-		return systemExecutor.submit(pausingRunnable);
-	}
+    @Override
+    public Future<?> pause() {
+        return systemExecutor.submit(pausingRunnable);
+    }
 
-	protected Runnable shutdownRunnable = new Runnable() {
-		@Override
-		public void run() {
-			doRun = false;
-			agentExecutor.shutdown();
-			systemExecutor.shutdown();
-		}
-	};
+    protected Runnable shutdownRunnable = new Runnable() {
+        @Override
+        public void run() {
+            doRun = false;
+            agentExecutor.shutdown();
+            systemExecutor.shutdown();
+        }
+    };
 
-	@Override
-	public Future<?> shutdown() {
-		return systemExecutor.submit(shutdownRunnable);
-	}
+    @Override
+    public Future<?> shutdown() {
+        return systemExecutor.submit(shutdownRunnable);
+    }
 
-	/*** Executor Handling ***/
-	@Override
-	public ExecutorService getExecutorService() {
-		return agentExecutor;
-	}
+    /*** Executor Handling ***/
+    @Override
+    public ExecutorService getExecutorService() {
+        return agentExecutor;
+    }
 
-	@Override
-	public void setExecutorService(ExecutorService executor) {
-		ExecutorService old = agentExecutor;
-		agentExecutor = executor;
-		old.shutdown();
-	}
+    @Override
+    public void setExecutorService(ExecutorService executor) {
+        ExecutorService old = agentExecutor;
+        agentExecutor = executor;
+        old.shutdown();
+    }
 
-	/*** Agent Handling ***/
+    /*** Agent Handling ***/
 
-	@Override
-	public Collection<AgentType> getAgents() {
-		return new HashSet<AgentType>(agents);
-	}
+    @Override
+    public Collection<T> getAgents() {
+        return new HashSet<T>(agents);
+    }
 
-	@Override
-	public void addAgent(AgentType agent) {
-		this.agents.add(agent);
-	}
+    @Override
+    public void addAgent(T agent) {
+        this.agents.add(agent);
+    }
 
-	@Override
-	public void removeAgent(AgentType agent) {
-		this.agents.remove(agent);
-	}
+    @Override
+    public void removeAgent(T agent) {
+        this.agents.remove(agent);
+    }
 
-	@Override
-	public void addAgents(Collection<AgentType> agents) {
-		for (AgentType agent : agents) {
-			addAgent(agent);
-		}
-	}
+    @Override
+    public void addAgents(Collection<T> agents) {
+        for (T agent : agents) {
+            addAgent(agent);
+        }
+    }
 
-	@Override
-	public void removeAgents(Collection<AgentType> agents) {
-		for (AgentType agent : agents) {
-			removeAgent(agent);
-		}
-	}
+    @Override
+    public void removeAgents(Collection<T> agents) {
+        for (T agent : agents) {
+            removeAgent(agent);
+        }
+    }
 
-	@Override
-	public void addPreStepHook(Runnable task) {
-		preStepHooks.add(task);
-	}
+    @Override
+    public void addPreStepHook(Runnable task) {
+        preStepHooks.add(task);
+    }
 
-	@Override
-	public void addPostStepHook(Runnable task) {
-		postStepHooks.add(task);
-	}
+    @Override
+    public void addPostStepHook(Runnable task) {
+        postStepHooks.add(task);
+    }
 
-	@Override
-	public void removePreStepHook(Runnable task) {
-		preStepHooks.remove(task);
-	}
+    @Override
+    public void removePreStepHook(Runnable task) {
+        preStepHooks.remove(task);
+    }
 
-	@Override
-	public void removePostStepHook(Runnable task) {
-		postStepHooks.remove(task);
-	}
+    @Override
+    public void removePostStepHook(Runnable task) {
+        postStepHooks.remove(task);
+    }
 
-	@Override
-	public Set<Runnable> getPreStepHooks() {
-		return new HashSet<Runnable>(preStepHooks);
-	}
+    @Override
+    public Set<Runnable> getPreStepHooks() {
+        return new HashSet<Runnable>(preStepHooks);
+    }
 
-	@Override
-	public Set<Runnable> getPostStepHooks() {
-		return new HashSet<Runnable>(postStepHooks);
-	}
+    @Override
+    public Set<Runnable> getPostStepHooks() {
+        return new HashSet<Runnable>(postStepHooks);
+    }
 
 }

@@ -39,54 +39,54 @@ import java.util.concurrent.Executor;
  */
 public interface IHookHandler {
 
-	/**
-	 * 
-	 * Add a new task to be executed before each step
-	 * 
-	 * @param task
-	 *            the new task to be added to pre-step hooks
-	 */
-	public void addPreStepHook(Runnable task);
+    /**
+     * 
+     * Add a new task to be executed before each step
+     * 
+     * @param task
+     *            the new task to be added to pre-step hooks
+     */
+    public void addPreStepHook(Runnable task);
 
-	/**
-	 * 
-	 * Add a new task to be executed after each step
-	 * 
-	 * @param task
-	 *            the new task to be added to post-step hooks
-	 */
-	public void addPostStepHook(Runnable task);
+    /**
+     * 
+     * Add a new task to be executed after each step
+     * 
+     * @param task
+     *            the new task to be added to post-step hooks
+     */
+    public void addPostStepHook(Runnable task);
 
-	/**
-	 * 
-	 * Remove a task from pre-step hooks. The task will no longer be executed
-	 * before each step.
-	 * 
-	 * @param task
-	 *            the task to be removed from pre-step hooks.
-	 */
-	public void removePreStepHook(Runnable task);
+    /**
+     * 
+     * Remove a task from pre-step hooks. The task will no longer be executed
+     * before each step.
+     * 
+     * @param task
+     *            the task to be removed from pre-step hooks.
+     */
+    public void removePreStepHook(Runnable task);
 
-	/**
-	 * 
-	 * Remove a task from post-step hooks. The task will no longer be executed
-	 * after each step.
-	 * 
-	 * @param task
-	 *            the task to be removed from post-step hooks.
-	 */
-	public void removePostStepHook(Runnable task);
+    /**
+     * 
+     * Remove a task from post-step hooks. The task will no longer be executed
+     * after each step.
+     * 
+     * @param task
+     *            the task to be removed from post-step hooks.
+     */
+    public void removePostStepHook(Runnable task);
 
-	/**
-	 * 
-	 * @return the currently registered pre-step hooks
-	 */
-	public Set<Runnable> getPreStepHooks();
+    /**
+     * 
+     * @return the currently registered pre-step hooks
+     */
+    public Set<Runnable> getPreStepHooks();
 
-	/**
-	 * 
-	 * @return the currently registered post-step hooks
-	 */
-	public Set<Runnable> getPostStepHooks();
+    /**
+     * 
+     * @return the currently registered post-step hooks
+     */
+    public Set<Runnable> getPostStepHooks();
 
 }
