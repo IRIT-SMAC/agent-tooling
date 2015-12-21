@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-import fr.irit.smac.libs.tooling.plot.commons.ChartType;
+import fr.irit.smac.libs.tooling.plot.commons.EChartType;
 import fr.irit.smac.libs.tooling.plot.interfaces.IAgentPlotChart;
 
 /**
@@ -37,72 +37,79 @@ import fr.irit.smac.libs.tooling.plot.interfaces.IAgentPlotChart;
  */
 public class AgentPlotConnectedClient implements Runnable {
 
-	private BufferedReader in;
-	private AgentPlotServer agentPlotServer;
+    private BufferedReader  in;
+    private AgentPlotServer agentPlotServer;
 
-	public AgentPlotConnectedClient(Socket clientSocket,
-			AgentPlotServer _agentPlotServer) {
-		try {
-			agentPlotServer = _agentPlotServer;
-			in = new BufferedReader(new InputStreamReader(
-					clientSocket.getInputStream()));
-			new Thread(this).start();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    public AgentPlotConnectedClient(Socket clientSocket,
+        AgentPlotServer agentPlotServer) {
+        try {
+            this.agentPlotServer = agentPlotServer;
+            in = new BufferedReader(new InputStreamReader(
+                clientSocket.getInputStream()));
+            new Thread(this).start();
+        }
+        catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-	}
+    }
 
-	@Override
-	public void run() {
-		String line;
-		try {
-			while ((line = in.readLine()) != null) {
-				String[] res = line.split(";");
-				switch (res[0]) {
-				case "config":
-					config(res);
-					break;
-				case "add":
-					add(res);
-					break;
-				case "close":
-					close(res);
-					break;
-				}
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void run() {
+        String line;
+        try {
+            while ((line = in.readLine()) != null) {
+                String[] res = line.split(";");
+                switch (res[0]) {
+                    case "config":
+                        config(res);
+                        break;
+                    case "add":
+                        add(res);
+                        break;
+                    case "close":
+                        close(res);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
-	private void close(String[] res) {
-		agentPlotServer.getChart(res[1]).close();
-	}
+    private void close(String[] res) {
+        agentPlotServer.getChart(res[1]).close();
+    }
 
-	private void add(String[] res) {
-		IAgentPlotChart chart = agentPlotServer.getChart(res[1]);
-		double y = Double.parseDouble(res[4]);
-		if (res[3].isEmpty()) {
-			if (res[2].isEmpty()) {
-				chart.add(y);
-			} else {
-				chart.add(res[2], y);
-			}
-		} else {
-			double x = Double.parseDouble(res[3]);
-			if (res[2].isEmpty()) {
-				chart.add(x, y);
-			} else {
-				chart.add(res[2], x, y);
-			}
-		}
-	}
+    private void add(String[] res) {
+        IAgentPlotChart chart = agentPlotServer.getChart(res[1]);
+        double y = Double.parseDouble(res[4]);
+        if (res[3].isEmpty()) {
+            if (res[2].isEmpty()) {
+                chart.add(y);
+            }
+            else {
+                chart.add(res[2], y);
+            }
+        }
+        else {
+            double x = Double.parseDouble(res[3]);
+            if (res[2].isEmpty()) {
+                chart.add(x, y);
+            }
+            else {
+                chart.add(res[2], x, y);
+            }
+        }
+    }
 
-	private void config(String[] res) {
-		agentPlotServer.configChart(res[1], ChartType.valueOf(res[2]));
-	}
+    private void config(String[] res) {
+        agentPlotServer.configChart(res[1], EChartType.valueOf(res[2]));
+    }
 
 }

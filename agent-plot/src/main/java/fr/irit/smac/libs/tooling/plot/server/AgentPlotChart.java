@@ -42,7 +42,7 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-import fr.irit.smac.libs.tooling.plot.commons.ChartType;
+import fr.irit.smac.libs.tooling.plot.commons.EChartType;
 import fr.irit.smac.libs.tooling.plot.interfaces.IAgentPlotChart;
 
 /**
@@ -52,180 +52,179 @@ import fr.irit.smac.libs.tooling.plot.interfaces.IAgentPlotChart;
  * 
  */
 public class AgentPlotChart implements IAgentPlotChart {
-	private static JFrame frame;
-	private static JPanel chartContainer;
-	private XYSeriesCollection dataset;
-	private static int chartCount = 0;
-	private JFreeChart chart;
-	private Map<String, XYSeries> series = new TreeMap<String, XYSeries>();
-	private String name;
-	private TitledBorder border;
-	private ChartType chartType = ChartType.PLOT;
-	private ChartPanel chartPanel;
-	private String firstSerie;
-	protected static int untitledCount = 1;
-	private static String frameName;
+    private static JFrame         frame;
+    private static JPanel         chartContainer;
+    private XYSeriesCollection    dataset;
+    private static int            chartCount    = 0;
+    private JFreeChart            chart;
+    private Map<String, XYSeries> series        = new TreeMap<String, XYSeries>();
+    private String                name;
+    private TitledBorder          border;
+    private EChartType            chartType     = EChartType.PLOT;
+    private ChartPanel            chartPanel;
+    private String                firstSerie;
+    protected static int          untitledCount = 1;
+    private static String         frameName;
 
-	public AgentPlotChart() {
-		this("Untitled " + (untitledCount++));
-	}
+    public AgentPlotChart() {
+        this("Untitled " + (untitledCount++));
+    }
 
-	public AgentPlotChart(String _name) {
-		this(_name, ChartType.LINE);
-	}
+    public AgentPlotChart(String name) {
+        this(name, EChartType.LINE);
+    }
 
-	public AgentPlotChart(String _name, ChartType _chartType) {
-		name = _name;
-		chartType = _chartType;
-		chartCount++;
-		getChartContainer(true).add(getChartPanel());
-		getFrame();
-		getChartContainer().revalidate();
-		getChartContainer().repaint();
-	}
+    public AgentPlotChart(String name, EChartType chartType) {
+        this.name = name;
+        this.chartType = chartType;
+        AgentPlotChart.chartCount++;
+        getChartContainer(true).add(getChartPanel());
+        getFrame();
+        getChartContainer().revalidate();
+        getChartContainer().repaint();
+    }
 
-	private static JFrame getFrame() {
-		if (frame == null) {
-			frame = new JFrame(frameName);
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			JScrollPane jScrollPane = new JScrollPane(getChartContainer());
-			jScrollPane.setPreferredSize(new Dimension(800, 600));
-			frame.getContentPane().add(jScrollPane, BorderLayout.CENTER);
-			frame.pack();
-			frame.setVisible(true);
-		}
-		return frame;
-	}
+    private static JFrame getFrame() {
+        if (frame == null) {
+            frame = new JFrame(frameName);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            JScrollPane jScrollPane = new JScrollPane(getChartContainer());
+            jScrollPane.setPreferredSize(new Dimension(800, 600));
+            frame.getContentPane().add(jScrollPane, BorderLayout.CENTER);
+            frame.pack();
+            frame.setVisible(true);
+        }
+        return frame;
+    }
 
-	private static JPanel getChartContainer() {
-		return getChartContainer(false);
-	}
+    private static JPanel getChartContainer() {
+        return getChartContainer(false);
+    }
 
-	private static JPanel getChartContainer(boolean _refresh) {
-		if (chartContainer == null) {
-			chartContainer = new JPanel();
-		}
-		if (_refresh) {
-			switch (chartCount) {
-			case 1:
-			case 2:
-				chartContainer.setLayout(new GridLayout(0, chartCount));
-				break;
-			default:
-				chartContainer.setLayout(new GridLayout(0, 3));
-				break;
-			}
-		}
-		return chartContainer;
-	}
+    private static JPanel getChartContainer(boolean refresh) {
+        if (chartContainer == null) {
+            chartContainer = new JPanel();
+        }
+        if (refresh) {
+            switch (chartCount) {
+                case 1:
+                case 2:
+                    chartContainer.setLayout(new GridLayout(0, chartCount));
+                    break;
+                default:
+                    chartContainer.setLayout(new GridLayout(0, 3));
+                    break;
+            }
+        }
+        return chartContainer;
+    }
 
-	private ChartPanel getChartPanel() {
-		// we put the chart into a panel
-		if (chartPanel == null) {
-			chartPanel = new ChartPanel(getJFreeChart());
-			border = BorderFactory.createTitledBorder(name);
-			chartPanel.setBorder(border);
-			// default size
-			chartPanel.setPreferredSize(new Dimension(300, 300));
-		}
-		return chartPanel;
-	}
+    private ChartPanel getChartPanel() {
+        // we put the chart into a panel
+        if (chartPanel == null) {
+            chartPanel = new ChartPanel(getJFreeChart());
+            border = BorderFactory.createTitledBorder(name);
+            chartPanel.setBorder(border);
+            // default size
+            chartPanel.setPreferredSize(new Dimension(300, 300));
+        }
+        return chartPanel;
+    }
 
-	private XYSeriesCollection getDataset() {
-		if (dataset == null) {
-			dataset = new XYSeriesCollection();
-		}
-		return dataset;
-	}
+    private XYSeriesCollection getDataset() {
+        if (dataset == null) {
+            dataset = new XYSeriesCollection();
+        }
+        return dataset;
+    }
 
-	private XYSeries getSeries(String _serieName) {
-		if (firstSerie == null)
-			firstSerie = _serieName;
-		if (!series.containsKey(_serieName)) {
-			XYSeries xySeries = new XYSeries(_serieName, true,
-					(chartType == ChartType.PLOT));
+    private XYSeries getSeries(String serieName) {
+        if (firstSerie == null)
+            firstSerie = serieName;
+        if (!series.containsKey(serieName)) {
+            XYSeries xySeries = new XYSeries(serieName, true,
+                chartType == EChartType.PLOT);
 
-			series.put(_serieName, xySeries);
-			getDataset().addSeries(xySeries);
-		}
-		return series.get(_serieName);
-	}
+            series.put(serieName, xySeries);
+            getDataset().addSeries(xySeries);
+        }
+        return series.get(serieName);
+    }
 
-	public JFreeChart getJFreeChart() {
-		if (chart == null) {
-			switch (chartType) {
-			case LINE:
-				chart = ChartFactory.createXYLineChart("", // chart
-						// title
-						"X", // x axis label
-						"Y", // y axis label
-						getDataset(), // data
-						PlotOrientation.VERTICAL, true, // include legend
-						true, // tooltips
-						false // urls
-						);
-				break;
-			case PLOT:
-				chart = ChartFactory.createScatterPlot("", // chart
-						// title
-						"X", // x axis label
-						"Y", // y axis label
-						getDataset(), // data
-						PlotOrientation.VERTICAL, true, // include legend
-						true, // tooltips
-						false // urls
-						);
-				break;
+    public JFreeChart getJFreeChart() {
+        if (chart == null) {
+            if (chartType == EChartType.LINE) {
+                chart = ChartFactory.createXYLineChart("", // chart
+                    // title
+                    "X", // x axis label
+                    "Y", // y axis label
+                    getDataset(), // data
+                    PlotOrientation.VERTICAL, true, // include legend
+                    true, // tooltips
+                    false // urls
+                );
+            }
+            else if (chartType == EChartType.PLOT) {
+                chart = ChartFactory.createScatterPlot("", // chart
+                    // title
+                    "X", // x axis label
+                    "Y", // y axis label
+                    getDataset(), // data
+                    PlotOrientation.VERTICAL, true, // include legend
+                    true, // tooltips
+                    false // urls
+                );
+            }
 
-			}
-			XYPlot plot = (XYPlot) chart.getPlot();
-			plot.setBackgroundPaint(Color.white);
-			plot.setRangeGridlinePaint(Color.black);
-		}
-		return chart;
-	}
+            XYPlot plot = (XYPlot) chart.getPlot();
+            plot.setBackgroundPaint(Color.white);
+            plot.setRangeGridlinePaint(Color.black);
+        }
+        return chart;
 
-	@Override
-	public void close() {
-		getChartContainer().remove(getChartPanel());
-		getChartContainer().revalidate();
-		getChartContainer().repaint();
-	}
+    }
 
-	@Override
-	public void add(double _y) {
-		if (firstSerie == null)
-			firstSerie = "Default";
-		add(firstSerie, _y);
-	}
+    @Override
+    public void close() {
+        getChartContainer().remove(getChartPanel());
+        getChartContainer().revalidate();
+        getChartContainer().repaint();
+    }
 
-	@Override
-	public void add(double _x, double _y) {
-		if (firstSerie == null)
-			firstSerie = "Default";
-		add(firstSerie, _x, _y);
-	}
+    @Override
+    public void add(double y) {
+        if (firstSerie == null)
+            firstSerie = "Default";
+        add(firstSerie, y);
+    }
 
-	@Override
-	public void add(String _serieName, double _y) {
-		double x = getSeries(_serieName).getMaxX();
-		if (Double.isNaN(x)) {
-			x = 0;
-		}
-		x += 1;
-		add(_serieName, x, _y);
-	}
+    @Override
+    public void add(double x, double y) {
+        if (firstSerie == null)
+            firstSerie = "Default";
+        add(firstSerie, x, y);
+    }
 
-	@Override
-	public void add(String _serieName, double _x, double _y) {
-		if (chartType == ChartType.PLOT)
-			getSeries(_serieName).add(_x, _y);
-		else
-			getSeries(_serieName).addOrUpdate(_x, _y);
-	}
+    @Override
+    public void add(String serieName, double y) {
+        double x = getSeries(serieName).getMaxX();
+        if (Double.isNaN(x)) {
+            x = 0;
+        }
+        x += 1;
+        add(serieName, x, y);
+    }
 
-	public static void prepareWindow(String _name) {
-		frameName = _name;
-		getFrame();
-	}
+    @Override
+    public void add(String serieName, double x, double y) {
+        if (chartType == EChartType.PLOT)
+            getSeries(serieName).add(x, y);
+        else
+            getSeries(serieName).addOrUpdate(x, y);
+    }
+
+    public static void prepareWindow(String name) {
+        frameName = name;
+        getFrame();
+    }
 }

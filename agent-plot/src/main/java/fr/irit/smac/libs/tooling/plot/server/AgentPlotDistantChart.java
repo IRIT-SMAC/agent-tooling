@@ -23,7 +23,7 @@ package fr.irit.smac.libs.tooling.plot.server;
 
 import java.io.PrintWriter;
 
-import fr.irit.smac.libs.tooling.plot.commons.ChartType;
+import fr.irit.smac.libs.tooling.plot.commons.EChartType;
 import fr.irit.smac.libs.tooling.plot.interfaces.IAgentPlotChart;
 
 /**
@@ -34,42 +34,42 @@ import fr.irit.smac.libs.tooling.plot.interfaces.IAgentPlotChart;
  */
 public class AgentPlotDistantChart implements IAgentPlotChart {
 
-	private String name;
-	private PrintWriter out;
+    private String      name;
+    private PrintWriter out;
 
-	public AgentPlotDistantChart(String _name, ChartType _chartType, PrintWriter _out) {
-		name = _name;
-		out = _out;
-		out.println("config;" + _name + ";" + _chartType.toString());
-		out.flush();
-	}
+    public AgentPlotDistantChart(String name, EChartType chartType, PrintWriter out) {
+        this.name = name;
+        this.out = out;
+        this.out.println("config;" + name + ";" + chartType.toString());
+        this.out.flush();
+    }
 
-	@Override
-	public void add(double _y) {
-		add("", _y);
-	}
+    @Override
+    public void add(double y) {
+        add("", y);
+    }
 
-	@Override
-	public void add(double _x, double _y) {
-		add("", _x, _y);
-	}
+    @Override
+    public void add(double x, double y) {
+        add("", x, y);
+    }
 
-	@Override
-	public void add(String _serieName, double _y) {
-		out.println("add;" + name + ";" + _serieName + ";;" + _y);
-		out.flush();
-	}
+    @Override
+    public void add(String serieName, double y) {
+        out.println("add;" + name + ";" + serieName + ";;" + y);
+        out.flush();
+    }
 
-	@Override
-	public void add(String _serieName, double _x, double _y) {
-		out.println("add;" + name + ";" + _serieName + ";" + _x + ";" + _y);
-		out.flush();
-	}
+    @Override
+    public void add(String serieName, double x, double y) {
+        out.println("add;" + name + ";" + serieName + ";" + x + ";" + y);
+        out.flush();
+    }
 
-	@Override
-	public void close() {
-		out.println("close;" + name);
-		out.flush();
-	}
+    @Override
+    public void close() {
+        out.println("close;" + name);
+        out.flush();
+    }
 
 }

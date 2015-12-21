@@ -28,7 +28,7 @@ import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.TreeMap;
 
-import fr.irit.smac.libs.tooling.plot.commons.ChartType;
+import fr.irit.smac.libs.tooling.plot.commons.EChartType;
 import fr.irit.smac.libs.tooling.plot.interfaces.IAgentPlotChart;
 import fr.irit.smac.libs.tooling.plot.interfaces.IAgentPlotServer;
 
@@ -39,34 +39,36 @@ import fr.irit.smac.libs.tooling.plot.interfaces.IAgentPlotServer;
  * 
  */
 public class AgentPlotDistantServer implements IAgentPlotServer {
-	private Map<String, IAgentPlotChart> charts = new TreeMap<String, IAgentPlotChart>();
-	private Socket socket;
-	private PrintWriter out;
+    private Map<String, IAgentPlotChart> charts = new TreeMap<String, IAgentPlotChart>();
+    private Socket                       socket;
+    private PrintWriter                  out;
 
-	public AgentPlotDistantServer(String _host, int _port) {
-		try {
-			socket = new Socket(_host, _port);
-			out = new PrintWriter(socket.getOutputStream());
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+    public AgentPlotDistantServer(String host, int port) {
+        try {
+            socket = new Socket(host, port);
+            out = new PrintWriter(socket.getOutputStream());
+        }
+        catch (UnknownHostException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public IAgentPlotChart getChart(String _name) {
-		if (!charts.containsKey(_name)) {
-			charts.put(_name, new AgentPlotDistantChart(_name, ChartType.LINE, out));
-		}
-		return charts.get(_name);
-	}
+    @Override
+    public IAgentPlotChart getChart(String name) {
+        if (!charts.containsKey(name)) {
+            charts.put(name, new AgentPlotDistantChart(name, EChartType.LINE, out));
+        }
+        return charts.get(name);
+    }
 
-	@Override
-	public void configChart(String _name, ChartType _chartType) {
-		charts.put(_name, new AgentPlotDistantChart(_name, _chartType, out));
-	}
+    @Override
+    public void configChart(String name, EChartType chartType) {
+        charts.put(name, new AgentPlotDistantChart(name, chartType, out));
+    }
 
 }

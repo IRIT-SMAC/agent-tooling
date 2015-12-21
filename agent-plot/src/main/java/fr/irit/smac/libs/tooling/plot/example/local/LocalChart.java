@@ -24,7 +24,7 @@ package fr.irit.smac.libs.tooling.plot.example.local;
 import org.jfree.chart.JFreeChart;
 
 import fr.irit.smac.libs.tooling.plot.AgentPlot;
-import fr.irit.smac.libs.tooling.plot.commons.ChartType;
+import fr.irit.smac.libs.tooling.plot.commons.EChartType;
 import fr.irit.smac.libs.tooling.plot.server.AgentPlotChart;
 
 /**
@@ -34,44 +34,47 @@ import fr.irit.smac.libs.tooling.plot.server.AgentPlotChart;
  * 
  */
 public class LocalChart {
-	public static void main(String[] args) {
 
-		// First, we inform the server that the chart "Layer" must be of type
-		// PLOT
-		AgentPlot.getServer().configChart("Layer", ChartType.PLOT);
+    private LocalChart() {
 
-		// Add plots to the chart "Layer" for serie #0
-		AgentPlot.getChart("Layer").add(1, 2);
-		AgentPlot.getChart("Layer").add(2, 2.5);
-		AgentPlot.getChart("Layer").add(2, 3);
+    }
 
-		// Add plots to the chart "Layer" for serie "My serie"
-		AgentPlot.getChart("Layer").add("My serie", 21, 2);
-		AgentPlot.getChart("Layer").add("My serie", 12, 2.5);
+    public static void main(String[] args) {
 
-		
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// Add plots to the chart "My Chart" which will be created during this
-		// call
-		AgentPlot.getChart("My chart").add(2, 3);
-		AgentPlot.getChart("My chart").add(3, 3);
-		AgentPlot.getChart("My chart").add(3, 4);
-				
-		
-		
-		//Access the JFreeChart object (only from the server side)
-		JFreeChart chart = ((AgentPlotChart)(AgentPlot.getChart("My chart"))).getJFreeChart();
-		//Change its title
-		chart.getTitle().setText("New title");
+        // First, we inform the server that the chart "Layer" must be of type
+        // PLOT
+        AgentPlot.getServer().configChart("Layer", EChartType.PLOT);
 
-		// Close chart
-		// AgentPlot.getChart("My chart").close();
-		// AgentPlot.getChart("Layer").close();
-	}
+        // Add plots to the chart "Layer" for serie #0
+        AgentPlot.getChart("Layer").add(1, 2);
+        AgentPlot.getChart("Layer").add(2, 2.5);
+        AgentPlot.getChart("Layer").add(2, 3);
+
+        // Add plots to the chart "Layer" for serie "My serie"
+        AgentPlot.getChart("Layer").add("My serie", 21, 2);
+        AgentPlot.getChart("Layer").add("My serie", 12, 2.5);
+
+        try {
+            Thread.sleep(1000);
+        }
+        catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        // Add plots to the chart "My Chart" which will be created during this
+        // call
+        AgentPlot.getChart("My chart").add(2, 3);
+        AgentPlot.getChart("My chart").add(3, 3);
+        AgentPlot.getChart("My chart").add(3, 4);
+
+        // Access the JFreeChart object (only from the server side)
+        JFreeChart chart = ((AgentPlotChart) (AgentPlot.getChart("My chart"))).getJFreeChart();
+        // Change its title
+        chart.getTitle().setText("New title");
+
+        // Close chart
+        // AgentPlot.getChart("My chart").close();
+        // AgentPlot.getChart("Layer").close();
+    }
 
 }

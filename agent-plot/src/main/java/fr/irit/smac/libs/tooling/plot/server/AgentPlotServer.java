@@ -27,7 +27,7 @@ import java.net.Socket;
 import java.util.Map;
 import java.util.TreeMap;
 
-import fr.irit.smac.libs.tooling.plot.commons.ChartType;
+import fr.irit.smac.libs.tooling.plot.commons.EChartType;
 import fr.irit.smac.libs.tooling.plot.interfaces.IAgentPlotChart;
 import fr.irit.smac.libs.tooling.plot.interfaces.IAgentPlotServer;
 
@@ -39,61 +39,63 @@ import fr.irit.smac.libs.tooling.plot.interfaces.IAgentPlotServer;
  */
 public class AgentPlotServer implements IAgentPlotServer, Runnable {
 
-	private ServerSocket socket;
-	private boolean running = false;
-	private Map<String, IAgentPlotChart> charts = new TreeMap<String, IAgentPlotChart>();
+    private ServerSocket                 socket;
+    private boolean                      running = false;
+    private Map<String, IAgentPlotChart> charts  = new TreeMap<String, IAgentPlotChart>();
 
-	@Override
-	public IAgentPlotChart getChart(String _name) {
-		if (!charts.containsKey(_name)) {
-			charts.put(_name, new AgentPlotChart(_name));
-		}
-		return charts.get(_name);
-	}
+    /**
+     * Create server NOT accessible through the network
+     * 
+     * @param name
+     */
+    public AgentPlotServer(String name) {
+        AgentPlotChart.prepareWindow(name);
+    }
 
-	/**
-	 * Create server NOT accessible through the network
-	 * 
-	 * @param _name
-	 */
-	public AgentPlotServer(String _name) {
-		AgentPlotChart.prepareWindow(_name);
-	}
+    /**
+     * Create server accessible through the network and locally
+     * 
+     * @param name
+     * @param port
+     */
+    public AgentPlotServer(String name, int port) {
+        this(name + " - localhost:" + port);
+        try {
+            socket = new ServerSocket(port);
+            running = true;
+            new Thread(this).start();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	/**
-	 * Create server accessible through the network and locally
-	 * 
-	 * @param _name
-	 * @param _port
-	 */
-	public AgentPlotServer(String _name, int _port) {
-		this(_name + " - localhost:" + _port);
-		try {
-			socket = new ServerSocket(_port);
-			running = true;
-			new Thread(this).start();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public IAgentPlotChart getChart(String name) {
+        if (!charts.containsKey(name)) {
+            charts.put(name, new AgentPlotChart(name));
+        }
+        return charts.get(name);
+    }
 
-	@Override
-	public void run() {
-		while (running) {
-			try {
-				Socket clientSocket = socket.accept();
-				new AgentPlotConnectedClient(clientSocket, this);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+    @Override
+    public void run() {
+        while (running) {
+            try {
+                Socket clientSocket = socket.accept();
+                new AgentPlotConnectedClient(clientSocket, this);
+            }
+            catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
-		}
-	}
+        }
+    }
 
-	@Override
-	public void configChart(String _name, ChartType _chartType) {
-		charts.put(_name, new AgentPlotChart(_name, _chartType));
-	}
+    @Override
+    public void configChart(String name, EChartType chartType) {
+        charts.put(name, new AgentPlotChart(name, chartType));
+    }
 
 }

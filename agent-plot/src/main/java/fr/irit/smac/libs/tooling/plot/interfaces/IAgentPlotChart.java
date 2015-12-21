@@ -28,40 +28,40 @@ package fr.irit.smac.libs.tooling.plot.interfaces;
  * 
  */
 public interface IAgentPlotChart {
-	/**
-	 * Add the point (xMax+1, _y) to the first serie of the chart.
-	 * 
-	 * @param _y
-	 */
-	public void add(double _y);
+    /**
+     * Add the point (xMax+1, y) to the first serie of the chart.
+     * 
+     * @param y
+     */
+    public void add(double y);
 
-	/**
-	 * Add the point (_x,_y) to the first serie of the chart.
-	 * 
-	 * @param _x
-	 * @param _y
-	 */
-	public void add(double _x, double _y);
+    /**
+     * Add the point (x,y) to the first serie of the chart.
+     * 
+     * @param x
+     * @param y
+     */
+    public void add(double x, double y);
 
-	/**
-	 * Add the point (xMax+1, _y) to the _serie serie of the chart.
-	 * 
-	 * @param _serieName
-	 * @param _y
-	 */
-	public void add(String _serieName, double _y);
+    /**
+     * Add the point (xMax+1, y) to the serie of the chart.
+     * 
+     * @param serieName
+     * @param y
+     */
+    public void add(String serieName, double y);
 
-	/**
-	 * Add the point (_x, _y) to the _serie serie of the chart.
-	 * 
-	 * @param _serieName
-	 * @param _x
-	 * @param _y
-	 */
-	public void add(String _serieName, double _x, double _y);
+    /**
+     * Add the point (x, y) to the serie of the chart.
+     * 
+     * @param serieName
+     * @param x
+     * @param y
+     */
+    public void add(String serieName, double x, double y);
 
-	/**
-	 * Close the chart on the server.
-	 */
-	public void close();
+    /**
+     * Close the chart on the server.
+     */
+    public void close();
 }

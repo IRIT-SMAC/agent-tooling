@@ -27,6 +27,6 @@ package fr.irit.smac.libs.tooling.plot.commons;
  * @author Alexandre Perles
  * 
  */
-public enum ChartType {
-	PLOT, LINE
+public enum EChartType {
+    PLOT, LINE
 }

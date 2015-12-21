@@ -22,7 +22,7 @@
 package fr.irit.smac.libs.tooling.plot.example.network;
 
 import fr.irit.smac.libs.tooling.plot.AgentPlot;
-import fr.irit.smac.libs.tooling.plot.commons.ChartType;
+import fr.irit.smac.libs.tooling.plot.commons.EChartType;
 
 /**
  * Example showing the distant connection to the server.
@@ -32,29 +32,33 @@ import fr.irit.smac.libs.tooling.plot.commons.ChartType;
  */
 public class Client {
 
-	public static void main(String[] args) {
-		// Server's configuration
-		AgentPlot.configServer("My server", "localhost", 6090);
+    private Client() {
 
-		// Create "My chart" on "My server" and plot two points
-		AgentPlot.getServer("My server").getChart("My chart").add(1, 2);
-		AgentPlot.getServer("My server").getChart("My chart").add(2, 3);
-		
-		//Plot two points in serie "My serie"
-		AgentPlot.getServer("My server").getChart("My chart").add("My serie", 3, 2.5);
-		AgentPlot.getServer("My server").getChart("My chart").add("My serie", 5, 2);
+    }
 
-		// Preconfigure chart by setting name and type
-		AgentPlot.getServer("My server").configChart("My chart 2",
-				ChartType.PLOT);
+    public static void main(String[] args) {
+        // Server's configuration
+        AgentPlot.configServer("My server", "localhost", 6090);
 
-		// Plot 3 points
-		AgentPlot.getServer("My server").getChart("My chart 2").add(1, 2);
-		AgentPlot.getServer("My server").getChart("My chart 2").add(2, 3);
-		AgentPlot.getServer("My server").getChart("My chart 2").add(3, 2.5);
+        // Create "My chart" on "My server" and plot two points
+        AgentPlot.getServer("My server").getChart("My chart").add(1, 2);
+        AgentPlot.getServer("My server").getChart("My chart").add(2, 3);
 
-		// Close charts
-		// AgentPlot.getChart("My chart", "My server").close();
-		// AgentPlot.getChart("My chart 2", "My server").close();
-	}
+        // Plot two points in serie "My serie"
+        AgentPlot.getServer("My server").getChart("My chart").add("My serie", 3, 2.5);
+        AgentPlot.getServer("My server").getChart("My chart").add("My serie", 5, 2);
+
+        // Preconfigure chart by setting name and type
+        AgentPlot.getServer("My server").configChart("My chart 2",
+            EChartType.PLOT);
+
+        // Plot 3 points
+        AgentPlot.getServer("My server").getChart("My chart 2").add(1, 2);
+        AgentPlot.getServer("My server").getChart("My chart 2").add(2, 3);
+        AgentPlot.getServer("My server").getChart("My chart 2").add(3, 2.5);
+
+        // Close charts
+        // AgentPlot.getChart("My chart", "My server").close();
+        // AgentPlot.getChart("My chart 2", "My server").close();
+    }
 }

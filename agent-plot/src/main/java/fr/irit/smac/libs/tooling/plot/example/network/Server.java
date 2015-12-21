@@ -31,7 +31,11 @@ import fr.irit.smac.libs.tooling.plot.AgentPlot;
  */
 public class Server {
 
-	public static void main(String[] args) {
-		AgentPlot.createServer(6090);
-	}
+    private Server() {
+
+    }
+
+    public static void main(String[] args) {
+        AgentPlot.createServer(6090);
+    }
 }

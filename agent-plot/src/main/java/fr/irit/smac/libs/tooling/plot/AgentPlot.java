@@ -37,104 +37,108 @@ import fr.irit.smac.libs.tooling.plot.server.AgentPlotServer;
  */
 public class AgentPlot {
 
-	/**
-	 * If no name is given for the server, this one will be used
-	 */
-	private static IAgentPlotServer defaultServer;
+    /**
+     * If no name is given for the server, this one will be used
+     */
+    private static IAgentPlotServer              defaultServer;
 
-	/**
-	 * Server's map linking name and server
-	 */
-	private static Map<String, IAgentPlotServer> servers = new TreeMap<String, IAgentPlotServer>();
+    /**
+     * Server's map linking name and server
+     */
+    private static Map<String, IAgentPlotServer> servers = new TreeMap<String, IAgentPlotServer>();
 
-	/**
-	 * Create a new server which will be accessible through network with the
-	 * port _port
-	 * 
-	 * @param _port
-	 */
-	public static void createServer(int _port) {
-		defaultServer = new AgentPlotServer("default", _port);
-	}
+    private AgentPlot() {
 
-	/**
-	 * Create a new server with the name _name and which will be accessible
-	 * through network with the port _port. The name is only used in the
-	 * server's side
-	 * 
-	 * @param _name
-	 * @param _port
-	 */
-	public static void createServer(String _name, int _port) {
-		servers.put(_name, new AgentPlotServer(_name, _port));
-	}
+    }
+    
+    /**
+     * Create a new server which will be accessible through network with the
+     * port _port
+     * 
+     * @param port
+     */
+    public static void createServer(int port) {
+        defaultServer = new AgentPlotServer("default", port);
+    }
 
-	/**
-	 * Get default server if any. Otherwise create it.
-	 * 
-	 * @return
-	 */
-	public static IAgentPlotServer getServer() {
-		if (defaultServer == null)
-			defaultServer = new AgentPlotServer("default");
-		return defaultServer;
-	}
+    /**
+     * Create a new server with the name _name and which will be accessible
+     * through network with the port _port. The name is only used in the
+     * server's side
+     * 
+     * @param name
+     * @param port
+     */
+    public static void createServer(String name, int port) {
+        servers.put(name, new AgentPlotServer(name, port));
+    }
 
-	/**
-	 * Get server with the given name if it exists. Otherwise create a
-	 * connection to it.
-	 * 
-	 * @param _name
-	 * @return
-	 */
-	public static IAgentPlotServer getServer(String _name) {
-		if (!servers.containsKey(_name)) {
-			servers.put(_name, new AgentPlotServer(_name));
-		}
-		return servers.get(_name);
-	}
+    /**
+     * Get default server if any. Otherwise create it.
+     * 
+     * @return
+     */
+    public static IAgentPlotServer getServer() {
+        if (defaultServer == null)
+            defaultServer = new AgentPlotServer("default");
+        return defaultServer;
+    }
 
-	/**
-	 * Get the chart with the given name if any. Otherwise, create it.
-	 * 
-	 * @param _name
-	 * @return
-	 */
-	public static IAgentPlotChart getChart(String _name) {
-		return getServer().getChart(_name);
-	}
+    /**
+     * Get server with the given name if it exists. Otherwise create a
+     * connection to it.
+     * 
+     * @param name
+     * @return
+     */
+    public static IAgentPlotServer getServer(String name) {
+        if (!servers.containsKey(name)) {
+            servers.put(name, new AgentPlotServer(name));
+        }
+        return servers.get(name);
+    }
 
-	/**
-	 * Get the chart _name located on the server _serverName if any. Otherwise,
-	 * create it.
-	 * 
-	 * @param _name
-	 * @param _serverName
-	 * @return
-	 */
-	public static IAgentPlotChart getChart(String _name, String _serverName) {
-		return getServer(_serverName).getChart(_name);
-	}
+    /**
+     * Get the chart with the given name if any. Otherwise, create it.
+     * 
+     * @param name
+     * @return
+     */
+    public static IAgentPlotChart getChart(String name) {
+        return getServer().getChart(name);
+    }
 
-	/**
-	 * Configure the connection to a server and set a local name. The name _name
-	 * will be then used with the method getServer(String _name).
-	 * 
-	 * @param _name
-	 * @param _host
-	 * @param _port
-	 */
-	public static void configServer(String _name, String _host, int _port) {
-		servers.put(_name, new AgentPlotDistantServer(_host, _port));
-	}
+    /**
+     * Get the chart _name located on the server _serverName if any. Otherwise,
+     * create it.
+     * 
+     * @param name
+     * @param serverName
+     * @return
+     */
+    public static IAgentPlotChart getChart(String name, String serverName) {
+        return getServer(serverName).getChart(name);
+    }
 
-	/**
-	 * Configure the connection with the default server.
-	 * 
-	 * @param _host
-	 * @param _port
-	 */
-	public static void configServer(String _host, int _port) {
-		defaultServer = new AgentPlotDistantServer(_host, _port);
-	}
+    /**
+     * Configure the connection to a server and set a local name. The name _name
+     * will be then used with the method getServer(String _name).
+     * 
+     * @param name
+     * @param host
+     * @param port
+     */
+    public static void configServer(String name, String host, int port) {
+        servers.put(name, new AgentPlotDistantServer(host, port));
+    }
+
+    /**
+     * Configure the connection with the default server.
+     * 
+     * @param host
+     * @param port
+     */
+    public static void configServer(String host, int port) {
+        defaultServer = new AgentPlotDistantServer(host, port);
+    }
 }
