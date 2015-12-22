@@ -1,6 +1,6 @@
 /*
  * #%L
- * agent-logging
+ * avt
  * %%
  * Copyright (C) 2014 - 2015 IRIT - SMAC Team
  * %%
@@ -19,41 +19,26 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package irit.smac.tooling.logging;
+package fr.irit.smac.libs.tooling.avt.deltamanager.deltadecision.impl;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import spock.lang.Specification
+import spock.lang.Unroll
+import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision
+import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl.StandardDMDFactory
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
+@Unroll
+class StandardDMDFactoryTest extends Specification {
+
+    def 'createInstance' () {
+        
+        given:
+        StandardDMDFactory standardDMDFactory = new StandardDMDFactory()
+        
+        when:
+        IDMDecision standardDMD = standardDMDFactory.createInstance()
+        
+        then:
+        standardDMD != null
     }
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
-
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
-    }
 }

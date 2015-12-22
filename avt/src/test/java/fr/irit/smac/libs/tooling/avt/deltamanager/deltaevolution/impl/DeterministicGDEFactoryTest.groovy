@@ -1,6 +1,6 @@
 /*
  * #%L
- * agent-plot
+ * avt
  * %%
  * Copyright (C) 2014 - 2015 IRIT - SMAC Team
  * %%
@@ -19,41 +19,31 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package fr.irit.smac.libs.tooling.plot;
+package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import spock.lang.Specification
+import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDE
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
+class DeterministicGDEFactoryTest extends Specification{
+
+    def 'UndeterministicGDEFactory' () {
+
+        when:
+        DeterministicGDEFactory deterministicGDEFactory = new DeterministicGDEFactory(1, 3)
+
+        then:
+        deterministicGDEFactory != null
     }
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
+    def 'createInstance' () {
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
+        given:
+        DeterministicGDEFactory deterministicGDEFactory = new DeterministicGDEFactory(1, 3)
+
+        when:
+        IGeometricDE deterministicGDE = deterministicGDEFactory.createInstance()
+
+        then:
+        deterministicGDE != null
     }
 }

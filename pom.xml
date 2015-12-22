@@ -2,31 +2,48 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<groupId>irit.smac</groupId>
 	<artifactId>agent-tooling</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-
 	<name>agent-tooling</name>
 	<url>http://maven.apache.org</url>
-
 	<organization>
 		<name>IRIT - SMAC Team</name>
 		<url>http://irit.fr/-SMAC-team-</url>
 	</organization>
-
 	<inceptionYear>2014</inceptionYear>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<sonar.host.url>http://localhost:9000/</sonar.host.url>
+		<gmaven-plugin.version>1.4</gmaven-plugin.version>
+		<groovy.version>2.3.5</groovy.version>
 	</properties>
-
 	<dependencies>
+		<!-- Spock -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
+			<groupId>org.spockframework</groupId>
+			<artifactId>spock-core</artifactId>
+			<version>0.7-groovy-2.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-all</artifactId>
+			<version>${groovy.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- cglib : for class mocking -->
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib-nodep</artifactId>
+			<version>3.0</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- objenesis : enables mocking classes without default constructor -->
+		<dependency>
+			<groupId>org.objenesis</groupId>
+			<artifactId>objenesis</artifactId>
+			<version>1.3</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -38,10 +55,9 @@
 		<module>agent-plot</module>
 		<module>avt</module>
 	</modules>
-
 	<build>
 		<plugins>
-
+			<!-- Checkstyle -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
@@ -57,13 +73,11 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-
 			<!-- handle license files -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>license-maven-plugin</artifactId>
 				<version>1.7</version>
-
 				<configuration>
 					<licenseName>lgpl_v3</licenseName>
 					<roots>
@@ -74,9 +88,7 @@
 					<!-- break some files otherwise -->
 					<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
 				</configuration>
-
 				<executions>
-
 					<execution>
 						<id>update-license</id>
 						<goals>
@@ -84,7 +96,6 @@
 						</goals>
 						<phase>generate-resources</phase>
 					</execution>
-
 					<execution>
 						<!-- download license files -->
 						<id>download-licenses</id>
@@ -92,16 +103,14 @@
 							<goal>download-licenses</goal>
 						</goals>
 					</execution>
-
 				</executions>
 			</plugin>
-
 			<plugin>
 				<groupId>org.eluder.coveralls</groupId>
 				<artifactId>coveralls-maven-plugin</artifactId>
 				<version>4.1.0</version>
 			</plugin>
-
+			<!-- JaCoco -->
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
@@ -126,13 +135,12 @@
 							<goal>check</goal>
 						</goals>
 						<configuration>
-							<rules></rules>
+							<rules />
 						</configuration>
 					</execution>
 				</executions>
-
 			</plugin>
-
+			<!-- SonarQube -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>sonar-maven-plugin</artifactId>
@@ -140,6 +148,52 @@
 				<configuration>
 					<sonar.sources>src/main/java</sonar.sources>
 					<sonar.exclusions>file:**/src/main/java/**/*_.*</sonar.exclusions>
+				</configuration>
+			</plugin>
+			<!-- Groovy -->
+			<plugin>
+				<groupId>org.codehaus.gmaven</groupId>
+				<artifactId>gmaven-plugin</artifactId>
+				<version>${gmaven-plugin.version}</version>
+				<configuration>
+					<providerSelection>2.0</providerSelection>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+							<goal>testCompile</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.codehaus.gmaven.runtime</groupId>
+						<artifactId>gmaven-runtime-2.0</artifactId>
+						<version>${gmaven-plugin.version}</version>
+						<exclusions>
+							<exclusion>
+								<groupId>org.codehaus.groovy</groupId>
+								<artifactId>groovy-all</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+					<dependency>
+						<groupId>org.codehaus.groovy</groupId>
+						<artifactId>groovy-all</artifactId>
+						<version>${groovy.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.15</version>
+				<configuration>
+					<includes>
+						<include>**/*Test.class</include>
+						<include>**/*Spec.class</include>
+					</includes>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -156,23 +210,29 @@
 							<pluginExecutions>
 								<pluginExecution>
 									<pluginExecutionFilter>
-										<groupId>
-											org.codehaus.mojo
-										</groupId>
-										<artifactId>
-											license-maven-plugin
-										</artifactId>
-										<versionRange>
-											[1.7,)
-										</versionRange>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>license-maven-plugin</artifactId>
+										<versionRange>[1.7,)</versionRange>
 										<goals>
-											<goal>
-												update-project-license
-											</goal>
+											<goal>update-project-license</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.gmaven</groupId>
+										<artifactId>gmaven-plugin</artifactId>
+										<versionRange>[1.4,)</versionRange>
+										<goals>
+											<goal>compile</goal>
+											<goal>testCompile</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
