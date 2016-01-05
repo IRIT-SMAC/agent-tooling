@@ -23,6 +23,7 @@ package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl;
 
 import spock.lang.Specification
 import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDE
+import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl.DeterministicGDEFactory;
 
 class DeterministicGDEFactoryTest extends Specification{
 

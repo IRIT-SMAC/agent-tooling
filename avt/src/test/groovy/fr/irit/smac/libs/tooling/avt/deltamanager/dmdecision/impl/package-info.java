@@ -19,26 +19,4 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package fr.irit.smac.libs.tooling.avt.deltamanager.deltadecision.impl;
-
-import spock.lang.Specification
-import spock.lang.Unroll
-import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision
-import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl.StandardDMDFactory
-
-@Unroll
-class StandardDMDFactoryTest extends Specification {
-
-    def 'createInstance' () {
-        
-        given:
-        StandardDMDFactory standardDMDFactory = new StandardDMDFactory()
-        
-        when:
-        IDMDecision standardDMD = standardDMDFactory.createInstance()
-        
-        then:
-        standardDMD != null
-    }
-
-}
+package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl;

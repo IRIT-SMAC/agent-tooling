@@ -24,86 +24,16 @@ package fr.irit.smac.libs.tooling.avt;
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager
+import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection
 
 @Unroll
 class AVTBuilderTest extends Specification {
 
     @Shared AVTBuilder avtBuilderException
-    
+
     def setupSpec() {
         avtBuilderException = new AVTBuilder()
-    }
-
-    def 'BuildHardBounds' () {
-
-        given:
-        double minValue = 0
-        double maxValue = 10
-        double precision = 0.001
-
-        AVTBuilder avtBuilderBuild = new AVTBuilder()
-        avtBuilderBuild.lowerBound(minValue)
-        avtBuilderBuild.upperBound(maxValue)
-        avtBuilderBuild.deltaMin(precision)
-        avtBuilderBuild.deltaDecreaseDelay(1)
-        avtBuilderBuild.deltaIncreaseDelay(1)
-        avtBuilderBuild.startValue(1.0)
-
-        when:
-        IAVT avt = avtBuilderBuild.build()
-
-        then:
-        avt != null
-    }
-
-    def 'BuildSoftBounds' () {
-
-        given:
-        boolean isHardBounds = false
-        double minValue = 0
-        double maxValue = 10
-        double precision = 0.001
-        
-        AVTBuilder avtBuilderBuild = new AVTBuilder()
-        avtBuilderBuild.isHardBounds(isHardBounds)
-        avtBuilderBuild.lowerBound(minValue)
-        avtBuilderBuild.upperBound(maxValue)
-        avtBuilderBuild.deltaMin(precision)
-        avtBuilderBuild.deltaDecreaseDelay(1)
-        avtBuilderBuild.deltaIncreaseDelay(1)
-        avtBuilderBuild.startValue(1.0)
-
-        when:
-        IAVT avt = avtBuilderBuild.build()
-
-        then:
-        avt != null
-    }
-
-    def 'BuildSoftBoundsMemory' () {
-
-        given:
-        boolean isHardBounds = false
-        int softBoundsMemory = 1
-        double minValue = 0
-        double maxValue = 10
-        double precision = 0.001
-        
-        AVTBuilder avtBuilderBuild = new AVTBuilder()
-        avtBuilderBuild.isHardBounds(isHardBounds)
-        avtBuilderBuild.softBoundsMemory(softBoundsMemory)
-        avtBuilderBuild.lowerBound(minValue)
-        avtBuilderBuild.upperBound(maxValue)
-        avtBuilderBuild.deltaMin(precision)
-        avtBuilderBuild.deltaDecreaseDelay(1)
-        avtBuilderBuild.deltaIncreaseDelay(1)
-        avtBuilderBuild.startValue(1.0)
-
-        when:
-        IAVT avt = avtBuilderBuild.build()
-
-        then:
-        avt != null
     }
 
     def 'isHardBounds with a not null avtFactory should throw an IllegalStateException' () {

@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package fr.irit.smac.libs.tooling.avt.deltamanager.deltadecision.impl;
+package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl;
 
 import spock.lang.Shared
 import spock.lang.Specification

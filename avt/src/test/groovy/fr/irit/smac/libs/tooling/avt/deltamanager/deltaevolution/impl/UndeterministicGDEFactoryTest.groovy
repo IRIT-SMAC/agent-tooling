@@ -25,6 +25,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDE
+import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl.UndeterministicGDEFactory;
 
 @Unroll
 class UndeterministicGDEFactoryTest extends Specification {
