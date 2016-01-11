@@ -19,9 +19,8 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl;
+package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl
 
-import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl.UndeterministicGDE;
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll

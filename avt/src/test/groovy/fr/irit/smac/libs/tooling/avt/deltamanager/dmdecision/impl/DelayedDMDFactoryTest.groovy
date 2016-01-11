@@ -19,13 +19,11 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl;
+package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl
 
 import spock.lang.Specification
 import spock.lang.Unroll
 import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision
-import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl.DelayedDMDFactory
-import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl.StandardDMDFactory
 
 @Unroll
 class DelayedDMDFactoryTest extends Specification{
@@ -36,11 +34,11 @@ class DelayedDMDFactoryTest extends Specification{
 
         when:
         delayedDMDFactory = new DelayedDMDFactory(new StandardDMDFactory(), 1, 1)
-        
+
         then:
         delayedDMDFactory != null
     }
-    
+
     def 'createInstance' () {
 
         given:

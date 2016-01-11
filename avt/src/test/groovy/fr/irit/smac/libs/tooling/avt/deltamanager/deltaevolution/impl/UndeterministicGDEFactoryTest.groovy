@@ -19,13 +19,12 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl;
+package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl
 
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDE
-import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl.UndeterministicGDEFactory;
 
 @Unroll
 class UndeterministicGDEFactoryTest extends Specification {

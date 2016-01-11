@@ -1,6 +1,4 @@
-package fr.irit.smac.libs.tooling.avt.impl;
-
-import static org.junit.Assert.*
+package fr.irit.smac.libs.tooling.avt.impl
 
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
@@ -11,6 +9,7 @@ import spock.lang.Unroll
 import fr.irit.smac.libs.tooling.avt.AVTBuilder
 import fr.irit.smac.libs.tooling.avt.EFeedback
 import fr.irit.smac.libs.tooling.avt.IAVT
+import fr.irit.smac.libs.tooling.avt.range.impl.MutableRangeImpl
 
 @Unroll
 class SoftBoundsMemoryAVTTest extends Specification{
@@ -74,6 +73,22 @@ class SoftBoundsMemoryAVTTest extends Specification{
         thrown(IllegalArgumentException)
     }
 
+    def 'adjustValue'(EFeedback feedback, double value) {
+
+        given:
+        softBoundsMemoryAVT.range = new MutableRangeImpl(minValue, maxValue)
+        softBoundsMemoryAVT.adjustValue(feedback)
+
+        expect:
+        true
+
+        where:
+        feedback | value
+        EFeedback.GOOD | 1.0
+        EFeedback.GREATER | 1.0
+        EFeedback.LOWER | 1.0
+    }
+
     def 'adjustValue with a null argument should thrown an IllegalArgumentException'() {
 
         when:
@@ -104,14 +119,75 @@ class SoftBoundsMemoryAVTTest extends Specification{
         thrown(IllegalArgumentException)
     }
 
+    def 'updateBoundsFromHistory'() {
+
+        given:
+        softBoundsMemoryAVT.range = new MutableRangeImpl(minValue, maxValue)
+        softBoundsMemoryAVT.valuesHistory.add((Double)0.288)
+
+        when:
+        softBoundsMemoryAVT.updateBoundsFromHistory()
+
+        then:
+        true
+    }
+
+    def 'isHistoryMax'(Double value, boolean historyMax) {
+
+        given:
+        softBoundsMemoryAVT.valuesHistory.add((Double)5.0)
+        softBoundsMemoryAVT.valuesHistory.add((Double)6.0)
+        softBoundsMemoryAVT.valuesHistory.add((Double)7.0)
+        softBoundsMemoryAVT.valuesHistory.add((Double)2.0)
+
+        expect:
+        softBoundsMemoryAVT.isHistoryMax(value) == historyMax
+
+        where:
+        value | historyMax
+        5.0 | false
+        15.0 | true
+        -5.0 | false
+    }
+
+    def 'isHistoryMin'(Double value, boolean historyMin) {
+
+        given:
+        softBoundsMemoryAVT.valuesHistory.add((Double)5.0)
+        softBoundsMemoryAVT.valuesHistory.add((Double)6.0)
+        softBoundsMemoryAVT.valuesHistory.add((Double)7.0)
+        softBoundsMemoryAVT.valuesHistory.add((Double)0.2)
+
+        expect:
+        softBoundsMemoryAVT.isHistoryMin(value) == historyMin
+
+        where:
+        value | historyMin
+        5.0 | false
+        15.0 | false
+        -5.0 | true
+    }
+
+    def 'updateBoundsFromNewValue'(double value, boolean boundsUpdated) {
+
+        expect:
+        softBoundsMemoryAVT.updateBoundsFromNewValue(value) == boundsUpdated
+
+        where:
+        value | boundsUpdated
+        -5 | false
+        -50 | true
+        50 | true
+    }
+
     def 'updateValueFromBounds'(double value, double newValue) {
 
         given:
         Field field = StandardAVT.getDeclaredField("value")
-        field.setAccessible(true);
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        modifiersField.setAccessible(true);
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.PROTECTED);
+        field.setAccessible(true)
+        Field modifiersField = Field.class.getDeclaredField("modifiers")
+        modifiersField.setAccessible(true)
+        modifiersField.setInt(field, field.getModifiers() & ~Modifier.PROTECTED)
         field.set(softBoundsMemoryAVT, value)
         softBoundsMemoryAVT.updateValueFromBounds()
 

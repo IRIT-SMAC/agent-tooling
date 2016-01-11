@@ -1,24 +1,14 @@
-package fr.irit.smac.libs.tooling.avt.impl;
-
-import static org.junit.Assert.*
+package fr.irit.smac.libs.tooling.avt.impl
 
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
 
 import spock.lang.Shared
-import spock.lang.Specification;
-import spock.lang.Unroll;
-import fr.irit.smac.libs.tooling.avt.AVTBuilder;
+import spock.lang.Specification
+import spock.lang.Unroll
+import fr.irit.smac.libs.tooling.avt.AVTBuilder
 import fr.irit.smac.libs.tooling.avt.EFeedback
-import fr.irit.smac.libs.tooling.avt.IAVT;
-import fr.irit.smac.libs.tooling.avt.IAdvancedAVT
-import fr.irit.smac.libs.tooling.avt.deltamanager.IAdvancedDM
-import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager
-import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory
-import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection
-import fr.irit.smac.libs.tooling.avt.deltamanager.impl.ForwardingDM
-import fr.irit.smac.libs.tooling.avt.range.IMutableRange
-import fr.irit.smac.libs.tooling.avt.range.impl.MutableRangeImpl
+import fr.irit.smac.libs.tooling.avt.IAVT
 
 @Unroll
 class SoftBoundsAVTTest extends Specification {
@@ -207,10 +197,10 @@ class SoftBoundsAVTTest extends Specification {
 
         given:
         Field field = StandardAVT.getDeclaredField("value")
-        field.setAccessible(true);
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        modifiersField.setAccessible(true);
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.PROTECTED);
+        field.setAccessible(true)
+        Field modifiersField = Field.class.getDeclaredField("modifiers")
+        modifiersField.setAccessible(true)
+        modifiersField.setInt(field, field.getModifiers() & ~Modifier.PROTECTED)
         field.set(softBoundsAVT, value)
         softBoundsAVT.updateValueFromBounds()
 

@@ -19,39 +19,92 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package fr.irit.smac.libs.tooling.avt;
+package fr.irit.smac.libs.tooling.avt
 
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager
-import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection
+import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory
 
 @Unroll
 class AVTBuilderTest extends Specification {
 
-    @Shared AVTBuilder avtBuilderException
+    @Shared AVTBuilder avtBuilder
 
     def setupSpec() {
-        avtBuilderException = new AVTBuilder()
+        avtBuilder = new AVTBuilder()
+    }
+
+    def setup() {
+
+        avtBuilder.lowerBound = 5.0
+        avtBuilder.upperBound = 10.0
     }
 
     def 'isHardBounds with a not null avtFactory should throw an IllegalStateException' () {
 
         given:
-        avtBuilderException.avtFactory = Mock(IAVTFactory)
+        avtBuilder.avtFactory = Mock(IAVTFactory)
 
         when:
-        avtBuilderException.isHardBounds(true)
+        avtBuilder.isHardBounds(true)
 
         then:
         thrown(IllegalStateException)
     }
 
+    def 'avtFactory'() {
+
+        given:
+        IAVTFactory avtFactory = Mock(IAVTFactory)
+        when:
+        avtBuilder.avtFactory(avtFactory)
+
+        then:
+        avtBuilder.avtFactory == avtFactory
+    }
+
+    def 'isDelayedDelta'() {
+
+        given:
+        boolean isDelayed = true
+
+        when:
+        avtBuilder.isDelayedDelta(isDelayed)
+
+        then:
+        avtBuilder.isDelayedDelta == isDelayed
+    }
+
+    def 'isBoundedDelta'() {
+
+        given:
+        boolean isDeterministic = true
+
+        when:
+        avtBuilder.isBoundedDelta(isDeterministic)
+
+        then:
+        avtBuilder.isBoundedDelta == isDeterministic
+    }
+
+    def 'isDeterministicDelta'() {
+
+        given:
+        boolean isDeterministic = true
+
+        when:
+        AVTBuilder avtBuilder2 = avtBuilder.isDeterministicDelta(isDeterministic)
+
+        then:
+        avtBuilder.isDeterministicDelta  == isDeterministic
+        avtBuilder2 == avtBuilder
+    }
+
     def 'lowerBound with a NaN argument should throw an IllegalArgumentException' () {
 
         when:
-        avtBuilderException.lowerBound(Math.sqrt(-1))
+        avtBuilder.lowerBound(Math.sqrt(-1))
 
         then:
         thrown(IllegalArgumentException)
@@ -60,7 +113,7 @@ class AVTBuilderTest extends Specification {
     def 'upperBound with a NaN argument should throw an IllegalArgumentException' () {
 
         when:
-        avtBuilderException.upperBound(Math.sqrt(-1))
+        avtBuilder.upperBound(Math.sqrt(-1))
 
         then:
         thrown(IllegalArgumentException)
@@ -69,16 +122,28 @@ class AVTBuilderTest extends Specification {
     def 'startValue with a NaN argument should throw an IllegalArgumentException' () {
 
         when:
-        avtBuilderException.startValue(Math.sqrt(-1))
+        avtBuilder.startValue(Math.sqrt(-1))
 
         then:
         thrown(IllegalArgumentException)
     }
 
+    def 'deltaMax' () {
+
+        given:
+        double deltaMax = 5.0
+
+        when:
+        avtBuilder.deltaMax(deltaMax)
+
+        then:
+        avtBuilder.deltaMax == deltaMax
+    }
+
     def 'deltaMax with a NaN argument should throw an IllegalArgumentException' () {
 
         when:
-        avtBuilderException.deltaMax(Math.sqrt(-1))
+        avtBuilder.deltaMax(Math.sqrt(-1))
 
         then:
         thrown(IllegalArgumentException)
@@ -87,7 +152,7 @@ class AVTBuilderTest extends Specification {
     def 'deltaMin with a NaN argument should throw an IllegalArgumentException' () {
 
         when:
-        avtBuilderException.deltaMin(Math.sqrt(-1))
+        avtBuilder.deltaMin(Math.sqrt(-1))
 
         then:
         thrown(IllegalArgumentException)
@@ -96,7 +161,7 @@ class AVTBuilderTest extends Specification {
     def 'deltaIncreaseDelay with a negative argument should throw an IllegalArgumentException' () {
 
         when:
-        avtBuilderException.deltaIncreaseDelay(-1)
+        avtBuilder.deltaIncreaseDelay(-1)
 
         then:
         thrown(IllegalArgumentException)
@@ -105,7 +170,7 @@ class AVTBuilderTest extends Specification {
     def 'deltaDecreaseDelay with a negative argument should throw an IllegalArgumentException' () {
 
         when:
-        avtBuilderException.deltaDecreaseDelay(-1)
+        avtBuilder.deltaDecreaseDelay(-1)
 
         then:
         thrown(IllegalArgumentException)
@@ -114,7 +179,7 @@ class AVTBuilderTest extends Specification {
     def 'softBoundsMemory with a negative argument should throw an IllegalArgumentException' () {
 
         when:
-        avtBuilderException.softBoundsMemory(-1)
+        avtBuilder.softBoundsMemory(-1)
 
         then:
         thrown(IllegalArgumentException)
@@ -123,40 +188,77 @@ class AVTBuilderTest extends Specification {
     def 'softBoundsMemory with hardBounds should throw an IllegalStateException' () {
 
         given:
-        avtBuilderException.isHardBounds = true
+        avtBuilder.isHardBounds = true
 
         when:
-        avtBuilderException.softBoundsMemory(1)
+        avtBuilder.softBoundsMemory(1)
 
         then:
         thrown(IllegalStateException)
     }
 
+    def 'deltaIncreaseFactor'() {
+
+        given:
+        double increaseFactor = 2.5
+
+        when:
+        avtBuilder.deltaIncreaseFactor (increaseFactor)
+
+        then:
+        avtBuilder.deltaIncreaseFactor  == increaseFactor
+    }
+
     def 'deltaIncreaseFactor with an argument lower than 1 should throw an IllegalArgumentException' () {
 
         when:
-        avtBuilderException.deltaIncreaseFactor(-1)
+        avtBuilder.deltaIncreaseFactor(-1)
 
         then:
         thrown(IllegalArgumentException)
+    }
+
+    def 'deltaDecreaseFactor'() {
+
+        given:
+        double decreaseFactor = 2.5
+
+        when:
+        avtBuilder.deltaDecreaseFactor(decreaseFactor)
+
+        then:
+        avtBuilder.deltaDecreaseFactor  == decreaseFactor
     }
 
     def 'deltaDecreaseFactor with an argument lower than 1 should throw an IllegalArgumentException' () {
 
         when:
-        avtBuilderException.deltaDecreaseFactor(-1)
+        avtBuilder.deltaDecreaseFactor(-1)
 
         then:
         thrown(IllegalArgumentException)
     }
 
+    def 'deltaDecreaseNoise'() {
+
+        given:
+        double decreaseNoise = 2.5
+        avtBuilder.isDeterministicDelta = false
+
+        when:
+        avtBuilder.deltaDecreaseNoise(decreaseNoise)
+
+        then:
+        avtBuilder.deltaDecreaseNoise  == decreaseNoise
+    }
+
     def 'deltaDecreaseNoise with a negative argument should throw an IllegalArgumentException' () {
 
         given:
-        avtBuilderException.isDeterministicDelta = false
+        avtBuilder.isDeterministicDelta = false
 
         when:
-        avtBuilderException.deltaDecreaseNoise(-1)
+        avtBuilder.deltaDecreaseNoise(-1)
 
         then:
         thrown(IllegalArgumentException)
@@ -165,34 +267,130 @@ class AVTBuilderTest extends Specification {
     def 'deltaDecreaseNoise with DeterministicDelta should throw an IllegalStateException' () {
 
         given:
-        avtBuilderException.isDeterministicDelta = true
+        avtBuilder.isDeterministicDelta = true
 
         when:
-        avtBuilderException.deltaDecreaseNoise(1)
+        avtBuilder.deltaDecreaseNoise(1)
 
         then:
         thrown(IllegalStateException)
+    }
+
+    def 'deltaRandomSeed'() {
+
+        given:
+        long seed = 4.0
+
+        when:
+        avtBuilder.deltaRandomSeed(seed)
+
+        then:
+        avtBuilder.isDeterministicDelta == false
+        avtBuilder.deltaRandomSeed == seed
+    }
+
+    def 'deltaManagerFactory' () {
+
+        given:
+        IDeltaManagerFactory deltaManagerFactory = Mock(IDeltaManagerFactory)
+
+        when:
+        AVTBuilder avtBuilder2 = avtBuilder.deltaManagerFactory(deltaManagerFactory)
+
+        then:
+        avtBuilder.deltaManagerFactory == deltaManagerFactory
+        avtBuilder2 == avtBuilder
     }
 
     def 'deltaManagerFactory with a null argument should throw an IllegalArgumentException' () {
 
         when:
-        avtBuilderException.deltaManagerFactory(null)
+        avtBuilder.deltaManagerFactory(null)
 
         then:
         thrown(IllegalArgumentException)
     }
 
+    def 'getPortionOfRange'() {
+
+        given:
+        double portion = 4.0
+
+        when:
+        double portionOfRange = avtBuilder.getPortionOfRange(portion)
+
+        then:
+        portionOfRange == 20.0
+    }
+
+    def 'getRange' () {
+
+        when:
+        BigDecimal range = avtBuilder.getRange()
+
+        then:
+        range == 5.0
+    }
+
     def 'getRange with lowerBound greather than upperBound should throw an IllegalStateException' () {
 
         given:
-        avtBuilderException.upperBound = 2
-        avtBuilderException.lowerBound = 3
+        avtBuilder.upperBound = 2
+        avtBuilder.lowerBound = 3
 
         when:
-        avtBuilderException.getRange()
+        avtBuilder.getRange()
 
         then:
         thrown(IllegalStateException)
+    }
+
+    def 'getBigDecValueOf'(double value, BigDecimal bdVal) {
+
+        expect:
+        bdVal == avtBuilder.getBigDecValueOf(value)
+
+        where:
+        value | bdVal
+        Double.NEGATIVE_INFINITY | BigDecimal.valueOf(-Double.MAX_VALUE)
+        Double.POSITIVE_INFINITY | BigDecimal.valueOf(Double.MAX_VALUE)
+        5.0 | BigDecimal.valueOf(5.0)
+    }
+
+    def 'getRangeMiddle'() {
+
+        when:
+        double rangeMiddle = avtBuilder.getRangeMiddle()
+
+        then:
+        rangeMiddle == 7.5
+    }
+
+    def 'getRangeMiddle when lowerBound is upper than upperBound should throw an IllegalStateException'() {
+
+        given:
+        avtBuilder.lowerBound = 15.0
+
+        when:
+        avtBuilder.getRangeMiddle()
+
+        then:
+        thrown(IllegalStateException)
+    }
+
+    def 'build'() {
+
+        given:
+        avtBuilder.startValue = null
+        avtBuilder.deltaManagerFactory = null
+        avtBuilder.isDeterministicDelta = false
+        avtBuilder.deltaMin = null
+        avtBuilder.deltaMax = 5.0
+
+        when:
+        avtBuilder.build()
+
+        then:
+        true
     }
 }

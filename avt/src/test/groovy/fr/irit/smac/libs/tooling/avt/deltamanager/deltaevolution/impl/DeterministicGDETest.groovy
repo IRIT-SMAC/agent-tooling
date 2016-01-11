@@ -19,12 +19,13 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl;
+package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl
 
 import spock.lang.Shared
 import spock.lang.Specification
-import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl.DeterministicGDE
+import spock.lang.Unroll
 
+@Unroll
 class DeterministicGDETest extends Specification{
 
     @Shared DeterministicGDE deterministicGDEConstructor
@@ -33,7 +34,7 @@ class DeterministicGDETest extends Specification{
     def setupSpec() {
         deterministicGDE = new DeterministicGDE(2, 3)
     }
-    
+
     def 'DeterministicGDE with an increaseFactor lower than 1 should throw an IllegalArgumentException' () {
 
         when:
@@ -83,43 +84,43 @@ class DeterministicGDETest extends Specification{
     }
 
     def 'getDecreasedDelta with a NaN argument should throw an IllegalArgumentException' () {
-        
+
         when:
         deterministicGDE.getDecreasedDelta(Math.sqrt(-1))
-        
+
         then:
         thrown(IllegalArgumentException)
     }
-    
+
     def 'getIncreasedDelta with a NaN argument should throw an IllegalArgumentException' () {
-        
+
         when:
         deterministicGDE.getIncreasedDelta(Math.sqrt(-1))
-        
+
         then:
         thrown(IllegalArgumentException)
     }
-    
+
     def 'getIncreasedDelta should return delta * decreaseFactor' () {
-        
+
         given:
         double delta = 2.0
-        
+
         when:
         double newDelta = deterministicGDE.getIncreasedDelta(delta)
-        
+
         then:
         newDelta == delta * deterministicGDE.increaseFactor
     }
-    
+
     def 'getDecreasedDelta should return delta / decreaseFactor' () {
-        
+
         given:
         double delta = 2.0
-        
+
         when:
         double newDelta = deterministicGDE.getDecreasedDelta(delta)
-        
+
         then:
         newDelta == delta / deterministicGDE.decreaseFactor
     }

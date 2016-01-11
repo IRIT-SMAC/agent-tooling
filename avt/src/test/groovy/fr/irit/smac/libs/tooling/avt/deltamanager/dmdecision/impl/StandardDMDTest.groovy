@@ -19,14 +19,13 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl;
+package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl
 
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection
 import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision.EDecision
-import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl.StandardDMD
 
 @Unroll
 class StandardDMDTest extends Specification {
@@ -105,6 +104,5 @@ class StandardDMDTest extends Specification {
         EDirection.INDIRECT | EDirection.INDIRECT | EDecision.INCREASE_DELTA
         EDirection.NONE | EDirection.INDIRECT | EDecision.DECREASE_DELTA
         EDirection.NONE | EDirection.DIRECT | EDecision.DECREASE_DELTA
-        
     }
 }

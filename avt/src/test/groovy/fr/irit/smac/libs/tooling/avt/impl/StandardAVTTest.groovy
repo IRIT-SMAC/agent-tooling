@@ -19,9 +19,8 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package fr.irit.smac.libs.tooling.avt.impl;
+package fr.irit.smac.libs.tooling.avt.impl
 
-import static org.junit.Assert.*
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll

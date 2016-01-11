@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl;
+package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl
 
 import spock.lang.Shared
 import spock.lang.Specification
@@ -27,8 +27,6 @@ import spock.lang.Unroll
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection
 import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision
 import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision.EDecision
-import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl.DelayedDMD
-import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl.StandardDMD
 
 @Unroll
 class DelayedDMDTest extends Specification {
@@ -76,18 +74,18 @@ class DelayedDMDTest extends Specification {
         1 | 1 | false
         1 | 0 | true
     }
-    
+
     def 'getNextDecision' (EDirection direction, EDirection lastDirection, EDecision decision, int increaseDelay, int decreaseDelay) {
-        
+
         given:
         StandardDMD nestedDmd = new StandardDMD()
         delayedDMD = new DelayedDMD(nestedDmd, increaseDelay, decreaseDelay)
         nestedDmd.lastDirection = lastDirection
         EDecision newDecision = delayedDMD.getNextDecision(direction)
-        
+
         expect:
         newDecision == decision
-        
+
         where:
         direction | lastDirection | decision | increaseDelay | decreaseDelay
         EDirection.NONE | EDirection.NONE | EDecision.SAME_DELTA | 1 | 1
@@ -96,46 +94,46 @@ class DelayedDMDTest extends Specification {
         EDirection.DIRECT | EDirection.DIRECT | EDecision.SAME_DELTA | 1 | 1
         EDirection.DIRECT | EDirection.INDIRECT | EDecision.SAME_DELTA | 1 | 1
     }
-    
+
     def 'getNextDecision should throw an IllegalArgumentException' () {
-        
+
         given:
         StandardDMD nestedDmd = new StandardDMD()
         delayedDMD = new DelayedDMD(nestedDmd, 1, 1)
-        
+
         when:
-        delayedDMD.getNextDecision(null);
-        
+        delayedDMD.getNextDecision(null)
+
         then:
         thrown(IllegalArgumentException)
     }
-    
+
     def 'getNextDecisionIf' (EDirection direction, EDirection lastDirection, EDecision decision, int increaseDelay, int decreaseDelay) {
-        
+
         given:
         StandardDMD nestedDmd = new StandardDMD()
         delayedDMD = new DelayedDMD(nestedDmd, increaseDelay, decreaseDelay)
         nestedDmd.lastDirection = lastDirection
         EDecision newDecision = delayedDMD.getNextDecisionIf(direction)
-        
+
         expect:
         newDecision == decision
-        
+
         where:
         direction | lastDirection | decision | increaseDelay | decreaseDelay
         EDirection.DIRECT | EDirection.DIRECT | EDecision.INCREASE_DELTA | 0 | 1
         EDirection.DIRECT | EDirection.INDIRECT | EDecision.DECREASE_DELTA | 1 | 0
     }
-    
+
     def 'getNextDecisionIf should throw an IllegalArgumentException' () {
-        
+
         given:
         StandardDMD nestedDmd = new StandardDMD()
         delayedDMD = new DelayedDMD(nestedDmd, 1, 1)
-        
+
         when:
-        delayedDMD.getNextDecisionIf(null);
-        
+        delayedDMD.getNextDecisionIf(null)
+
         then:
         thrown(IllegalArgumentException)
     }

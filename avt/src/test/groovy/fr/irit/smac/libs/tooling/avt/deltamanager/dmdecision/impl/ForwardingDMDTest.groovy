@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl;
+package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl
 
 import spock.lang.Shared
 import spock.lang.Specification
@@ -27,8 +27,6 @@ import spock.lang.Unroll
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection
 import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision
 import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision.EDecision
-import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl.ForwardingDMD
-import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl.StandardDMD
 
 @Unroll
 public class ForwardingDMDTest extends Specification {
@@ -65,16 +63,16 @@ public class ForwardingDMDTest extends Specification {
     }
 
     def 'getNextDecision' () {
-        
+
         when:
         EDecision decision = forwardingDMD.getNextDecision(EDirection.DIRECT)
 
         then:
         decision != null
     }
-    
+
     def 'getNextDecisionIf' () {
-        
+
         when:
         EDecision decision = forwardingDMD.getNextDecisionIf(EDirection.DIRECT)
 
