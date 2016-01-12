@@ -34,36 +34,68 @@ import fr.irit.smac.libs.tooling.avt.deltamanager.impl.BoundedDMFactory;
 import fr.irit.smac.libs.tooling.avt.deltamanager.impl.StandardDMFactory;
 
 /**
- * Yeah !
- * 
+ * The Class AbstractAVTBuilder.
+ *
  * @author Sylvain Lemouzy
+ * @param <T>
+ *            the generic type
  */
 public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<T> {
 
+    /** The lower bound. */
     // AVT Parameters
     protected Double                  lowerBound           = Double.NEGATIVE_INFINITY;
+
+    /** The upper bound. */
     protected Double                  upperBound           = Double.POSITIVE_INFINITY;
+
+    /** The start value. */
     protected Double                  startValue           = null;
+
+    /** The is hard bounds. */
     protected boolean                 isHardBounds         = true;
+
+    /** The soft bounds memory. */
     protected int                     softBoundsMemory     = 0;
+
+    /** The avt factory. */
     protected IAVTFactory<T>          avtFactory           = null;
 
+    /** The delta manager factory. */
     // Delta Parameters
     protected IDeltaManagerFactory<?> deltaManagerFactory  = null;
 
+    /** The delta min. */
     protected Double                  deltaMin             = null;
+
+    /** The delta max. */
     protected Double                  deltaMax             = null;
 
+    /** The is bounded delta. */
     protected boolean                 isBoundedDelta       = true;
 
+    /** The is delayed delta. */
     protected boolean                 isDelayedDelta       = false;
+
+    /** The delta increase delay. */
     protected int                     deltaIncreaseDelay   = 1;
+
+    /** The delta decrease delay. */
     protected int                     deltaDecreaseDelay   = 1;
 
+    /** The delta increase factor. */
     protected double                  deltaIncreaseFactor  = 2.;
+
+    /** The delta decrease factor. */
     protected double                  deltaDecreaseFactor  = 3.;
+
+    /** The is deterministic delta. */
     protected boolean                 isDeterministicDelta = true;
+
+    /** The delta decrease noise. */
     protected double                  deltaDecreaseNoise   = 0.5;
+
+    /** The delta random seed. */
     protected Long                    deltaRandomSeed      = null;
 
     /*
@@ -240,7 +272,7 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
     @Override
     public AbstractAVTBuilder<T> deltaMin(double deltaMin) {
         if (Double.isNaN(deltaMin)) {
-            throw new IllegalArgumentException("deltaMin isNaN");
+            throw new IllegalArgumentException(EMessageException.DELTA_MIN_NAN.toString());
         }
         this.deltaMin = deltaMin;
         return this;
@@ -254,7 +286,7 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
     @Override
     public AbstractAVTBuilder<T> deltaMax(double deltaMax) {
         if (Double.isNaN(deltaMax)) {
-            throw new IllegalArgumentException("deltaMax isNaN");
+            throw new IllegalArgumentException(EMessageException.DELTA_MAX_NAN.toString());
         }
         this.deltaMax = deltaMax;
         return this;
@@ -268,7 +300,7 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
     @Override
     public AbstractAVTBuilder<T> lowerBound(double lowerBound) {
         if (Double.isNaN(lowerBound)) {
-            throw new IllegalArgumentException("lowerBound isNaN");
+            throw new IllegalArgumentException(EMessageException.LOWER_BOUND_NAN.toString());
         }
         this.lowerBound = lowerBound;
         return this;
@@ -282,7 +314,7 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
     @Override
     public AbstractAVTBuilder<T> upperBound(double upperBound) {
         if (Double.isNaN(upperBound)) {
-            throw new IllegalArgumentException("upperBound isNaN");
+            throw new IllegalArgumentException(EMessageException.UPPER_BOUND_NAN.toString());
         }
         this.upperBound = upperBound;
         return this;
@@ -320,14 +352,26 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
         return this;
     }
 
+    /**
+     * Gets the portion of range.
+     *
+     * @param portion
+     *            the portion
+     * @return the portion of range
+     */
     protected double getPortionOfRange(double portion) {
 
         return this.getRange().multiply(BigDecimal.valueOf(portion)).doubleValue();
     }
 
+    /**
+     * Gets the range.
+     *
+     * @return the range
+     */
     protected BigDecimal getRange() {
         if (this.lowerBound > this.upperBound) {
-            throw new IllegalStateException("lowerBound greater than upperBound");
+            throw new IllegalStateException(EMessageException.LOWER_BOUND_GT_UPPER_BOUND.toString());
         }
 
         BigDecimal lb = getBigDecValueOf(this.lowerBound);
@@ -336,6 +380,13 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
         return ub.subtract(lb);
     }
 
+    /**
+     * Gets the big dec value of.
+     *
+     * @param value
+     *            the value
+     * @return the big dec value of
+     */
     protected static BigDecimal getBigDecValueOf(double value) {
 
         BigDecimal bdVal;
@@ -352,6 +403,11 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
         return bdVal;
     }
 
+    /**
+     * Gets the range middle.
+     *
+     * @return the range middle
+     */
     protected double getRangeMiddle() {
         if (this.lowerBound > this.upperBound) {
             throw new IllegalStateException("lowerBound greater than upperBound");
@@ -362,12 +418,30 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
 
     /**
      * throws a lot of exceptions, that are described in the doc of the build()
-     * function
+     * function.
      */
     protected void checkStateConsistency() {
+
+        checkLowerBound();
+        checkStartValue();
+        checkDeltaMin();
+        checkAvtFactory();
+    }
+
+    /**
+     * Check lower bound.
+     */
+    protected void checkLowerBound() {
+
         if (this.lowerBound >= this.upperBound) {
             throw new IllegalStateException("lowerBound >= upperBound");
         }
+    }
+
+    /**
+     * Check start value.
+     */
+    protected void checkStartValue() {
 
         if (this.startValue != null) {
             if (this.lowerBound > this.startValue) {
@@ -378,6 +452,12 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
                 throw new IllegalStateException("startValue > upperBound");
             }
         }
+    }
+
+    /**
+     * Check delta min.
+     */
+    protected void checkDeltaMin() {
 
         if (this.deltaMin != null) {
             if (this.deltaMin < 0) {
@@ -388,6 +468,12 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
                 throw new IllegalStateException("deltaMin > deltaMax");
             }
         }
+    }
+
+    /**
+     * Check avt factory.
+     */
+    protected void checkAvtFactory() {
 
         if (this.avtFactory == null) {
             throw new IllegalStateException("avtFactory is not set");
@@ -413,7 +499,7 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
         if (this.deltaManagerFactory == null) {
 
             // 2.1 instanciation of evolution
-            IGeometricDEFactory deltaEvolutionFactory = null;
+            IGeometricDEFactory deltaEvolutionFactory;
 
             if (this.isDeterministicDelta) {
                 deltaEvolutionFactory = new DeterministicGDEFactory(this.deltaIncreaseFactor, this.deltaDecreaseFactor);

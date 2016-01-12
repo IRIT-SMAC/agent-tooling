@@ -23,116 +23,174 @@ package fr.irit.smac.libs.tooling.avt;
 
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory;
 
+/**
+ * The Interface IAVTBuilder.
+ *
+ * @param <T> the generic type
+ */
 public interface IAVTBuilder<T extends IAVT> {
 
+    /**
+     * Checks if is hard bounds.
+     *
+     * @param isHardBounds the is hard bounds
+     * @return the IAVT builder
+     */
     public IAVTBuilder<T> isHardBounds(boolean isHardBounds);
 
+    /**
+     * Avt factory.
+     *
+     * @param avtFactory the avt factory
+     * @return the IAVT builder
+     */
     public IAVTBuilder<T> avtFactory(IAVTFactory<T> avtFactory);
 
     /**
-     * 
-     * @param softBoundsMemory
-     * @return
-     * @throws IllegalArgumentException
-     *             if softBoundsMemory < 0
-     * @throws IllegalStateException
-     *             hardBounds are set to true
+     * Soft bounds memory.
+     *
+     * @param softBoundsMemory the soft bounds memory
+     * @return the IAVT builder
+     * @throws IllegalArgumentException             if softBoundsMemory < 0
+     * @throws IllegalStateException             hardBounds are set to true
      */
     public IAVTBuilder<T> softBoundsMemory(int softBoundsMemory);
 
+    /**
+     * Checks if is delayed delta.
+     *
+     * @param isDelayed the is delayed
+     * @return the IAVT builder
+     */
     public IAVTBuilder<T> isDelayedDelta(boolean isDelayed);
 
+    /**
+     * Checks if is bounded delta.
+     *
+     * @param isBounded the is bounded
+     * @return the IAVT builder
+     */
     public IAVTBuilder<T> isBoundedDelta(boolean isBounded);
 
+    /**
+     * Checks if is deterministic delta.
+     *
+     * @param isDeterministic the is deterministic
+     * @return the IAVT builder
+     */
     public IAVTBuilder<T> isDeterministicDelta(boolean isDeterministic);
 
     /**
-     * 
-     * @param increaseFactor
-     * @return
-     * @throws IllegalArgumentException
-     *             if increaseFactor < 1.
+     * Delta increase factor.
+     *
+     * @param increaseFactor the increase factor
+     * @return the IAVT builder
+     * @throws IllegalArgumentException             if increaseFactor < 1.
      */
     public IAVTBuilder<T> deltaIncreaseFactor(double increaseFactor);
 
     /**
-     * 
-     * @param decreaseFactor
-     * @return
-     * @throws IllegalArgumentException
-     *             if decreaseFactor < 1.
+     * Delta decrease factor.
+     *
+     * @param decreaseFactor the decrease factor
+     * @return the IAVT builder
+     * @throws IllegalArgumentException             if decreaseFactor < 1.
      */
     public IAVTBuilder<T> deltaDecreaseFactor(double decreaseFactor);
 
     /**
-     * 
-     * @param decreaseNoise
-     * @return
-     * @throws IllegalStateException
-     *             if delta has been set to deterministic thanks to
+     * Delta decrease noise.
+     *
+     * @param decreaseNoise the decrease noise
+     * @return the IAVT builder
+     * @throws IllegalStateException             if delta has been set to deterministic thanks to
      *             this.setDeterministic(true)
-     * @throws IllegalArgumentException
-     *             if decreaseNoise <= 0
+     * @throws IllegalArgumentException             if decreaseNoise <= 0
      */
     public IAVTBuilder<T> deltaDecreaseNoise(double decreaseNoise);
 
     /**
      * Sets the random seed that defines the non deterministic evolution of
-     * delta decrease
-     * 
-     * @param seed
-     * @return
+     * delta decrease.
+     *
+     * @param seed the seed
+     * @return the IAVT builder
      */
     public IAVTBuilder<T> deltaRandomSeed(long seed);
 
     /**
-     * 
-     * @param increaseDelay
-     * @return
-     * @throws IllegalStateException
-     *             if delta has not been set to delayed thanks to a call to
+     * Delta increase delay.
+     *
+     * @param increaseDelay the increase delay
+     * @return the IAVT builder
+     * @throws IllegalStateException             if delta has not been set to delayed thanks to a call to
      *             this.setDelayedDelat(true)
-     * @throws IllegalArgumentException
-     *             if increaseDelay < 0
+     * @throws IllegalArgumentException             if increaseDelay < 0
      */
     public IAVTBuilder<T> deltaIncreaseDelay(int increaseDelay);
 
     /**
-     * 
-     * @param increaseDelay
-     * @return
+     * Delta decrease delay.
+     *
+     * @param decreaseDelay the decrease delay
+     * @return the IAVT builder
      */
     public IAVTBuilder<T> deltaDecreaseDelay(int decreaseDelay);
 
+    /**
+     * Delta min.
+     *
+     * @param deltaMin the delta min
+     * @return the IAVT builder
+     */
     public IAVTBuilder<T> deltaMin(double deltaMin);
 
+    /**
+     * Delta max.
+     *
+     * @param deltaMax the delta max
+     * @return the IAVT builder
+     */
     public IAVTBuilder<T> deltaMax(double deltaMax);
 
+    /**
+     * Lower bound.
+     *
+     * @param lowerBound the lower bound
+     * @return the IAVT builder
+     */
     public IAVTBuilder<T> lowerBound(double lowerBound);
 
+    /**
+     * Upper bound.
+     *
+     * @param upperBound the upper bound
+     * @return the IAVT builder
+     */
     public IAVTBuilder<T> upperBound(double upperBound);
 
+    /**
+     * Start value.
+     *
+     * @param startValue the start value
+     * @return the IAVT builder
+     */
     public IAVTBuilder<T> startValue(double startValue);
 
     /**
-     * 
-     * @param deltaManagerFactory
-     * @return
+     * Delta manager factory.
+     *
+     * @param deltaManagerFactory the delta manager factory
+     * @return the IAVT builder
      * @throw new IllegalArgumentException if deltaManager == null
      */
     public IAVTBuilder<T> deltaManagerFactory(IDeltaManagerFactory<?> deltaManagerFactory);
 
     /**
-     * @throws IllegalStateException
-     *             if this.lowerBound > this.startValue
-     * @throws IllegalStateException
-     *             if this.startValue > this.upperBound
-     * @throws IllegalStateException
-     *             if this.lowerBound >= this.upperBound
-     * @throws IllegalStateException
-     *             if this.deltaMin < 0
-     * @throws IllegalStateException
-     *             if this.deltaMin > this.deltaMax
+     * Builds the.
+     *
+     * @return the t
+     * @throws IllegalStateException             if this.deltaMin > this.deltaMax
      */
     public T build();
 

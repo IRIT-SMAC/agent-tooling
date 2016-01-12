@@ -42,7 +42,13 @@ public interface IDeltaManager {
      * @author Sylvain Lemouzy
      */
     public enum EDirection {
-        DIRECT, INDIRECT, NONE
+
+        /** The direct. */
+        DIRECT,
+        /** The indirect. */
+        INDIRECT,
+        /** The none. */
+        NONE
     }
 
     /**

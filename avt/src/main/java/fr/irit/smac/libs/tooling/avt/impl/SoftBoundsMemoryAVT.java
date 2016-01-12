@@ -21,17 +21,34 @@
  */
 package fr.irit.smac.libs.tooling.avt.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
 import fr.irit.smac.libs.tooling.avt.EFeedback;
+import fr.irit.smac.libs.tooling.avt.EMessageException;
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory;
 
+/**
+ * The Class SoftBoundsMemoryAVT.
+ */
 public class SoftBoundsMemoryAVT extends StandardAVT {
 
+    /** The memory size. */
     private final int           memorySize;
+    
+    /** The values history. */
     private final Queue<Double> valuesHistory;
 
+    /**
+     * Instantiates a new soft bounds memory avt.
+     *
+     * @param lowerBound the lower bound
+     * @param upperBound the upper bound
+     * @param startValue the start value
+     * @param deltaManagerFactory the delta manager factory
+     * @param memorySize the memory size
+     */
     public SoftBoundsMemoryAVT(double lowerBound, double upperBound, double startValue,
         IDeltaManagerFactory<?> deltaManagerFactory, int memorySize) {
         super(lowerBound, upperBound, startValue, deltaManagerFactory);
@@ -42,6 +59,9 @@ public class SoftBoundsMemoryAVT extends StandardAVT {
         this.valuesHistory = new ArrayDeque<Double>(this.memorySize + 1);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.impl.StandardAVT#setLowerBound(double)
+     */
     @Override
     public void setLowerBound(double lowerBound) {
         super.setLowerBound(lowerBound);
@@ -50,6 +70,9 @@ public class SoftBoundsMemoryAVT extends StandardAVT {
         this.updateDMFromBounds();
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.impl.StandardAVT#setUpperBound(double)
+     */
     @Override
     public void setUpperBound(double upperBound) {
         super.setUpperBound(upperBound);
@@ -58,6 +81,9 @@ public class SoftBoundsMemoryAVT extends StandardAVT {
         this.updateDMFromBounds();
     }
 
+    /**
+     * Update history from bounds.
+     */
     private void updateHistoryFromBounds() {
 
         Double[] values = this.valuesHistory.toArray(new Double[0]);
@@ -68,10 +94,13 @@ public class SoftBoundsMemoryAVT extends StandardAVT {
         }
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.impl.StandardAVT#setValue(double)
+     */
     @Override
     public void setValue(double value) {
         if (Double.isNaN(value)) {
-            throw new IllegalArgumentException("value isNaN");
+            throw new IllegalArgumentException(EMessageException.VALUE_NAN.toString());
         }
         this.value = value;
         this.registerNewValueAndUpdateBounds(value);
@@ -81,11 +110,14 @@ public class SoftBoundsMemoryAVT extends StandardAVT {
         this.deltaManager.getAdvancedDM().resetState();
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.impl.StandardAVT#adjustValue(fr.irit.smac.libs.tooling.avt.EFeedback)
+     */
     @Override
     public void adjustValue(EFeedback feedback) {
 
         if (feedback == null) {
-            throw new IllegalArgumentException("feedback is null");
+            throw new IllegalArgumentException(EMessageException.FEEDBACK_NULL.toString());
         }
 
         // 1 - Updates the delta value
@@ -101,10 +133,13 @@ public class SoftBoundsMemoryAVT extends StandardAVT {
         this.registerNewValueAndUpdateBounds(this.value);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.impl.StandardAVT#getValueIf(fr.irit.smac.libs.tooling.avt.EFeedback)
+     */
     @Override
     public double getValueIf(EFeedback feedback) {
         if (feedback == null) {
-            throw new IllegalArgumentException("feedback is null");
+            throw new IllegalArgumentException(EMessageException.FEEDBACK_NULL.toString());
         }
 
         double valueIf = this.value;
@@ -121,6 +156,11 @@ public class SoftBoundsMemoryAVT extends StandardAVT {
         return valueIf;
     }
 
+    /**
+     * Register new value and update bounds.
+     *
+     * @param value the value
+     */
     private void registerNewValueAndUpdateBounds(double value) {
 
         this.valuesHistory.add(value);
@@ -133,18 +173,26 @@ public class SoftBoundsMemoryAVT extends StandardAVT {
         }
     }
 
+    /**
+     * Update bounds from history.
+     *
+     * @return true, if successful
+     */
     private boolean updateBoundsFromHistory() {
         boolean boundsUpdated = false;
 
         if (this.valuesHistory.size() >= this.memorySize) {
             double oldestValue = this.valuesHistory.poll();
+            BigDecimal bdOldestValue = BigDecimal.valueOf(oldestValue);
             // if the oldestValue is the max of the history and different to
             // the current upperBound then update
-            if (this.isHistoryMax(oldestValue) && oldestValue != this.getRange().getUpperBound()) {
+            if (this.isHistoryMax(oldestValue)
+                && !bdOldestValue.equals(BigDecimal.valueOf(this.getRange().getUpperBound()))) {
                 super.setUpperBound(oldestValue);
                 boundsUpdated = true;
             } // the same reasoning applied to lower bound
-            else if (this.isHistoryMin(oldestValue) && oldestValue != this.getRange().getLowerBound()) {
+            else if (this.isHistoryMin(oldestValue)
+                && !bdOldestValue.equals(BigDecimal.valueOf(this.getRange().getLowerBound()))) {
                 super.setLowerBound(oldestValue);
                 boundsUpdated = true;
             }
@@ -153,6 +201,12 @@ public class SoftBoundsMemoryAVT extends StandardAVT {
         return boundsUpdated;
     }
 
+    /**
+     * Checks if is history min.
+     *
+     * @param value the value
+     * @return true, if is history min
+     */
     // optimized history comparison (stop at first min occurence)
     private boolean isHistoryMin(Double value) {
         for (Double d : this.valuesHistory) {
@@ -163,6 +217,12 @@ public class SoftBoundsMemoryAVT extends StandardAVT {
         return true;
     }
 
+    /**
+     * Checks if is history max.
+     *
+     * @param value the value
+     * @return true, if is history max
+     */
     // optimized history comparison (stop at first max occurence)
     private boolean isHistoryMax(Double value) {
         for (Double d : this.valuesHistory) {
@@ -173,6 +233,12 @@ public class SoftBoundsMemoryAVT extends StandardAVT {
         return true;
     }
 
+    /**
+     * Update bounds from new value.
+     *
+     * @param value the value
+     * @return true, if successful
+     */
     private boolean updateBoundsFromNewValue(double value) {
 
         boolean boundsUpdated = false;
@@ -189,6 +255,11 @@ public class SoftBoundsMemoryAVT extends StandardAVT {
         return boundsUpdated;
     }
 
+    /**
+     * Sets the value from bounds.
+     *
+     * @param value the new value from bounds
+     */
     private void setValueFromBounds(double value) {
         this.value = value;
 
@@ -197,6 +268,9 @@ public class SoftBoundsMemoryAVT extends StandardAVT {
         this.deltaManager.getAdvancedDM().resetState();
     }
 
+    /**
+     * Update value from bounds.
+     */
     private void updateValueFromBounds() {
         if (this.effectiveLowerBound > this.value) {
             this.setValueFromBounds(this.effectiveLowerBound);

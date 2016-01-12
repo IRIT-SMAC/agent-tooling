@@ -24,10 +24,19 @@ package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl;
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection;
 import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision;
 
+/**
+ * The Class ForwardingDMD.
+ */
 public class ForwardingDMD implements IDMDecision {
 
+    /** The dm decison. */
     private final IDMDecision dmDecison;
 
+    /**
+     * Instantiates a new forwarding dmd.
+     *
+     * @param dmDecison the dm decison
+     */
     public ForwardingDMD(IDMDecision dmDecison) {
         super();
         if (dmDecison == null) {
@@ -36,16 +45,25 @@ public class ForwardingDMD implements IDMDecision {
         this.dmDecison = dmDecison;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision#getNextDecision(fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection)
+     */
     @Override
     public EDecision getNextDecision(EDirection direction) {
         return this.dmDecison.getNextDecision(direction);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision#resetState()
+     */
     @Override
     public void resetState() {
         this.dmDecison.resetState();
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision#getNextDecisionIf(fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection)
+     */
     @Override
     public EDecision getNextDecisionIf(EDirection direction) {
         return this.dmDecison.getNextDecisionIf(direction);

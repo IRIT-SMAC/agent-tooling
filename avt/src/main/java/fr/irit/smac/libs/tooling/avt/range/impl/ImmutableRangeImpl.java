@@ -21,11 +21,23 @@
  */
 package fr.irit.smac.libs.tooling.avt.range.impl;
 
+/**
+ * The Class ImmutableRangeImpl.
+ */
 public class ImmutableRangeImpl extends AbstractRange {
 
+    /** The lower bound. */
     private final double lowerBound;
+    
+    /** The upper bound. */
     private final double upperBound;
 
+    /**
+     * Instantiates a new immutable range impl.
+     *
+     * @param lowerBound the lower bound
+     * @param upperBound the upper bound
+     */
     public ImmutableRangeImpl(double lowerBound, double upperBound) {
         super();
 
@@ -35,11 +47,17 @@ public class ImmutableRangeImpl extends AbstractRange {
         this.checkBoundsConsistency();
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.range.IRange#getLowerBound()
+     */
     @Override
     public double getLowerBound() {
         return this.lowerBound;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.range.IRange#getUpperBound()
+     */
     @Override
     public double getUpperBound() {
         return this.upperBound;

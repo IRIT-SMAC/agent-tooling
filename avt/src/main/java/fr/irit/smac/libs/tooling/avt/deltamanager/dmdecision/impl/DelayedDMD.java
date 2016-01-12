@@ -21,17 +21,37 @@
  */
 package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl;
 
+import fr.irit.smac.libs.tooling.avt.EMessageException;
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection;
 import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision;
 
+/**
+ * The Class DelayedDMD.
+ */
 public class DelayedDMD extends ForwardingDMD {
 
+    /** The increase delay. */
     private final int increaseDelay;
+
+    /** The decrease delay. */
     private final int decreaseDelay;
 
+    /** The increase request count. */
     private int       increaseRequestCount;
+
+    /** The decrease request count. */
     private int       decreaseRequestCount;
 
+    /**
+     * Instantiates a new delayed dmd.
+     *
+     * @param dmDecison
+     *            the dm decison
+     * @param increaseDelay
+     *            the increase delay
+     * @param decreaseDelay
+     *            the decrease delay
+     */
     public DelayedDMD(IDMDecision dmDecison, int increaseDelay, int decreaseDelay) {
         super(dmDecison);
         this.increaseDelay = increaseDelay;
@@ -40,6 +60,11 @@ public class DelayedDMD extends ForwardingDMD {
         this.resetState();
     }
 
+    /**
+     * Checks if is increase allowed.
+     *
+     * @return true, if is increase allowed
+     */
     private boolean isIncreaseAllowed() {
         this.decreaseRequestCount = 0;
 
@@ -50,6 +75,11 @@ public class DelayedDMD extends ForwardingDMD {
         return this.increaseRequestCount > this.increaseDelay;
     }
 
+    /**
+     * Checks if is decrease allowed.
+     *
+     * @return true, if is decrease allowed
+     */
     private boolean isDecreaseAllowed() {
         this.increaseRequestCount = 0;
 
@@ -60,6 +90,11 @@ public class DelayedDMD extends ForwardingDMD {
         return this.decreaseRequestCount > this.decreaseDelay;
     }
 
+    /**
+     * Checks if is increase allowed if.
+     *
+     * @return true, if is increase allowed if
+     */
     private boolean isIncreaseAllowedIf() {
         int anIncreaseRequestCount = this.increaseRequestCount;
         if (anIncreaseRequestCount <= this.increaseDelay) {
@@ -69,6 +104,11 @@ public class DelayedDMD extends ForwardingDMD {
         return anIncreaseRequestCount > this.increaseDelay;
     }
 
+    /**
+     * Checks if is decrease allowed if.
+     *
+     * @return true, if is decrease allowed if
+     */
     private boolean isDecreaseAllowedIf() {
         int aDecreaseRequestCount = this.decreaseRequestCount;
 
@@ -79,10 +119,18 @@ public class DelayedDMD extends ForwardingDMD {
         return aDecreaseRequestCount > this.decreaseDelay;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl.ForwardingDMD
+     * #getNextDecision
+     * (fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection)
+     */
     @Override
     public EDecision getNextDecision(EDirection direction) {
         if (direction == null) {
-            throw new IllegalArgumentException("direction is null");
+            throw new IllegalArgumentException(EMessageException.DIRECTION_NULL.toString());
         }
 
         EDecision d = super.getNextDecision(direction);
@@ -100,10 +148,18 @@ public class DelayedDMD extends ForwardingDMD {
         return d;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl.ForwardingDMD
+     * #getNextDecisionIf
+     * (fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection)
+     */
     @Override
     public EDecision getNextDecisionIf(EDirection direction) {
         if (direction == null) {
-            throw new IllegalArgumentException("direction is null");
+            throw new IllegalArgumentException(EMessageException.DIRECTION_NULL.toString());
         }
 
         EDecision d = super.getNextDecisionIf(direction);
@@ -118,6 +174,13 @@ public class DelayedDMD extends ForwardingDMD {
         return d;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl.ForwardingDMD
+     * #resetState()
+     */
     @Override
     public void resetState() {
         super.resetState();

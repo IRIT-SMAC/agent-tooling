@@ -21,6 +21,15 @@
  */
 package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution;
 
+/**
+ * A factory for creating IDeltaEvolution objects.
+ */
 public interface IDeltaEvolutionFactory {
+    
+    /**
+     * Creates a new IDeltaEvolution object.
+     *
+     * @return the i delta evolution
+     */
     IDeltaEvolution createInstance();
 }

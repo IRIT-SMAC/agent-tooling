@@ -25,15 +25,27 @@ import fr.irit.smac.libs.tooling.avt.IAVT;
 import fr.irit.smac.libs.tooling.avt.IAVTFactory;
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory;
 
+/**
+ * A factory for creating SoftBoundsMemoryAVT objects.
+ */
 public class SoftBoundsMemoryAVTFactory implements IAVTFactory<IAVT> {
 
+    /** The soft bounds memory. */
     private final int softBoundsMemory;
 
+    /**
+     * Instantiates a new soft bounds memory avt factory.
+     *
+     * @param softBoundsMemory the soft bounds memory
+     */
     public SoftBoundsMemoryAVTFactory(int softBoundsMemory) {
         super();
         this.softBoundsMemory = softBoundsMemory;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.IAVTFactory#createInstance(double, double, double, fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory)
+     */
     @Override
     public IAVT createInstance(double lowerBound, double upperBound, double startValue,
         IDeltaManagerFactory<?> deltaManagerFactory) {

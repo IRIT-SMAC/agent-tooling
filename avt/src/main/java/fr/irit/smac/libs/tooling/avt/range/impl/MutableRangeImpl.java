@@ -23,33 +23,57 @@ package fr.irit.smac.libs.tooling.avt.range.impl;
 
 import fr.irit.smac.libs.tooling.avt.range.IMutableRange;
 
+/**
+ * The Class MutableRangeImpl.
+ */
 public class MutableRangeImpl extends AbstractRange implements IMutableRange {
 
+    /** The lower bound. */
     private double lowerBound;
+    
+    /** The upper bound. */
     private double upperBound;
 
+    /**
+     * Instantiates a new mutable range impl.
+     *
+     * @param lowerBound the lower bound
+     * @param upperBound the upper bound
+     */
     public MutableRangeImpl(double lowerBound, double upperBound) {
         super();
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.range.IRange#getLowerBound()
+     */
     @Override
     public double getLowerBound() {
         return this.lowerBound;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.range.IRange#getUpperBound()
+     */
     @Override
     public double getUpperBound() {
         return this.upperBound;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.range.IMutableRange#setLowerBound(double)
+     */
     @Override
     public void setLowerBound(double lowerBound) {
         this.lowerBound = lowerBound;
         this.checkBoundsConsistency();
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.range.IMutableRange#setUpperBound(double)
+     */
     @Override
     public void setUpperBound(double upperBound) {
         this.upperBound = upperBound;

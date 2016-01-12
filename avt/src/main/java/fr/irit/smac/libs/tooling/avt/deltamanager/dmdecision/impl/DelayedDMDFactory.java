@@ -24,12 +24,27 @@ package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl;
 import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision;
 import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecisionFactory;
 
+/**
+ * A factory for creating DelayedDMD objects.
+ */
 public class DelayedDMDFactory implements IDMDecisionFactory {
 
+    /** The nested dm decison factory. */
     private final IDMDecisionFactory nestedDMDecisonFactory;
+    
+    /** The increase delay. */
     private final int                increaseDelay;
+    
+    /** The decrease delay. */
     private final int                decreaseDelay;
 
+    /**
+     * Instantiates a new delayed dmd factory.
+     *
+     * @param nestedDMDecisonFactory the nested dm decison factory
+     * @param increaseDelay the increase delay
+     * @param decreaseDelay the decrease delay
+     */
     public DelayedDMDFactory(IDMDecisionFactory nestedDMDecisonFactory, int increaseDelay, int decreaseDelay) {
         super();
         this.nestedDMDecisonFactory = nestedDMDecisonFactory;
@@ -37,6 +52,9 @@ public class DelayedDMDFactory implements IDMDecisionFactory {
         this.decreaseDelay = decreaseDelay;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecisionFactory#createInstance()
+     */
     @Override
     public IDMDecision createInstance() {
         return new DelayedDMD(this.nestedDMDecisonFactory.createInstance(), this.increaseDelay, this.decreaseDelay);

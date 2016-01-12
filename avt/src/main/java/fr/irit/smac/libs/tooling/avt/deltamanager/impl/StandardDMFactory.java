@@ -27,18 +27,43 @@ import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDEFac
 import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecisionFactory;
 import fr.irit.smac.libs.tooling.avt.range.IRange;
 
+/**
+ * A factory for creating StandardDM objects.
+ */
 public class StandardDMFactory implements IDeltaManagerFactory<IDeltaManager> {
 
+    /** The delta evolution factory. */
     private final IGeometricDEFactory deltaEvolutionFactory;
+    
+    /** The dm decision factory. */
     private final IDMDecisionFactory  dmDecisionFactory;
+    
+    /** The delta min. */
     private final double              deltaMin;
+    
+    /** The delta max. */
     private final double              deltaMax;
 
+    /**
+     * Instantiates a new standard dm factory.
+     *
+     * @param deltaEvolutionFactory the delta evolution factory
+     * @param dmDecisionFactory the dm decision factory
+     * @param deltaMin the delta min
+     */
     public StandardDMFactory(IGeometricDEFactory deltaEvolutionFactory, IDMDecisionFactory dmDecisionFactory,
         double deltaMin) {
         this(deltaEvolutionFactory, dmDecisionFactory, deltaMin, Double.NaN);
     }
 
+    /**
+     * Instantiates a new standard dm factory.
+     *
+     * @param deltaEvolutionFatory the delta evolution fatory
+     * @param dmDecisionFactory the dm decision factory
+     * @param deltaMin the delta min
+     * @param deltaMax the delta max
+     */
     public StandardDMFactory(IGeometricDEFactory deltaEvolutionFatory, IDMDecisionFactory dmDecisionFactory,
         double deltaMin, double deltaMax) {
         super();
@@ -48,6 +73,9 @@ public class StandardDMFactory implements IDeltaManagerFactory<IDeltaManager> {
         this.deltaMax = deltaMax;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory#createInstance(fr.irit.smac.libs.tooling.avt.range.IRange)
+     */
     @Override
     public IDeltaManager createInstance(IRange range) {
         if (Double.isNaN(this.deltaMax)) {

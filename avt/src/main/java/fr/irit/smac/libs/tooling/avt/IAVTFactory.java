@@ -23,8 +23,22 @@ package fr.irit.smac.libs.tooling.avt;
 
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory;
 
+/**
+ * A factory for creating IAVT objects.
+ *
+ * @param <T> the generic type
+ */
 public interface IAVTFactory<T extends IAVT> {
 
+    /**
+     * Creates a new IAVT object.
+     *
+     * @param lowerBound the lower bound
+     * @param upperBound the upper bound
+     * @param startValue the start value
+     * @param deltaManagerFactory the delta manager factory
+     * @return the t
+     */
     T createInstance(double lowerBound, double upperBound, double startValue,
         IDeltaManagerFactory<?> deltaManagerFactory);
 

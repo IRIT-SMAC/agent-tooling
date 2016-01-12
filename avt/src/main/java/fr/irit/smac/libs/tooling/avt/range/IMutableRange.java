@@ -21,6 +21,9 @@
  */
 package fr.irit.smac.libs.tooling.avt.range;
 
+/**
+ * The Interface IMutableRange.
+ */
 public interface IMutableRange extends IRange {
     /**
      * Sets the lower bound of this range.

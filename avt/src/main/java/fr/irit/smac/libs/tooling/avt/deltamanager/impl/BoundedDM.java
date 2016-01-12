@@ -23,41 +23,61 @@ package fr.irit.smac.libs.tooling.avt.deltamanager.impl;
 
 import java.math.BigDecimal;
 
+import fr.irit.smac.libs.tooling.avt.EMessageException;
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager;
 
+/**
+ * The Class BoundedDM.
+ */
 public class BoundedDM extends ForwardingDM {
 
     /**
-     * @param dm
-     * @throws IllegalArgumentException
-     *             if dm == null
+     * Instantiates a new bounded dm.
+     *
+     * @param dm the dm
+     * @throws IllegalArgumentException             if dm == null
      */
     public BoundedDM(IDeltaManager dm) {
         super(dm);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.impl.ForwardingDM#adjustDelta(fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection)
+     */
     @Override
     public void adjustDelta(EDirection direction) {
         super.adjustDelta(direction);
         this.ensureBoundedDelta();
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.impl.ForwardingDM#reconfigure(double, java.math.BigDecimal)
+     */
     @Override
     public void reconfigure(double deltaMin, BigDecimal range) {
         super.reconfigure(deltaMin, range);
         this.ensureBoundedDelta();
     }
 
+    /**
+     * Ensure bounded delta.
+     */
     private void ensureBoundedDelta() {
         double currentDelta = this.getBoundedDelta(this.dm.getDelta());
-        if (currentDelta != this.dm.getDelta()) {
+        if (!BigDecimal.valueOf(currentDelta).equals(BigDecimal.valueOf(this.dm.getDelta()))) {
             this.dm.getAdvancedDM().setDelta(currentDelta);
         }
     }
 
+    /**
+     * Gets the bounded delta.
+     *
+     * @param delta the delta
+     * @return the bounded delta
+     */
     private double getBoundedDelta(double delta) {
         if (Double.isNaN(delta)) {
-            throw new IllegalArgumentException("delta isNaN");
+            throw new IllegalArgumentException(EMessageException.DELTA_NAN.toString());
         }
         double currentDelta = delta;
         if (currentDelta < this.dm.getAdvancedDM().getDeltaMin()) {
@@ -66,6 +86,9 @@ public class BoundedDM extends ForwardingDM {
         return currentDelta;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.impl.ForwardingDM#getDeltaIf(fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection)
+     */
     @Override
     public double getDeltaIf(EDirection direction) {
         double delta = super.getDeltaIf(direction);

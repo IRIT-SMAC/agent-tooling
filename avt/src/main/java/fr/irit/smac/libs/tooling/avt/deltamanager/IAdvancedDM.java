@@ -57,9 +57,9 @@ public interface IAdvancedDM extends IDeltaManager {
 
     /**
      * Returns the next delta if it would be adjusted towards the given
-     * direction
-     * 
-     * @param direction
+     * direction.
+     *
+     * @param direction the direction
      * @return the next delta if it would be adjusted towards the given
      *         direction
      */
@@ -90,8 +90,8 @@ public interface IAdvancedDM extends IDeltaManager {
      * Setting this step number will change the value of delta, in order to keep
      * consistency between these two values.
      * </p>
-     * 
-     * @param geometricStepNumber
+     *
+     * @param geometricStepNumber the new geometric step number
      */
     public void setGeometricStepNumber(int geometricStepNumber);
 
@@ -148,10 +148,9 @@ public interface IAdvancedDM extends IDeltaManager {
 
     /**
      * Reconfigure the values of delta min, delta max and nbGeometricSteps with
-     * the given new delta min and the range of the avt
-     * 
-     * @param deltaMin
-     *            minimal delta value (or tuning step)
+     * the given new delta min and the range of the avt.
+     *
+     * @param deltaMin            minimal delta value (or tuning step)
      */
     public void reconfigure(double deltaMin);
 

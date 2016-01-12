@@ -24,77 +24,58 @@ package fr.irit.smac.libs.tooling.avt.deltamanager.impl;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
+import fr.irit.smac.libs.tooling.avt.EMessageException;
 import fr.irit.smac.libs.tooling.avt.deltamanager.IAdvancedDM;
 import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDE;
 import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision;
 import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision.EDecision;
 import fr.irit.smac.libs.tooling.avt.range.IRange;
 
+/**
+ * The Class StandardDM.
+ */
 public class StandardDM implements IAdvancedDM {
 
-    private final IGeometricDE  deltaEvolution;
-    private final IDMDecision   dmDecision;
-    private final IRange         range;
+    /** The delta evolution. */
+    private final IGeometricDE deltaEvolution;
 
-    private double              delta;
-    private double              deltaMin;
-    private double              deltaMax;
-    private int                 nbGeometricSteps;
+    /** The dm decision. */
+    private final IDMDecision  dmDecision;
 
-    private static final String DELTA_MIN_NAN                        = "deltaMin isNaN";
-    private static final String RANGE_NULL                           = "range is null";
-    private static final String DELTA_MIN_LE_0                       = "deltaMin <= 0";
-    private static final String DELTA_EVOLUTION_NULL                 = "deltaEvolution == null";
-    private static final String DELTA_EVOLUTION_INCREASE_FACTOR_LE_1 = "deltaEvolution.getIncreaseFactor() <= 1.";
-    private static final String DELTA_MAX_NAN                        = "deltaMax isNaN";
-    private static final String DELTA_MAX_LT_DELTA_MIN               = "deltaMax < deltaMin";
-    private static final String DELTA_MIN_GT_DELTA_MAX               = "deltaMin > this.deltaMax";
-    private static final String DIRECTION_NULL                       = "direction is null";
-    private static final String DELTA_NULL                           = "delta isNaN";
-    private static final String DELTA_MAX_LT_THIS_DELTA_MIN          = "deltaMax < this.deltaMin";
-    private static final String LOWER_BOUND_NAN                      = "lowerBound isNaN";
-    private static final String UPPER_BOUND_NAN                      = "upperBound isNaN";
-    private static final String GEOMETRIC_FACTOR_BOUND_NAN           = "geometricFactor isNaN";
-    private static final String DELTA_MIN_GE_RANGE                   = "deltaMin => range";
-    private static final String RANGE_GT_MAX_VALUE_TIME_2            = "range > Double.MAX_VALUE * 2";
-    private static final String GEOMETRIC_STEP_NUMBER_BOUND          = "if geometricStepNumber < 1 or geometricStepNumber > this.getNbGeometricSteps()";
+    /** The range. */
+    private final IRange       range;
+
+    /** The delta. */
+    private double             delta;
+
+    /** The delta min. */
+    private double             deltaMin;
+
+    /** The delta max. */
+    private double             deltaMax;
+
+    /** The nb geometric steps. */
+    private int                nbGeometricSteps;
 
     /**
-     * 
-     * 
+     * Instantiates a new standard dm.
+     *
      * @param deltaMin
+     *            the delta min
      * @param range
+     *            the range
      * @param deltaEvolution
-     * @throws IllegalArgumentException
-     *             if deltaMin <= 0
-     * @throws IllegalArgumentException
-     *             if range == null
-     * @throws IllegalArgumentException
-     *             if deltaEvolution == null
+     *            the delta evolution
+     * @param dmDecision
+     *            the dm decision
      * @throws IllegalArgumentException
      *             if deltaEvolution.getIncreaseFactor() <= 1.;
      */
     public StandardDM(double deltaMin, IRange range, IGeometricDE deltaEvolution, IDMDecision dmDecision) {
 
-        if (Double.isNaN(deltaMin)) {
-            throw new IllegalArgumentException(DELTA_MIN_NAN);
-        }
-
-        if (range == null) {
-            throw new IllegalArgumentException(RANGE_NULL);
-        }
-
-        // Check for invalid arguments
-        if (deltaMin <= 0) {
-            throw new IllegalArgumentException(DELTA_MIN_LE_0);
-        }
-
-        if (deltaEvolution == null) {
-            throw new IllegalArgumentException(DELTA_EVOLUTION_NULL);
-        }
-        if (deltaEvolution.getIncreaseFactor() <= 1.) {
-            throw new IllegalArgumentException(DELTA_EVOLUTION_INCREASE_FACTOR_LE_1);
-        }
+        checkDeltaMin(deltaMin);
+        checkRange(range);
+        checkDeltaEvolution(deltaEvolution);
 
         this.range = range;
         this.deltaMin = deltaMin;
@@ -105,50 +86,29 @@ public class StandardDM implements IAdvancedDM {
     }
 
     /**
-     * 
+     * Instantiates a new standard dm.
+     *
      * @param deltaMin
+     *            the delta min
      * @param deltaMax
-     * @param avt
+     *            the delta max
+     * @param range
+     *            the range
      * @param deltaEvolution
-     * @throws IllegalArgumentException
-     *             if deltaMin <= 0
-     * @throws IllegalArgumentException
-     *             if avt == null
-     * @throws IllegalArgumentException
-     *             if deltaEvolution == null
-     * @throws IllegalArgumentException
-     *             if deltaMax < deltaMin
+     *            the delta evolution
+     * @param dmDecision
+     *            the dm decision
      * @throws IllegalArgumentException
      *             if deltaEvolution.getIncreaseFactor() <= 1.
      */
     public StandardDM(double deltaMin, double deltaMax, IRange range, IGeometricDE deltaEvolution,
         IDMDecision dmDecision) {
 
-        if (Double.isNaN(deltaMin)) {
-            throw new IllegalArgumentException(DELTA_MIN_NAN);
-        }
-
-        if (Double.isNaN(deltaMax)) {
-            throw new IllegalArgumentException(DELTA_MAX_NAN);
-        }
-
-        if (range == null) {
-            throw new IllegalArgumentException(RANGE_NULL);
-        }
-
-        // Check for invalid arguments
-        if (deltaMin <= 0) {
-            throw new IllegalArgumentException(DELTA_MIN_LE_0);
-        }
-        if (deltaEvolution == null) {
-            throw new IllegalArgumentException(DELTA_EVOLUTION_NULL);
-        }
-        if (deltaMax < deltaMin) {
-            throw new IllegalArgumentException(DELTA_MAX_LT_DELTA_MIN);
-        }
-        if (deltaEvolution.getIncreaseFactor() <= 1.) {
-            throw new IllegalArgumentException(DELTA_EVOLUTION_INCREASE_FACTOR_LE_1);
-        }
+        checkDeltaMin(deltaMin);
+        checkDeltaMax(deltaMax);
+        checkDeltaMinAndMax(deltaMin, deltaMax);
+        checkRange(range);
+        checkDeltaEvolution(deltaEvolution);
 
         this.range = range;
         this.deltaMin = deltaMin;
@@ -160,6 +120,80 @@ public class StandardDM implements IAdvancedDM {
         this.resetState();
     }
 
+    /**
+     * Check range.
+     *
+     * @param range the range
+     */
+    private static void checkRange(IRange range) {
+
+        if (range == null) {
+            throw new IllegalArgumentException(EMessageException.RANGE_NULL.toString());
+        }
+    }
+
+    /**
+     * Check delta min.
+     *
+     * @param deltaMin the delta min
+     */
+    private static void checkDeltaMin(double deltaMin) {
+
+        if (Double.isNaN(deltaMin)) {
+            throw new IllegalArgumentException(EMessageException.DELTA_MIN_NAN.toString());
+        }
+
+        if (deltaMin <= 0) {
+            throw new IllegalArgumentException(EMessageException.DELTA_MIN_LE_0.toString());
+        }
+    }
+
+    /**
+     * Check delta max.
+     *
+     * @param deltaMax the delta max
+     */
+    private static void checkDeltaMax(double deltaMax) {
+
+        if (Double.isNaN(deltaMax)) {
+            throw new IllegalArgumentException(EMessageException.DELTA_MAX_NAN.toString());
+        }
+    }
+
+    /**
+     * Check delta min and max.
+     *
+     * @param deltaMin the delta min
+     * @param deltaMax the delta max
+     */
+    private static void checkDeltaMinAndMax(double deltaMin, double deltaMax) {
+
+        if (deltaMax < deltaMin) {
+            throw new IllegalArgumentException(EMessageException.DELTA_MAX_LT_DELTA_MIN.toString());
+        }
+    }
+
+    /**
+     * Check delta evolution.
+     *
+     * @param deltaEvolution the delta evolution
+     */
+    private static void checkDeltaEvolution(IGeometricDE deltaEvolution) {
+
+        if (deltaEvolution == null) {
+            throw new IllegalArgumentException(EMessageException.DELTA_EVOLUTION_NULL.toString());
+        }
+
+        if (deltaEvolution.getIncreaseFactor() <= 1.) {
+            throw new IllegalArgumentException(EMessageException.DELTA_EVOLUTION_INCREASE_FACTOR_LE_1.toString());
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.IAdvancedDM#resetState()
+     */
     @Override
     public void resetState() {
         // 1. reset current delta to the mid delta value
@@ -195,10 +229,17 @@ public class StandardDM implements IAdvancedDM {
         this.dmDecision.resetState();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager#adjustDelta(
+     * fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection)
+     */
     @Override
     public void adjustDelta(EDirection direction) {
         if (direction == null) {
-            throw new IllegalArgumentException(DIRECTION_NULL);
+            throw new IllegalArgumentException(EMessageException.DIRECTION_NULL.toString());
         }
 
         EDecision decision = this.dmDecision.getNextDecision(direction);
@@ -210,6 +251,11 @@ public class StandardDM implements IAdvancedDM {
         }
     }
 
+    /**
+     * Gets the increased delta.
+     *
+     * @return the increased delta
+     */
     protected double getIncreasedDelta() {
         double increasedDelta = this.deltaEvolution.getIncreasedDelta(this.delta);
         if (increasedDelta < this.deltaMin) {
@@ -223,25 +269,51 @@ public class StandardDM implements IAdvancedDM {
         return increasedDelta;
     }
 
+    /**
+     * Gets the decreased delta.
+     *
+     * @return the decreased delta
+     */
     protected double getDecreasedDelta() {
         return this.deltaEvolution.getDecreasedDelta(this.delta);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager#getDelta()
+     */
     @Override
     public double getDelta() {
         return this.delta;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager#getAdvancedDM()
+     */
     @Override
     public IAdvancedDM getAdvancedDM() {
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.IAdvancedDM#getDeltaMin()
+     */
     @Override
     public double getDeltaMin() {
         return this.deltaMin;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.IAdvancedDM#getDeltaMax()
+     */
     @Override
     public double getDeltaMax() {
         return this.deltaMax;
@@ -262,11 +334,11 @@ public class StandardDM implements IAdvancedDM {
     @Override
     public void setDeltaMin(double deltaMin) {
         if (Double.isNaN(deltaMin)) {
-            throw new IllegalArgumentException(DELTA_MIN_NAN);
+            throw new IllegalArgumentException(EMessageException.DELTA_MIN_NAN.toString());
         }
 
         if (deltaMin > this.deltaMax) {
-            throw new IllegalArgumentException(DELTA_MIN_GT_DELTA_MAX);
+            throw new IllegalArgumentException(EMessageException.DELTA_MIN_GT_DELTA_MAX.toString());
         }
         this.deltaMin = deltaMin;
     }
@@ -286,11 +358,11 @@ public class StandardDM implements IAdvancedDM {
     @Override
     public void setDeltaMax(double deltaMax) {
         if (Double.isNaN(deltaMax)) {
-            throw new IllegalArgumentException(DELTA_MAX_NAN);
+            throw new IllegalArgumentException(EMessageException.DELTA_MAX_NAN.toString());
         }
 
         if (deltaMax < this.deltaMin) {
-            throw new IllegalArgumentException(DELTA_MAX_LT_THIS_DELTA_MIN);
+            throw new IllegalArgumentException(EMessageException.DELTA_MAX_LT_THIS_DELTA_MIN.toString());
         }
         this.deltaMax = deltaMax;
     }
@@ -308,23 +380,44 @@ public class StandardDM implements IAdvancedDM {
     @Override
     public void setDelta(double delta) {
         if (Double.isNaN(delta)) {
-            throw new IllegalArgumentException(DELTA_NULL);
+            throw new IllegalArgumentException(EMessageException.DELTA_NAN.toString());
         }
 
         this.delta = delta;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.avt.deltamanager.IAdvancedDM#getGeometricStepNumber
+     * ()
+     */
     @Override
     public int getGeometricStepNumber() {
         return (int) Math.ceil((Math.log(Math.max(this.delta, this.deltaMin)) - Math.log(this.deltaMin))
             / Math.log(this.deltaEvolution.getIncreaseFactor())) + 1;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.avt.deltamanager.IAdvancedDM#getNbGeometricSteps
+     * ()
+     */
     @Override
     public int getNbGeometricSteps() {
         return this.nbGeometricSteps;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.avt.deltamanager.IAdvancedDM#reconfigure(double
+     * )
+     */
     @Override
     /**
      * Reconfigure the values of delta min, delta max and nbGeometricSteps with
@@ -337,6 +430,13 @@ public class StandardDM implements IAdvancedDM {
         this.reconfigure(deltaMin, this.range.computeRangeSize());
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.avt.deltamanager.IAdvancedDM#reconfigure(double
+     * , java.math.BigDecimal)
+     */
     @Override
     /**
      * @throws IllegalArgumentException
@@ -350,28 +450,24 @@ public class StandardDM implements IAdvancedDM {
      */
     public void reconfigure(double deltaMin, BigDecimal range) {
 
-        if (Double.isNaN(deltaMin)) {
-            throw new IllegalArgumentException(DELTA_MIN_NAN);
-        }
-
-        if (deltaMin <= 0) {
-            throw new IllegalArgumentException(DELTA_MIN_LE_0);
-        }
+        checkDeltaMin(deltaMin);
+        
         if (range == null) {
-            throw new IllegalArgumentException(RANGE_NULL);
+            throw new IllegalArgumentException(EMessageException.RANGE_NULL.toString());
         }
 
         if (range.compareTo(BigDecimal.valueOf(deltaMin)) <= 0) {
-            throw new IllegalArgumentException(DELTA_MIN_GE_RANGE);
+            throw new IllegalArgumentException(EMessageException.DELTA_MIN_GE_RANGE.toString());
         }
         if (range.compareTo(BigDecimal.valueOf(Double.MAX_VALUE).multiply(BigDecimal.valueOf(2.))) > 0) {
-            throw new IllegalArgumentException(RANGE_GT_MAX_VALUE_TIME_2);
+            throw new IllegalArgumentException(EMessageException.RANGE_GT_MAX_VALUE_TIME_2.toString());
         }
 
         this.deltaMin = deltaMin;
         this.nbGeometricSteps = StandardDM.computeNbGeometricStepsFromRange(deltaMin, range,
             this.deltaEvolution.getIncreaseFactor());
-        this.deltaMax = this.deltaMin * Math.pow(this.deltaEvolution.getIncreaseFactor(), this.nbGeometricSteps - 1);
+        this.deltaMax = this.deltaMin
+            * Math.pow(this.deltaEvolution.getIncreaseFactor(), (double) this.nbGeometricSteps - 1);
 
         // ensure consistency of current delta
         if (this.delta > this.deltaMax) {
@@ -379,10 +475,21 @@ public class StandardDM implements IAdvancedDM {
         }
     }
 
+    /**
+     * Compute nb geometric steps from range.
+     *
+     * @param deltaMin
+     *            the delta min
+     * @param range
+     *            the range
+     * @param geometricFactor
+     *            the geometric factor
+     * @return the int
+     */
     public static int computeNbGeometricStepsFromRange(double deltaMin, BigDecimal range, double geometricFactor) {
 
         if (Double.isNaN(deltaMin)) {
-            throw new IllegalArgumentException(DELTA_MIN_NAN);
+            throw new IllegalArgumentException(EMessageException.DELTA_MIN_NAN.toString());
         }
 
         int n; // search for a n value : the number of geometric step
@@ -420,23 +527,38 @@ public class StandardDM implements IAdvancedDM {
         }
     }
 
+    /**
+     * Compute nb geometric steps from delta max.
+     *
+     * @param deltaMin
+     *            the delta min
+     * @param deltaMax
+     *            the delta max
+     * @param geometricFactor
+     *            the geometric factor
+     * @return the int
+     */
     public static int computeNbGeometricStepsFromDeltaMax(double deltaMin, double deltaMax, double geometricFactor) {
         if (Double.isNaN(deltaMin)) {
-            throw new IllegalArgumentException(LOWER_BOUND_NAN);
+            throw new IllegalArgumentException(EMessageException.LOWER_BOUND_NAN.toString());
         }
 
         if (Double.isNaN(deltaMax)) {
-            throw new IllegalArgumentException(UPPER_BOUND_NAN);
+            throw new IllegalArgumentException(EMessageException.UPPER_BOUND_NAN.toString());
         }
 
         if (Double.isNaN(geometricFactor)) {
-            throw new IllegalArgumentException(GEOMETRIC_FACTOR_BOUND_NAN);
+            throw new IllegalArgumentException(EMessageException.GEOMETRIC_FACTOR_BOUND_NAN.toString());
         }
 
         return (int) Math.ceil((Math.log(deltaMax) - Math.log(deltaMin)) / Math.log(geometricFactor)) + 1;
     }
 
     /**
+     * Sets the geometric step number.
+     *
+     * @param geometricStepNumber
+     *            the new geometric step number
      * @throws IllegalArgumentException
      *             if geometricStepNumber < 1 or geometricStepNumber >
      *             this.getNbGeometricSteps()
@@ -445,18 +567,26 @@ public class StandardDM implements IAdvancedDM {
     public void setGeometricStepNumber(int geometricStepNumber) {
         if (geometricStepNumber < 1 || geometricStepNumber > this.getNbGeometricSteps()) {
             throw new IllegalArgumentException(
-                GEOMETRIC_STEP_NUMBER_BOUND);
+                EMessageException.GEOMETRIC_STEP_NUMBER_BOUND.toString());
         }
 
-        this.delta = this.deltaMin * Math.pow(this.deltaEvolution.getIncreaseFactor(), (double) geometricStepNumber - 1);
+        this.delta = this.deltaMin
+            * Math.pow(this.deltaEvolution.getIncreaseFactor(), (double) geometricStepNumber - 1);
 
         this.dmDecision.resetState(); // in order to forget the history
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.avt.deltamanager.IAdvancedDM#getDeltaIf(fr.
+     * irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection)
+     */
     @Override
     public double getDeltaIf(EDirection direction) {
         if (direction == null) {
-            throw new IllegalArgumentException(DIRECTION_NULL);
+            throw new IllegalArgumentException(EMessageException.DIRECTION_NULL.toString());
         }
         double deltaIf = this.delta;
         EDecision decision = this.dmDecision.getNextDecisionIf(direction);

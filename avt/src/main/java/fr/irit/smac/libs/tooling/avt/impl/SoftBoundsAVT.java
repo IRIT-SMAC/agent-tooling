@@ -22,20 +22,36 @@
 package fr.irit.smac.libs.tooling.avt.impl;
 
 import fr.irit.smac.libs.tooling.avt.EFeedback;
+import fr.irit.smac.libs.tooling.avt.EMessageException;
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory;
 
+/**
+ * The Class SoftBoundsAVT.
+ */
 public class SoftBoundsAVT extends StandardAVT {
 
-    private static final String VALUE_NAN       = "value isNaN";
-    private static final String FEEDBACK_NULL   = "feedback is null";
-    private static final String LOWER_BOUND_NAN = "lowerBound isNaN";
-    private static final String UPPER_BOUND_NAN = "upperBound isNaN";
-
+    /**
+     * Instantiates a new soft bounds avt.
+     *
+     * @param lowerBound
+     *            the lower bound
+     * @param upperBound
+     *            the upper bound
+     * @param startValue
+     *            the start value
+     * @param deltaManagerFactory
+     *            the delta manager factory
+     */
     public SoftBoundsAVT(double lowerBound, double upperBound, double startValue,
         IDeltaManagerFactory<?> deltaManagerFactory) {
         super(lowerBound, upperBound, startValue, deltaManagerFactory);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.libs.tooling.avt.impl.StandardAVT#setLowerBound(double)
+     */
     @Override
     public void setLowerBound(double lowerBound) {
         super.setLowerBound(lowerBound);
@@ -43,6 +59,11 @@ public class SoftBoundsAVT extends StandardAVT {
         this.updateDMFromBounds();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.libs.tooling.avt.impl.StandardAVT#setUpperBound(double)
+     */
     @Override
     public void setUpperBound(double upperBound) {
         super.setUpperBound(upperBound);
@@ -50,10 +71,15 @@ public class SoftBoundsAVT extends StandardAVT {
         this.updateDMFromBounds();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.libs.tooling.avt.impl.StandardAVT#setValue(double)
+     */
     @Override
     public void setValue(double value) {
         if (Double.isNaN(value)) {
-            throw new IllegalArgumentException(VALUE_NAN);
+            throw new IllegalArgumentException(EMessageException.VALUE_NAN.toString());
         }
         this.value = value;
 
@@ -66,10 +92,17 @@ public class SoftBoundsAVT extends StandardAVT {
         this.deltaManager.getAdvancedDM().resetState();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.avt.impl.StandardAVT#adjustValue(fr.irit.smac
+     * .libs.tooling.avt.EFeedback)
+     */
     @Override
     public void adjustValue(EFeedback feedback) {
         if (feedback == null) {
-            throw new IllegalArgumentException(FEEDBACK_NULL);
+            throw new IllegalArgumentException(EMessageException.FEEDBACK_NULL.toString());
         }
 
         // 1 - Updates the delta value
@@ -87,10 +120,17 @@ public class SoftBoundsAVT extends StandardAVT {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.avt.impl.StandardAVT#getValueIf(fr.irit.smac
+     * .libs.tooling.avt.EFeedback)
+     */
     @Override
     public double getValueIf(EFeedback feedback) {
         if (feedback == null) {
-            throw new IllegalArgumentException(FEEDBACK_NULL);
+            throw new IllegalArgumentException(EMessageException.FEEDBACK_NULL.toString());
         }
 
         double valueIf = this.value;
@@ -107,9 +147,15 @@ public class SoftBoundsAVT extends StandardAVT {
         return valueIf;
     }
 
+    /**
+     * Update bounds from value.
+     *
+     * @param value
+     *            the value
+     */
     private void updateBoundsFromValue(double value) {
         if (Double.isNaN(value)) {
-            throw new IllegalArgumentException(VALUE_NAN);
+            throw new IllegalArgumentException(EMessageException.VALUE_NAN.toString());
         }
 
         if (this.getRange().getLowerBound() > value) {
@@ -122,26 +168,44 @@ public class SoftBoundsAVT extends StandardAVT {
 
     }
 
+    /**
+     * Sets the lower bound from value.
+     *
+     * @param lowerBound
+     *            the new lower bound from value
+     */
     private void setLowerBoundFromValue(double lowerBound) {
         if (Double.isNaN(lowerBound)) {
-            throw new IllegalArgumentException(LOWER_BOUND_NAN);
+            throw new IllegalArgumentException(EMessageException.LOWER_BOUND_NAN.toString());
         }
 
         super.setLowerBound(lowerBound);
         this.updateDMFromBounds();
     }
 
+    /**
+     * Sets the upper bound from value.
+     *
+     * @param upperBound
+     *            the new upper bound from value
+     */
     private void setUpperBoundFromValue(double upperBound) {
         if (Double.isNaN(upperBound)) {
-            throw new IllegalArgumentException(UPPER_BOUND_NAN);
+            throw new IllegalArgumentException(EMessageException.UPPER_BOUND_NAN.toString());
         }
         super.setUpperBound(upperBound);
         this.updateDMFromBounds();
     }
 
+    /**
+     * Sets the value from bounds.
+     *
+     * @param value
+     *            the new value from bounds
+     */
     private void setValueFromBounds(double value) {
         if (Double.isNaN(value)) {
-            throw new IllegalArgumentException(VALUE_NAN);
+            throw new IllegalArgumentException(EMessageException.VALUE_NAN.toString());
         }
         this.value = value;
 
@@ -150,6 +214,9 @@ public class SoftBoundsAVT extends StandardAVT {
         this.deltaManager.getAdvancedDM().resetState();
     }
 
+    /**
+     * Update value from bounds.
+     */
     private void updateValueFromBounds() {
         if (this.effectiveLowerBound > this.value) {
             this.setValueFromBounds(this.effectiveLowerBound);

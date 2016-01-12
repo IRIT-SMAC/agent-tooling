@@ -23,10 +23,19 @@ package fr.irit.smac.libs.tooling.avt.range.impl;
 
 import java.math.BigDecimal;
 
+import fr.irit.smac.libs.tooling.avt.EMessageException;
 import fr.irit.smac.libs.tooling.avt.range.IRange;
 
+/**
+ * The Class AbstractRange.
+ */
 public abstract class AbstractRange implements IRange {
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.libs.tooling.avt.range.IRange#computeRangeSize()
+     */
     @Override
     public BigDecimal computeRangeSize() {
         if (this.hasInfiniteSize()) {
@@ -37,29 +46,47 @@ public abstract class AbstractRange implements IRange {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.libs.tooling.avt.range.IRange#hasInfiniteSize()
+     */
     @Override
     public boolean hasInfiniteSize() {
         return this.getUpperBound() == Double.POSITIVE_INFINITY || this.getLowerBound() == Double.NEGATIVE_INFINITY;
     }
 
+    /**
+     * Check bounds consistency.
+     */
     protected void checkBoundsConsistency() {
         if (Double.isNaN(this.getLowerBound())) {
-            throw new IllegalArgumentException("lowerBound isNaN");
+            throw new IllegalArgumentException(EMessageException.LOWER_BOUND_NAN.toString());
         }
         if (Double.isNaN(this.getUpperBound())) {
-            throw new IllegalArgumentException("upperBound isNaN");
+            throw new IllegalArgumentException(EMessageException.UPPER_BOUND_NAN.toString());
         }
 
         if (this.getLowerBound() > this.getUpperBound()) {
-            throw new IllegalArgumentException("lowerBound > upperBound");
+            throw new IllegalArgumentException(EMessageException.LOWER_BOUND_GT_UPPER_BOUND.toString());
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.libs.tooling.avt.range.IRange#isInsideRange(double)
+     */
     @Override
     public boolean isInsideRange(double value) {
         return value >= this.getLowerBound() && value <= this.getUpperBound();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
         return "[" + this.getLowerBound() + " ; " + this.getUpperBound() + "]";

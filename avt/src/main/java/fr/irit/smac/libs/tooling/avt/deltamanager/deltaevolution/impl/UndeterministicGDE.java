@@ -23,24 +23,24 @@ package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl;
 
 import java.util.Random;
 
+/**
+ * The Class UndeterministicGDE.
+ */
 public class UndeterministicGDE extends DeterministicGDE {
 
+    /** The decrease noise. */
     private final double decreaseNoise;
+    
+    /** The random. */
     private final Random random;
 
     /**
-     * 
-     * @param increaseFactor
-     * @param decreaseFactor
-     * @param decreaseNoise
-     * @throws IllegalArgumentException
-     *             if increaseFactor < 1
-     * @throws IllegalArgumentException
-     *             if decreaseFactor < 1
-     * @throws IllegalArgumentException
-     *             if decreaseNoise <= 0
-     * @throws IllegalArgumentException
-     *             if decreaseFactor - decreaseNoise < 1 in order to insure that
+     * Instantiates a new undeterministic gde.
+     *
+     * @param increaseFactor the increase factor
+     * @param decreaseFactor the decrease factor
+     * @param decreaseNoise the decrease noise
+     * @throws IllegalArgumentException             if decreaseFactor - decreaseNoise < 1 in order to insure that
      *             the average decrease factor is near decreaseFactor
      */
     public UndeterministicGDE(double increaseFactor, double decreaseFactor, double decreaseNoise) {
@@ -48,19 +48,13 @@ public class UndeterministicGDE extends DeterministicGDE {
     }
 
     /**
-     * 
-     * @param increaseFactor
-     * @param decreaseFactor
-     * @param decreaseNoise
-     * @param seed
-     * @throws IllegalArgumentException
-     *             if increaseFactor < 1
-     * @throws IllegalArgumentException
-     *             if decreaseFactor < 1
-     * @throws IllegalArgumentException
-     *             if decreaseNoise <= 0
-     * @throws IllegalArgumentException
-     *             if decreaseFactor - decreaseNoise < 1 in order to insure that
+     * Instantiates a new undeterministic gde.
+     *
+     * @param increaseFactor the increase factor
+     * @param decreaseFactor the decrease factor
+     * @param decreaseNoise the decrease noise
+     * @param seed the seed
+     * @throws IllegalArgumentException             if decreaseFactor - decreaseNoise < 1 in order to insure that
      *             the average decrease factor is near decreaseFactor
      */
     public UndeterministicGDE(double increaseFactor, double decreaseFactor, double decreaseNoise, Long seed) {
@@ -82,6 +76,9 @@ public class UndeterministicGDE extends DeterministicGDE {
         this.random = seed != null ? new Random(seed) : new Random();
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl.DeterministicGDE#getDecreasedDelta(double)
+     */
     @Override
     public double getDecreasedDelta(double delta) {
 

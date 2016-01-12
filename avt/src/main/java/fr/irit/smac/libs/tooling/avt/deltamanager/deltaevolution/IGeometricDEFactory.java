@@ -21,7 +21,14 @@
  */
 package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution;
 
+/**
+ * A factory for creating IGeometricDE objects.
+ */
 public interface IGeometricDEFactory extends IDeltaEvolutionFactory {
+    
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IDeltaEvolutionFactory#createInstance()
+     */
     @Override
     IGeometricDE createInstance();
 }

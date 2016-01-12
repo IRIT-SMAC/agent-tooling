@@ -21,17 +21,28 @@
  */
 package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl;
 
+import fr.irit.smac.libs.tooling.avt.EMessageException;
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection;
 import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision;
 
+/**
+ * The Class StandardDMD.
+ */
 public class StandardDMD implements IDMDecision {
 
+    /** The last direction. */
     private EDirection lastDirection;
 
+    /**
+     * Instantiates a new standard dmd.
+     */
     public StandardDMD() {
         this.resetState();
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision#getNextDecision(fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection)
+     */
     @Override
     public EDecision getNextDecision(EDirection direction) {
 
@@ -41,15 +52,21 @@ public class StandardDMD implements IDMDecision {
         return decision;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision#resetState()
+     */
     @Override
     public void resetState() {
         this.lastDirection = null;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision#getNextDecisionIf(fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection)
+     */
     @Override
     public EDecision getNextDecisionIf(EDirection direction) {
         if (direction == null) {
-            throw new IllegalArgumentException("direction is null");
+            throw new IllegalArgumentException(EMessageException.DIRECTION_NULL.toString());
         }
 
         EDecision decision = null;

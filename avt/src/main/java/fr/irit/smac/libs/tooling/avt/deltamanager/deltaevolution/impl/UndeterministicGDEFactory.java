@@ -24,17 +24,42 @@ package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl;
 import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDE;
 import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDEFactory;
 
+/**
+ * A factory for creating UndeterministicGDE objects.
+ */
 public class UndeterministicGDEFactory implements IGeometricDEFactory {
 
+    /** The increase factor. */
     private final double increaseFactor;
+    
+    /** The decrease factor. */
     private final double decreaseFactor;
+    
+    /** The decrease noise. */
     private final double decreaseNoise;
+    
+    /** The random seed. */
     private final Long   randomSeed;
 
+    /**
+     * Instantiates a new undeterministic gde factory.
+     *
+     * @param increaseFactor the increase factor
+     * @param decreaseFactor the decrease factor
+     * @param decreaseNoise the decrease noise
+     */
     public UndeterministicGDEFactory(double increaseFactor, double decreaseFactor, double decreaseNoise) {
         this(increaseFactor, decreaseFactor, decreaseNoise, null);
     }
 
+    /**
+     * Instantiates a new undeterministic gde factory.
+     *
+     * @param increaseFactor the increase factor
+     * @param decreaseFactor the decrease factor
+     * @param decreaseNoise the decrease noise
+     * @param randomSeed the random seed
+     */
     public UndeterministicGDEFactory(double increaseFactor, double decreaseFactor, double decreaseNoise,
         Long randomSeed) {
         super();
@@ -44,6 +69,9 @@ public class UndeterministicGDEFactory implements IGeometricDEFactory {
         this.randomSeed = randomSeed;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDEFactory#createInstance()
+     */
     @Override
     public IGeometricDE createInstance() {
         if (this.randomSeed == null) {

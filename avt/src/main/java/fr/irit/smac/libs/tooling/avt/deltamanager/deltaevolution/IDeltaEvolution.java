@@ -21,8 +21,24 @@
  */
 package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution;
 
+/**
+ * The Interface IDeltaEvolution.
+ */
 public interface IDeltaEvolution {
+    
+    /**
+     * Gets the increased delta.
+     *
+     * @param delta the delta
+     * @return the increased delta
+     */
     public double getIncreasedDelta(double delta);
 
+    /**
+     * Gets the decreased delta.
+     *
+     * @param delta the delta
+     * @return the decreased delta
+     */
     public double getDecreasedDelta(double delta);
 }

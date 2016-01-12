@@ -21,8 +21,22 @@
  */
 package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution;
 
+/**
+ * The Interface IGeometricDE.
+ */
 public interface IGeometricDE extends IDeltaEvolution {
+    
+    /**
+     * Gets the increase factor.
+     *
+     * @return the increase factor
+     */
     public double getIncreaseFactor();
 
+    /**
+     * Gets the decrease factor.
+     *
+     * @return the decrease factor
+     */
     public double getDecreaseFactor();
 }

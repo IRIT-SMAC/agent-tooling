@@ -23,6 +23,9 @@ package fr.irit.smac.libs.tooling.avt.range;
 
 import java.math.BigDecimal;
 
+/**
+ * The Interface IRange.
+ */
 public interface IRange {
 
     /**
@@ -40,18 +43,23 @@ public interface IRange {
     public double getUpperBound();
 
     /**
-     * 
-     * @param value
-     * @return true if value is inside lower et upper bounds, including bounds
+     * Checks if is inside range.
+     *
+     * @param value the value
+     * @return true if value is inside lower and upper bounds, including bounds
      */
     public boolean isInsideRange(double value);
 
     /**
-     * Computes the size of the range
+     * Computes the size of the range.
+     *
+     * @return the big decimal
      */
     public BigDecimal computeRangeSize();
 
     /**
+     * Checks for infinite size.
+     *
      * @return isInfinite
      */
     public boolean hasInfiniteSize();

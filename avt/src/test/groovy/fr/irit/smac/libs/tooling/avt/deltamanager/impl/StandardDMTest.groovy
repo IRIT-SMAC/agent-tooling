@@ -20,6 +20,16 @@ class StandardDMTest extends Specification{
                         new StandardDMDFactory().createInstance())
     }
 
+    def 'standardDM with a NaN deltaMin should thrown an IllegalArgumentException'() {
+        
+        when:
+        standardDMConstructor = new StandardDM(Math.sqrt(-1), 12.0, Mock(IRange), new DeterministicGDEFactory(2.0, 4.0).createInstance(),
+                        new StandardDMDFactory().createInstance())
+        
+        then:
+        thrown(IllegalArgumentException)
+    }
+    
     def 'adjustDelta'(EDirection direction, EDecision nextDecision) {
 
         given:

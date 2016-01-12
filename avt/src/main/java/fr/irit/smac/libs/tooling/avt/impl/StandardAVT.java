@@ -21,6 +21,9 @@
  */
 package fr.irit.smac.libs.tooling.avt.impl;
 
+import java.math.BigDecimal;
+
+import fr.irit.smac.libs.tooling.avt.EMessageException;
 import fr.irit.smac.libs.tooling.avt.IAdvancedAVT;
 import fr.irit.smac.libs.tooling.avt.EFeedback;
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager;
@@ -30,55 +33,60 @@ import fr.irit.smac.libs.tooling.avt.range.IMutableRange;
 import fr.irit.smac.libs.tooling.avt.range.IRange;
 import fr.irit.smac.libs.tooling.avt.range.impl.MutableRangeImpl;
 
+/**
+ * The Class StandardAVT.
+ */
 public class StandardAVT implements IAdvancedAVT {
 
-    protected IMutableRange        range;
+    /** The range. */
+    protected IMutableRange       range;
+
+    /** The value. */
     protected double              value;
 
-    // bounds that are effectively used when updating
-    // value (cause lowerBound and upperBound can be
-    // Double.(POSITIVE or NEGATIVE)_INFINITY
+    /**
+     * The effective lower bound. Bounds that are effectively used when updating
+     * value (cause lowerBound and upperBound can be Double.(POSITIVE or
+     * NEGATIVE)_INFINITY)
+     */
     protected double              effectiveLowerBound;
+
+    /** The effective upper bound. */
     protected double              effectiveUpperBound;
 
+    /** The delta manager. */
     protected final IDeltaManager deltaManager;
 
-    private static final String   LOWER_BOUND_NAN            = "lowerBound isNaN";
-    private static final String   UPPER_BOUND_NAN            = "upperBound isNaN";
-    private static final String   START_VALUE_NAN            = "startValue isNaN";
-    private static final String   DELTA_MANAGER_FACTORY_NULL = "deltaManagerFactory == null";
-    private static final String   VALUE_NAN                  = "value isNaN";
-    private static final String   FEEDBACK_NULL              = "feedback is null";
-    private static final String   CRITICITY_NAN              = "criticity isNaN";
-    private static final String   CRITICITY_LT_0             = "criticity < 0";
-    private static final String   CRITICITY_GT_1             = "criticity > 1";
-
     /**
-     * Constructs a StandardAVT
-     * 
+     * Constructs a StandardAVT.
+     *
      * @param lowerBound
+     *            the lower bound
      * @param upperBound
+     *            the upper bound
      * @param startValue
+     *            the start value
      * @param deltaManagerFactory
+     *            the delta manager factory
      */
     public StandardAVT(double lowerBound, double upperBound, double startValue,
         IDeltaManagerFactory<?> deltaManagerFactory) {
         super();
 
         if (Double.isNaN(lowerBound)) {
-            throw new IllegalArgumentException(LOWER_BOUND_NAN);
+            throw new IllegalArgumentException(EMessageException.LOWER_BOUND_NAN.toString());
         }
 
         if (Double.isNaN(upperBound)) {
-            throw new IllegalArgumentException(UPPER_BOUND_NAN);
+            throw new IllegalArgumentException(EMessageException.UPPER_BOUND_NAN.toString());
         }
 
         if (Double.isNaN(startValue)) {
-            throw new IllegalArgumentException(START_VALUE_NAN);
+            throw new IllegalArgumentException(EMessageException.START_VALUE_NAN.toString());
         }
 
         if (deltaManagerFactory == null) {
-            throw new IllegalArgumentException(DELTA_MANAGER_FACTORY_NULL);
+            throw new IllegalArgumentException(EMessageException.DELTA_MANAGER_FACTORY_NULL.toString());
         }
 
         this.range = new MutableRangeImpl(lowerBound, upperBound);
@@ -88,16 +96,31 @@ public class StandardAVT implements IAdvancedAVT {
         this.deltaManager = deltaManagerFactory.createInstance(this.range);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.libs.tooling.avt.IAVT#getValue()
+     */
     @Override
     public double getValue() {
         return this.value;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.libs.tooling.avt.IAdvancedAVT#getRange()
+     */
     @Override
     public IRange getRange() {
         return this.range;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.libs.tooling.avt.IAdvancedAVT#setLowerBound(double)
+     */
     @Override
     public void setLowerBound(double lowerBound) {
 
@@ -107,8 +130,10 @@ public class StandardAVT implements IAdvancedAVT {
         this.updateDMFromBounds();
     }
 
-    /**
+    /*
+     * (non-Javadoc)
      * 
+     * @see fr.irit.smac.libs.tooling.avt.IAdvancedAVT#setUpperBound(double)
      */
     @Override
     public void setUpperBound(double upperBound) {
@@ -119,6 +144,9 @@ public class StandardAVT implements IAdvancedAVT {
         this.updateDMFromBounds();
     }
 
+    /**
+     * Ensure value bounds consistency.
+     */
     private void ensureValueBoundsConsistency() {
         if (this.value > this.effectiveUpperBound) {
             this.setValue(this.effectiveUpperBound);
@@ -128,10 +156,15 @@ public class StandardAVT implements IAdvancedAVT {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.libs.tooling.avt.IAdvancedAVT#setValue(double)
+     */
     @Override
     public void setValue(double value) {
         if (Double.isNaN(value)) {
-            throw new IllegalArgumentException(VALUE_NAN);
+            throw new IllegalArgumentException(EMessageException.START_VALUE_NAN.toString());
         }
 
         if (!this.range.isInsideRange(value)) {
@@ -145,16 +178,31 @@ public class StandardAVT implements IAdvancedAVT {
         this.deltaManager.getAdvancedDM().resetState();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.libs.tooling.avt.IAdvancedAVT#getDeltaManager()
+     */
     @Override
     public IDeltaManager getDeltaManager() {
         return this.deltaManager;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.libs.tooling.avt.IAVT#getAdvancedAVT()
+     */
     @Override
     public IAdvancedAVT getAdvancedAVT() {
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.libs.tooling.avt.IAVT#getCriticity()
+     */
     @Override
     public double getCriticity() {
         double criticity = 0;
@@ -168,30 +216,41 @@ public class StandardAVT implements IAdvancedAVT {
     }
 
     /**
+     * Sets the criticity.
+     *
+     * @param criticity
+     *            the new criticity
      * @throws IllegalArgumentException
      *             if value > 1 or value < 0
      */
     @Override
     public void setCriticity(double criticity) {
         if (Double.isNaN(criticity)) {
-            throw new IllegalArgumentException(CRITICITY_NAN);
+            throw new IllegalArgumentException(EMessageException.CRITICITY_NAN.toString());
         }
 
         if (value < 0) {
-            throw new IllegalArgumentException(CRITICITY_LT_0);
+            throw new IllegalArgumentException(EMessageException.CRITICITY_LT_0.toString());
         }
         else if (value > 1) {
-            throw new IllegalArgumentException(CRITICITY_GT_1);
+            throw new IllegalArgumentException(EMessageException.CRITICITY_GT_1.toString());
         }
 
         int geometricStepNumber = (int) Math.round(criticity * this.deltaManager.getAdvancedDM().getNbGeometricSteps());
         this.deltaManager.getAdvancedDM().setGeometricStepNumber(geometricStepNumber);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.avt.IAVT#adjustValue(fr.irit.smac.libs.tooling
+     * .avt.EFeedback)
+     */
     @Override
     public void adjustValue(EFeedback feedback) {
         if (feedback == null) {
-            throw new IllegalArgumentException(FEEDBACK_NULL);
+            throw new IllegalArgumentException(EMessageException.FEEDBACK_NULL.toString());
         }
 
         // 1 - If the avt will stay at a bound then the real feedback is good
@@ -207,10 +266,17 @@ public class StandardAVT implements IAdvancedAVT {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.avt.IAdvancedAVT#getValueIf(fr.irit.smac.libs
+     * .tooling.avt.EFeedback)
+     */
     @Override
     public double getValueIf(EFeedback feedback) {
         if (feedback == null) {
-            throw new IllegalArgumentException(FEEDBACK_NULL);
+            throw new IllegalArgumentException(EMessageException.FEEDBACK_NULL.toString());
         }
 
         double valueIf = this.value;
@@ -230,19 +296,42 @@ public class StandardAVT implements IAdvancedAVT {
         return valueIf;
     }
 
+    /**
+     * Will stay at bounds.
+     *
+     * @param feedback
+     *            the feedback
+     * @return true, if successful
+     */
     private boolean willStayAtBounds(EFeedback feedback) {
-        return (this.value == this.effectiveLowerBound && feedback == EFeedback.LOWER)
-            || (this.value == this.effectiveUpperBound && feedback == EFeedback.GREATER);
+
+        BigDecimal bdValue = BigDecimal.valueOf(this.value);
+
+        return (bdValue.equals(BigDecimal.valueOf(this.effectiveLowerBound)) && feedback == EFeedback.LOWER)
+            || (bdValue.equals(BigDecimal.valueOf(this.effectiveUpperBound)) && feedback == EFeedback.GREATER);
     }
 
+    /**
+     * Update delta.
+     *
+     * @param feedback
+     *            the feedback
+     */
     protected void updateDelta(EFeedback feedback) {
         if (feedback == null) {
-            throw new IllegalArgumentException(FEEDBACK_NULL);
+            throw new IllegalArgumentException(EMessageException.FEEDBACK_NULL.toString());
         }
 
         this.deltaManager.adjustDelta(this.getDirectionFromFreedback(feedback));
     }
 
+    /**
+     * Gets the direction from freedback.
+     *
+     * @param feedback
+     *            the feedback
+     * @return the direction from freedback
+     */
     protected EDirection getDirectionFromFreedback(EFeedback feedback) {
         if (feedback == EFeedback.GREATER) {
             return EDirection.DIRECT;
@@ -255,6 +344,9 @@ public class StandardAVT implements IAdvancedAVT {
         }
     }
 
+    /**
+     * Update dm from bounds.
+     */
     protected void updateDMFromBounds() {
         // WARNING : an exception is thrown if the new range is lower to
         // deltaMin
@@ -265,11 +357,23 @@ public class StandardAVT implements IAdvancedAVT {
         this.deltaManager.getAdvancedDM().reconfigure(this.deltaManager.getAdvancedDM().getDeltaMin());
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
         return "AVT [v=" + value + " delta=" + this.deltaManager.getDelta() + "]";
     }
 
+    /**
+     * Gets the non infinite equival of.
+     *
+     * @param value
+     *            the value
+     * @return the non infinite equival of
+     */
     private static double getNonInfiniteEquivalOf(double value) {
         double finiteVal;
 

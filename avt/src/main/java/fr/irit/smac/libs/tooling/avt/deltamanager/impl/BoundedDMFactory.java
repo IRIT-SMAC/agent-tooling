@@ -25,14 +25,26 @@ import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager;
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory;
 import fr.irit.smac.libs.tooling.avt.range.IRange;
 
+/**
+ * A factory for creating BoundedDM objects.
+ */
 public class BoundedDMFactory implements IDeltaManagerFactory<IDeltaManager> {
 
+    /** The nested delta manager factory. */
     private final IDeltaManagerFactory<?> nestedDeltaManagerFactory;
 
+    /**
+     * Instantiates a new bounded dm factory.
+     *
+     * @param nestedDeltaManagerFactory the nested delta manager factory
+     */
     public BoundedDMFactory(IDeltaManagerFactory<?> nestedDeltaManagerFactory) {
         this.nestedDeltaManagerFactory = nestedDeltaManagerFactory;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory#createInstance(fr.irit.smac.libs.tooling.avt.range.IRange)
+     */
     @Override
     public IDeltaManager createInstance(IRange range) {
         return new BoundedDM(this.nestedDeltaManagerFactory.createInstance(range));

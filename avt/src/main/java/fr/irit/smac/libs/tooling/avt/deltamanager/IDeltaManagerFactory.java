@@ -23,13 +23,18 @@ package fr.irit.smac.libs.tooling.avt.deltamanager;
 
 import fr.irit.smac.libs.tooling.avt.range.IRange;
 
+/**
+ * A factory for creating IDeltaManager objects.
+ *
+ * @param <T> the generic type
+ */
 public interface IDeltaManagerFactory<T extends IDeltaManager> {
 
     /**
-     * Instanciate a DeltaManager that will be used for the given AVT
-     * 
-     * @param avt
-     * @return
+     * Instanciate a DeltaManager that will be used for the given AVT.
+     *
+     * @param range the range
+     * @return the t
      */
     T createInstance(IRange range);
 

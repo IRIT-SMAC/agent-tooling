@@ -23,14 +23,44 @@ package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision;
 
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection;
 
+/**
+ * The Interface IDMDecision.
+ */
 public interface IDMDecision {
+
+    /**
+     * The Enum EDecision.
+     */
     public enum EDecision {
-        INCREASE_DELTA, DECREASE_DELTA, SAME_DELTA
+
+        /** The increase delta. */
+        INCREASE_DELTA,
+        /** The decrease delta. */
+        DECREASE_DELTA,
+        /** The same delta. */
+        SAME_DELTA
     }
 
+    /**
+     * Gets the next decision.
+     *
+     * @param direction
+     *            the direction
+     * @return the next decision
+     */
     public EDecision getNextDecision(EDirection direction);
 
+    /**
+     * Gets the next decision if.
+     *
+     * @param direction
+     *            the direction
+     * @return the next decision if
+     */
     public EDecision getNextDecisionIf(EDirection direction);
 
+    /**
+     * Reset state.
+     */
     public void resetState();
 }

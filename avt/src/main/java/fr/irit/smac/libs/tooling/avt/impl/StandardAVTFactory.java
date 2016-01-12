@@ -25,8 +25,14 @@ import fr.irit.smac.libs.tooling.avt.IAVT;
 import fr.irit.smac.libs.tooling.avt.IAVTFactory;
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory;
 
+/**
+ * A factory for creating StandardAVT objects.
+ */
 public class StandardAVTFactory implements IAVTFactory<IAVT> {
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.IAVTFactory#createInstance(double, double, double, fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory)
+     */
     @Override
     public IAVT createInstance(double lowerBound, double upperBound, double startValue,
         IDeltaManagerFactory<?> deltaManagerFactory) {

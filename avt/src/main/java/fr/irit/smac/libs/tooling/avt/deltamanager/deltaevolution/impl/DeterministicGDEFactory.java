@@ -24,17 +24,32 @@ package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl;
 import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDE;
 import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDEFactory;
 
+/**
+ * A factory for creating DeterministicGDE objects.
+ */
 public class DeterministicGDEFactory implements IGeometricDEFactory {
 
+    /** The increase factor. */
     private final double increaseFactor;
+    
+    /** The decrease factor. */
     private final double decreaseFactor;
 
+    /**
+     * Instantiates a new deterministic gde factory.
+     *
+     * @param increaseFactor the increase factor
+     * @param decreaseFactor the decrease factor
+     */
     public DeterministicGDEFactory(double increaseFactor, double decreaseFactor) {
         super();
         this.increaseFactor = increaseFactor;
         this.decreaseFactor = decreaseFactor;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDEFactory#createInstance()
+     */
     @Override
     public IGeometricDE createInstance() {
         return new DeterministicGDE(increaseFactor, decreaseFactor);

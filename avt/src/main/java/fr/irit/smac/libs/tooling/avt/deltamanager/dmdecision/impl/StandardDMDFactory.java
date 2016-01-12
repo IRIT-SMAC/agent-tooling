@@ -24,8 +24,14 @@ package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl;
 import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision;
 import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecisionFactory;
 
+/**
+ * A factory for creating StandardDMD objects.
+ */
 public class StandardDMDFactory implements IDMDecisionFactory {
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecisionFactory#createInstance()
+     */
     @Override
     public IDMDecision createInstance() {
         return new StandardDMD();

@@ -26,8 +26,8 @@ import fr.irit.smac.libs.tooling.avt.impl.SoftBoundsMemoryAVTFactory;
 import fr.irit.smac.libs.tooling.avt.impl.StandardAVTFactory;
 
 /**
- * Yeah !
- * 
+ * The Class AVTBuilder.
+ *
  * @author Sylvain Lemouzy
  */
 public class AVTBuilder extends AbstractAVTBuilder<IAVT> {

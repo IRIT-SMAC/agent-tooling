@@ -17,6 +17,7 @@
 		<sonar.host.url>http://localhost:9000/</sonar.host.url>
 		<gmaven-plugin.version>1.4</gmaven-plugin.version>
 		<groovy.version>2.3.5</groovy.version>
+		<additionalparam>-Xdoclint:none</additionalparam>
 	</properties>
 	<dependencies>
 		<!-- Spock -->

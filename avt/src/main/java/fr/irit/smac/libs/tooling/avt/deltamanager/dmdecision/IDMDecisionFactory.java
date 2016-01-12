@@ -21,6 +21,15 @@
  */
 package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision;
 
+/**
+ * A factory for creating IDMDecision objects.
+ */
 public interface IDMDecisionFactory {
+
+    /**
+     * Creates a new IDMDecision object.
+     *
+     * @return the IDM decision
+     */
     IDMDecision createInstance();
 }
