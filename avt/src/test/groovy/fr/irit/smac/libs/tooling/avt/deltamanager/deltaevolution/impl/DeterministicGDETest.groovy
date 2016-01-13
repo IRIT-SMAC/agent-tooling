@@ -28,17 +28,17 @@ import spock.lang.Unroll
 @Unroll
 class DeterministicGDETest extends Specification{
 
-    @Shared DeterministicGDE deterministicGDEConstructor
     @Shared DeterministicGDE deterministicGDE
-
+    @Shared DeterministicGDE deterministicGDE2
+    
     def setupSpec() {
-        deterministicGDE = new DeterministicGDE(2, 3)
+        deterministicGDE = new DeterministicGDEFactory(2, 3).createInstance()
     }
 
     def 'DeterministicGDE with an increaseFactor lower than 1 should throw an IllegalArgumentException' () {
 
         when:
-        deterministicGDEConstructor = new DeterministicGDE(0, 3)
+        deterministicGDE2 = new DeterministicGDEFactory(0, 3).createInstance()
 
         then:
         thrown(IllegalArgumentException)
@@ -47,7 +47,7 @@ class DeterministicGDETest extends Specification{
     def 'DeterministicGDE with a decreaseFactor lower than 1 should throw an IllegalArgumentException' () {
 
         when:
-        deterministicGDEConstructor = new DeterministicGDE(1, 0)
+        deterministicGDE2 = new DeterministicGDEFactory(1, 0).createInstance()
 
         then:
         thrown(IllegalArgumentException)
@@ -56,7 +56,7 @@ class DeterministicGDETest extends Specification{
     def 'DeterministicGDE with a NaN decreaseFactor should throw an IllegalArgumentException' () {
 
         when:
-        deterministicGDEConstructor = new DeterministicGDE(1, Math.sqrt(-1))
+        deterministicGDE2 = new DeterministicGDEFactory(1, Math.sqrt(-1)).createInstance()
 
         then:
         thrown(IllegalArgumentException)
@@ -65,7 +65,7 @@ class DeterministicGDETest extends Specification{
     def 'DeterministicGDE with a NaN increaseFactor should throw an IllegalArgumentException' () {
 
         when:
-        deterministicGDEConstructor = new DeterministicGDE(Math.sqrt(-1),1)
+        deterministicGDE2 = new DeterministicGDEFactory(Math.sqrt(-1),1).createInstance()
 
         then:
         thrown(IllegalArgumentException)
@@ -74,13 +74,13 @@ class DeterministicGDETest extends Specification{
     def 'getDecreaseFactor should return decreaseFactor' () {
 
         given:
-        deterministicGDEConstructor = new DeterministicGDE(2,3)
+        deterministicGDE2 = new DeterministicGDEFactory(2,3).createInstance()
 
         when:
-        double decreaseFactor = deterministicGDEConstructor.getDecreaseFactor()
+        double decreaseFactor = deterministicGDE2.getDecreaseFactor()
 
         then:
-        decreaseFactor == deterministicGDEConstructor.decreaseFactor
+        decreaseFactor == deterministicGDE2.decreaseFactor
     }
 
     def 'getDecreasedDelta with a NaN argument should throw an IllegalArgumentException' () {

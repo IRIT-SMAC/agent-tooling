@@ -5,80 +5,143 @@ package fr.irit.smac.libs.tooling.avt;
  */
 public enum EMessageException {
 
-    /** The lower bound nan. */
+    /** LowerBound is NaN. */
     LOWER_BOUND_NAN("lowerBound isNaN"),
-    
-    /** The upper bound nan. */
+
+    /** UpperBound is NaN. */
     UPPER_BOUND_NAN("upperBound isNaN"),
-    
-    /** The start value nan. */
+
+    /** StartValue is NaN. */
     START_VALUE_NAN("startValue isNaN"),
-    
-    /** The lower bound gt upper bound. */
+
+    /** LowerBound is greater than upperBbound. */
     LOWER_BOUND_GT_UPPER_BOUND("lowerBound > upperBound"),
-    
-    /** The delta manager factory null. */
+
+    /** DeltaManagerFactory is null. */
     DELTA_MANAGER_FACTORY_NULL("deltaManagerFactory == null"),
-    
-    /** The value nan. */
+
+    /** Value is NaN. */
     VALUE_NAN("value isNaN"),
-    
-    /** The feedback null. */
+
+    /** Feedback is null. */
     FEEDBACK_NULL("feedback is null"),
-    
-    /** The criticity nan. */
+
+    /** Criticity is NaN. */
     CRITICITY_NAN("criticity isNaN"),
-    
-    /** The CRITICIT y_ l t_0. */
+
+    /** Criticity is lower than 0. */
     CRITICITY_LT_0("criticity < 0"),
-    
-    /** The CRITICIT y_ g t_1. */
+
+    /** Criticity is greater than 1. */
     CRITICITY_GT_1("criticity > 1"),
-    
-    /** The delta min nan. */
+
+    /** DeltaMin is NaN. */
     DELTA_MIN_NAN("deltaMin isNaN"),
-    
-    /** The range null. */
+
+    /** Range is null. */
     RANGE_NULL("range is null"),
-    
-    /** The DELT a_ mi n_ l e_0. */
+
+    /** DeltaMin is lower than or equal to 0. */
     DELTA_MIN_LE_0("deltaMin <= 0"),
-    
-    /** The delta evolution null. */
+
+    /** DeltaMin is lower than 0. */
+    DELTA_MIN_LT_0("deltaMin < 0"),
+
+    /** Delta evolution is null. */
     DELTA_EVOLUTION_NULL("deltaEvolution == null"),
-    
-    /** The DELT a_ evolutio n_ increas e_ facto r_ l e_1. */
+
+    /** IncreaseFactor is lower than or equal to 1. */
     DELTA_EVOLUTION_INCREASE_FACTOR_LE_1("deltaEvolution.getIncreaseFactor() <= 1."),
-    
-    /** The delta max nan. */
+
+    /** DeltaMax is NaN. */
     DELTA_MAX_NAN("deltaMax isNaN"),
-    
-    /** The delta max lt delta min. */
+
+    /** DeltaMax is lower than deltaMin. */
     DELTA_MAX_LT_DELTA_MIN("deltaMax < deltaMin"),
-    
-    /** The delta min gt delta max. */
+
+    /** DeltaMin is greater than deltaMax. */
     DELTA_MIN_GT_DELTA_MAX("deltaMin > this.deltaMax"),
-    
-    /** The direction null. */
+
+    /** Direction is null. */
     DIRECTION_NULL("direction is null"),
-    
-    /** The delta nan. */
+
+    /** Delta is NaN. */
     DELTA_NAN("delta isNaN"),
-    
-    /** The delta max lt this delta min. */
+
+    /** DeltaMax is lower than deltaMin. */
     DELTA_MAX_LT_THIS_DELTA_MIN("deltaMax < this.deltaMin"),
-    
-    /** The geometric factor bound nan. */
+
+    /** GeometricFactor is NaN. */
     GEOMETRIC_FACTOR_BOUND_NAN("geometricFactor isNaN"),
-    
-    /** The delta min ge range. */
+
+    /** DeltaMin is greater than or equal to range. */
     DELTA_MIN_GE_RANGE("deltaMin => range"),
-    
-    /** The RANG e_ g t_ ma x_ valu e_ tim e_2. */
+
+    /** Range is greather than DOUBLE.MAX_VALUE*2. */
     RANGE_GT_MAX_VALUE_TIME_2("range > Double.MAX_VALUE * 2"),
-    
-    /** The geometric step number bound. */
-    GEOMETRIC_STEP_NUMBER_BOUND("if geometricStepNumber < 1 or geometricStepNumber > this.getNbGeometricSteps()");
+
+    /** GeometricStepNumber is wrong. */
+    GEOMETRIC_STEP_NUMBER_BOUND("if geometricStepNumber < 1 or geometricStepNumber > this.getNbGeometricSteps()"),
+
+    /** IncreaseFactor delta. */
+    INCREASE_FACTOR_DELTA("increaseFactor delta"),
+
+    /** IncreaseFactor is lower than 1. */
+    INCREASE_FACTOR_LT_1("increase factor < 1"),
+
+    /** DecreaseFactor is lower than 1. */
+    DECREASE_FACTOR_LT_1("decrease factor < 1"),
+
+    /** DecreaseFactor is NaN. */
+    DECREASE_FACTOR_NAN("decreaseFactor is NaN"),
+
+    /** IncreaseFactor is NaN. */
+    INCREASE_FACTOR_NAN("increaseFactor is NaN"),
+
+    /** DecreaseNoise is lower than or equal to 0. */
+    DECREASE_NOISE_LT_ET_0("decreaseNoise <= 0"),
+
+    /** DecreaseNoise is NaN. */
+    DECREASE_NOISE_NAN("decreaseNoise is NaN"),
+
+    /** DecreaseFactor minus decreaseNoise is lower than 1. */
+    DECREASE_FACTOR_SUB_DECREASE_NOISE_LT_1("decreaseFactor - decreaseNoise < 1"),
+
+    /** dmDecison is null. */
+    DM_DECISION("dmDecison == null"),
+
+    /** AvtFactory is null. */
+    AVT_FACTORY_NULL("avtFactory is not set"),
+
+    /** StartValue is greater than upperBound. */
+    START_VALUE_GT_UPPER_BOUND("startValue > upperBound"),
+
+    /** LowerBound is greater than startValue. */
+    LOWER_BOUND_GT_START_VALUE("lowerBound > startValue"),
+
+    /** LowerBound is greather than or equal to upperBound. */
+    LOWER_BOUND_GE_UPPER_BOUND("lowerBound >= upperBound"),
+
+    /** DecreaseDelay is lower than 0. */
+    DECREASE_DELAY_LT_0("decreaseDelay < 0"),
+
+    /** IncreaseDelay is lower than 0. */
+    INCREASE_DELAY_LT_0("increaseDelay < 0"),
+
+    /** Call deterministic(false) before. */
+    CALL_DETERMINISTIC_BEFORE(
+        "cannot set decreaseNoise if delta decrease is deterministic, call this.deterministic(false) before"),
+
+    /** Call isHardBounds(false) before. */
+    CALL_HARD_BOUNDS_BEFORE(
+        "cannot set softBoundsMemory when hardBounds are set to true, call this.isHardBounds(false) before"),
+
+    /** Call avtFactory(null) before. */
+    CALL_AVT_FACTORY_BEFORE(
+        "cannot set hardBound option when an avt factory is already set. Call this.avtFactory(null) before."),
+
+    /** SoftBoundsMemory is lower than 0. */
+    SOFT_BOUNDS_MEMORY_LT_0("softBoundsMemory < 0");
 
     /** The text. */
     private String text;
@@ -86,13 +149,16 @@ public enum EMessageException {
     /**
      * Instantiates a new e message exception.
      *
-     * @param text the text
+     * @param text
+     *            the text
      */
     private EMessageException(String text) {
         this.text = text;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Enum#toString()
      */
     @Override

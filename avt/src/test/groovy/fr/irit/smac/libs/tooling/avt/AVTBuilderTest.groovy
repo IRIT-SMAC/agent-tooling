@@ -41,6 +41,93 @@ class AVTBuilderTest extends Specification {
         avtBuilder.upperBound = 10.0
     }
 
+    def 'avtBuilder with a lowerBound greater than the upperBound should thrown an IllegalStateException' () {
+
+        given:
+        avtBuilder.lowerBound = 15.0
+        avtBuilder.upperBound = 10.0
+
+        when:
+        avtBuilder.checkLowerBound()
+
+        then:
+        thrown(IllegalStateException)
+    }
+
+    def 'avtBuilder with a startValue greater than the upperBound should thrown an IllegalStateException' () {
+
+        given:
+        avtBuilder.startValue = 25.0
+
+        when:
+        avtBuilder.checkStartValue()
+
+        then:
+        thrown(IllegalStateException)
+    }
+
+    def 'avtBuilder with a startValue lower than the lowerBound should thrown an IllegalStateException' () {
+
+        given:
+        avtBuilder.startValue = -25.0
+
+        when:
+        avtBuilder.checkStartValue()
+
+        then:
+        thrown(IllegalStateException)
+    }
+
+    def 'avtBuilder with a negative deltaMin should thrown an IllegalStateException' () {
+
+        given:
+        avtBuilder.deltaMin = -5.0
+
+        when:
+        avtBuilder.checkDeltaMin()
+
+        then:
+        thrown(IllegalStateException)
+    }
+
+    def 'avtBuilder with a deltaMin greater than the deltaMax should thrown an IllegalStateException' () {
+
+        given:
+        avtBuilder.deltaMin = 5.0
+        avtBuilder.deltaMax = -15.0
+
+        when:
+        avtBuilder.checkDeltaMin()
+
+        then:
+        thrown(IllegalStateException)
+    }
+
+    def 'avtBuilder with a deltaMin lower than the deltaMax' () {
+
+        given:
+        avtBuilder.deltaMax = 15.0
+        avtBuilder.deltaMin = 5.0
+
+        when:
+        avtBuilder.checkDeltaMin()
+
+        then:
+        true
+    }
+
+    def 'avtBuilder with a null avtFactory should thrown an IllegalStateException' () {
+
+        given:
+        avtBuilder.avtFactory = null
+
+        when:
+        avtBuilder.checkAvtFactory()
+
+        then:
+        thrown(IllegalStateException)
+    }
+
     def 'isHardBounds with a not null avtFactory should throw an IllegalStateException' () {
 
         given:
@@ -387,6 +474,40 @@ class AVTBuilderTest extends Specification {
         avtBuilder.deltaMin = null
         avtBuilder.deltaMax = 5.0
 
+        when:
+        avtBuilder.build()
+
+        then:
+        true
+    }
+
+    def 'build with a not null deltaManagerFactory'() {
+
+        given:
+        avtBuilder.startValue = null
+        avtBuilder.deltaManagerFactory = Mock(IDeltaManagerFactory)
+        avtBuilder.isDeterministicDelta = false
+        avtBuilder.deltaMin = null
+        avtBuilder.deltaMax = 5.0
+
+        when:
+        avtBuilder.build()
+
+        then:
+        true
+    }
+
+    def 'build with a false isDelayedDelta and a false isBoundedDelta'() {
+
+        given:
+        avtBuilder.startValue = null
+        avtBuilder.deltaManagerFactory = null
+        avtBuilder.isDeterministicDelta = false
+        avtBuilder.deltaMin = null
+        avtBuilder.deltaMax = 5.0
+        avtBuilder.isDelayedDelta = false
+        avtBuilder.isBoundedDelta = false
+        
         when:
         avtBuilder.build()
 

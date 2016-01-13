@@ -1,8 +1,5 @@
 package fr.irit.smac.libs.tooling.avt.impl
 
-import java.lang.reflect.Field
-import java.lang.reflect.Modifier
-
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -44,6 +41,7 @@ class SoftBoundsMemoryAVTTest extends Specification{
         softBoundsMemoryAVT.upperBound = maxValue
         softBoundsMemoryAVT.value = startValue
         avtBuilder.deltaMin(precision)
+        softBoundsMemoryAVT.valuesHistory.clear()
     }
 
     def 'setLowerBound'() {
@@ -64,7 +62,22 @@ class SoftBoundsMemoryAVTTest extends Specification{
         true
     }
 
-    def 'setValue with a Nan argument should thrown an IllegalArgumentException'() {
+    def 'updateHistoryFromBounds'() {
+
+        given:
+        softBoundsMemoryAVT.valuesHistory.add((Double)-30.0)
+        softBoundsMemoryAVT.valuesHistory.add((Double)0.2)
+        softBoundsMemoryAVT.valuesHistory.add((Double)7.0)
+        softBoundsMemoryAVT.valuesHistory.add((Double)25.0)
+
+        when:
+        softBoundsMemoryAVT.updateHistoryFromBounds()
+
+        then:
+        true
+    }
+
+    def 'setValue with a Nan argument should throw an IllegalArgumentException'() {
 
         when:
         softBoundsMemoryAVT.setValue(Math.sqrt(-1))
@@ -89,7 +102,7 @@ class SoftBoundsMemoryAVTTest extends Specification{
         EFeedback.LOWER | 1.0
     }
 
-    def 'adjustValue with a null argument should thrown an IllegalArgumentException'() {
+    def 'adjustValue with a null argument should throw an IllegalArgumentException'() {
 
         when:
         softBoundsMemoryAVT.adjustValue(null)
@@ -110,7 +123,7 @@ class SoftBoundsMemoryAVTTest extends Specification{
         EFeedback.GOOD | softBoundsMemoryAVT.value
     }
 
-    def 'getValueIf with a NaN argument should thrown an IllegalArgumentException'() {
+    def 'getValueIf with a NaN argument should throw an IllegalArgumentException'() {
 
         when:
         softBoundsMemoryAVT.getValueIf(null)
@@ -119,17 +132,49 @@ class SoftBoundsMemoryAVTTest extends Specification{
         thrown(IllegalArgumentException)
     }
 
-    def 'updateBoundsFromHistory'() {
+    def 'registerNewValueAndUpdateBounds'() {
+
+        given:
+        double value = -30.0
+        softBoundsMemoryAVT.valuesHistory.add((Double)0.2)
+
+        when:
+
+        softBoundsMemoryAVT.registerNewValueAndUpdateBounds(value)
+
+        then:
+        softBoundsMemoryAVT.getRange().getLowerBound() == value
+    }
+
+    def 'updateBoundsFromHistory with an empty history'() {
 
         given:
         softBoundsMemoryAVT.range = new MutableRangeImpl(minValue, maxValue)
-        softBoundsMemoryAVT.valuesHistory.add((Double)0.288)
 
         when:
         softBoundsMemoryAVT.updateBoundsFromHistory()
 
         then:
         true
+    }
+
+    def 'updateBoundsFromHistory'(double value1, double value2) {
+
+        given:
+        softBoundsMemoryAVT.range = new MutableRangeImpl(minValue, maxValue)
+        softBoundsMemoryAVT.valuesHistory.clear()
+        softBoundsMemoryAVT.valuesHistory.add((Double)value1)
+        softBoundsMemoryAVT.valuesHistory.add((Double)value2)
+        softBoundsMemoryAVT.updateBoundsFromHistory()
+
+        expect:
+        true
+
+        where:
+        value1 | value2
+        0.188 | 0.088
+        0.088 | 1.88
+        softBoundsMemoryAVT.effectiveLowerBound | softBoundsMemoryAVT.effectiveUpperBound
     }
 
     def 'isHistoryMax'(Double value, boolean historyMax) {
@@ -183,12 +228,9 @@ class SoftBoundsMemoryAVTTest extends Specification{
     def 'updateValueFromBounds'(double value, double newValue) {
 
         given:
-        Field field = StandardAVT.getDeclaredField("value")
-        field.setAccessible(true)
-        Field modifiersField = Field.class.getDeclaredField("modifiers")
-        modifiersField.setAccessible(true)
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.PROTECTED)
-        field.set(softBoundsMemoryAVT, value)
+        softBoundsMemoryAVT.value = value
+        softBoundsMemoryAVT.effectiveLowerBound = -5.0
+        softBoundsMemoryAVT.effectiveUpperBound = 10.0
         softBoundsMemoryAVT.updateValueFromBounds()
 
         expect:
@@ -196,7 +238,7 @@ class SoftBoundsMemoryAVTTest extends Specification{
 
         where:
         value | newValue
-        -40 | minValue
-        30 | startValue
+        -20.0 | -5.0
+        20.0 | 10.0
     }
 }

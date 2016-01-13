@@ -41,22 +41,22 @@ public class ForwardingDMDTest extends Specification {
     def 'ForwardingDMD' () {
 
         given:
-        ForwardingDMD forwardingDMDConstructor
+        ForwardingDMD forwardingDMD2
 
         when:
-        forwardingDMDConstructor = new ForwardingDMD(Mock(IDMDecision))
+        forwardingDMD2 = new ForwardingDMD(Mock(IDMDecision))
 
         then:
-        forwardingDMDConstructor != null
+        forwardingDMD2 != null
     }
 
     def 'ForwardingDMD with a null argument should return an IllegalArgumentException' () {
 
         given:
-        ForwardingDMD forwardingDMDConstructor
+        ForwardingDMD forwardingDMD2
 
         when:
-        forwardingDMDConstructor = new ForwardingDMD(null)
+        forwardingDMD2 = new ForwardingDMD(null)
 
         then:
         thrown(IllegalArgumentException)

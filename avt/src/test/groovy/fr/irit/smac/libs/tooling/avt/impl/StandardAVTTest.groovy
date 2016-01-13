@@ -36,8 +36,8 @@ import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection
 class StandardAVTTest extends Specification {
 
     @Shared AVTBuilder avtBuilder
-    @Shared StandardAVT standardAVTConstructor
-    @Shared IAVT standardAVT
+    @Shared StandardAVT standardAVT
+    @Shared StandardAVT standardAVT2
     @Shared double minValue = -5
     @Shared double maxValue = 10
     @Shared double startValue = 0.5
@@ -68,7 +68,7 @@ class StandardAVTTest extends Specification {
     def 'StandardAVT with a NaN lowerBound should throw an IllegalArgumentException' () {
 
         when:
-        standardAVTConstructor = new StandardAVT(Math.sqrt(-1),2,4,Mock(IDeltaManagerFactory))
+        standardAVT2 = new StandardAVT(Math.sqrt(-1),2,4,Mock(IDeltaManagerFactory))
 
         then:
         thrown(IllegalArgumentException)
@@ -77,7 +77,7 @@ class StandardAVTTest extends Specification {
     def 'StandardAVT with a NaN upperBound should throw an IllegalArgumentException' () {
 
         when:
-        standardAVTConstructor = new StandardAVT(1,Math.sqrt(-1),4,Mock(IDeltaManagerFactory))
+        standardAVT2 = new StandardAVT(1,Math.sqrt(-1),4,Mock(IDeltaManagerFactory))
 
         then:
         thrown(IllegalArgumentException)
@@ -86,7 +86,7 @@ class StandardAVTTest extends Specification {
     def 'StandardAVT with a NaN startValue should throw an IllegalArgumentException' () {
 
         when:
-        standardAVTConstructor = new StandardAVT(1,1,Math.sqrt(-1),Mock(IDeltaManagerFactory))
+        standardAVT2 = new StandardAVT(1,1,Math.sqrt(-1),Mock(IDeltaManagerFactory))
 
         then:
         thrown(IllegalArgumentException)
@@ -95,7 +95,7 @@ class StandardAVTTest extends Specification {
     def 'StandardAVT with no deltaManagerFactory should throw an IllegalArgumentException' () {
 
         when:
-        standardAVTConstructor = new StandardAVT(1,1,1,null)
+        standardAVT2 = new StandardAVT(1,1,1,null)
 
         then:
         thrown(IllegalArgumentException)
@@ -192,6 +192,24 @@ class StandardAVTTest extends Specification {
         standardAVT.advancedAVT == advancedAVT
     }
 
+    def 'getCriticity with a getNbGeometricSteps <= 1'() {
+
+        given:
+        AVTBuilder avtBuilder2 = new AVTBuilder()
+        avtBuilder2.lowerBound(1)
+        avtBuilder2.upperBound(1.2)
+        avtBuilder2.deltaMin(0.1)
+        avtBuilder2.deltaDecreaseDelay(1)
+        avtBuilder2.deltaIncreaseDelay(1)
+        avtBuilder2.startValue(1)
+        
+        when:
+        double criticity = avtBuilder2.build().getCriticity()
+
+        then:
+        criticity == 0.0
+    }
+
     def 'getCriticity'() {
 
         when:
@@ -267,21 +285,24 @@ class StandardAVTTest extends Specification {
         EFeedback.GOOD | EFeedback.GOOD
     }
 
-    def 'adjustValue with a not good new feedback '(EFeedback feedback, EFeedback newFeedback, double newValue) {
+    def 'adjustValue with a not good new feedback '(EFeedback feedback, double newValue, double value) {
 
         given:
+        standardAVT.value = value
         standardAVT.adjustValue(feedback)
 
         expect:
         standardAVT.value == newValue
 
         where:
-        feedback | newFeedback | newValue
-        EFeedback.LOWER | EFeedback.LOWER | 0.46799999999999997
-        EFeedback.GREATER | EFeedback.GREATER | 0.532
+        feedback | newValue | value
+        EFeedback.LOWER | 0.46799999999999997 | standardAVT.value
+        EFeedback.GREATER | 0.532 | standardAVT.value
+        EFeedback.LOWER | -5.0 | standardAVT.effectiveLowerBound
+        EFeedback.GREATER | 10.0 | standardAVT.effectiveUpperBound
     }
 
-    def 'adjustValue with a null argument should thrown an IllegalArgumentException'() {
+    def 'adjustValue with a null argument should throw an IllegalArgumentException'() {
 
         when:
         standardAVT.adjustValue(null)
@@ -290,19 +311,24 @@ class StandardAVTTest extends Specification {
         thrown(IllegalArgumentException)
     }
 
-    def 'getValueIf with a not good new feedback'(EFeedback feedback, double delta, double newValue, EDirection direction) {
+    def 'getValueIf with a not good new feedback'(EFeedback feedback, double newValue, double value) {
 
+        given:
+        standardAVT.value = value
+        
         expect:
         newValue == standardAVT.getValueIf(feedback)
 
         where:
-        feedback | delta | newValue | direction
-        EFeedback.GREATER | 5.0 | 0.532 | EDirection.DIRECT
-        EFeedback.GREATER | 5.0 | 0.532 | EDirection.INDIRECT
-        EFeedback.GREATER | 5.0 | 0.532 | EDirection.NONE
-        EFeedback.LOWER | 5.0 | 0.46799999999999997 | EDirection.INDIRECT
-        EFeedback.LOWER | 5.0 | 0.46799999999999997 | EDirection.DIRECT
-        EFeedback.LOWER | 5.0 | 0.46799999999999997 | EDirection.NONE
+        feedback | newValue | value
+        EFeedback.GREATER | 0.532 | standardAVT.value
+        EFeedback.GREATER | 0.532 | standardAVT.value
+        EFeedback.GREATER |  0.532 | standardAVT.value
+        EFeedback.LOWER | 0.46799999999999997 | standardAVT.value
+        EFeedback.LOWER | 0.46799999999999997 | standardAVT.value
+        EFeedback.LOWER | 0.46799999999999997 | standardAVT.value
+        EFeedback.LOWER | -5 | standardAVT.effectiveLowerBound
+        EFeedback.GREATER | 10 | standardAVT.effectiveUpperBound
     }
 
     def 'getValueIf with a good new feedback'(EDirection direction, EFeedback feedback) {
@@ -323,7 +349,7 @@ class StandardAVTTest extends Specification {
         EDirection.INDIRECT | EFeedback.LOWER
     }
 
-    def 'getValueIf with a null argument should thrown an IllegalArgumentException'() {
+    def 'getValueIf with a null argument should throw an IllegalArgumentException'() {
 
         when:
         standardAVT.getValueIf(null)
@@ -347,6 +373,8 @@ class StandardAVTTest extends Specification {
         EFeedback.GOOD | 1.0 | false
         EFeedback.LOWER | 2.0 | false
         EFeedback.GREATER | 2.0 | false
+        EFeedback.GOOD | -5.0 | false
+        EFeedback.GOOD | 10.0 | false
     }
 
     def 'getNonInfiniteEquivalOf'(double value, double finiteVal) {

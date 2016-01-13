@@ -26,6 +26,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection
 import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision
+import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecisionFactory
 import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision.EDecision
 
 @Unroll
@@ -35,20 +36,18 @@ class DelayedDMDTest extends Specification {
 
     def 'DelayedDMD' () {
 
-        given:
-        DelayedDMD delayedDMDConstructor
-
         when:
-        delayedDMDConstructor = new DelayedDMD(Mock(IDMDecision), 1, 1)
+        delayedDMD = new DelayedDMDFactory(new StandardDMDFactory(), 1, 1).createInstance()
 
         then:
-        delayedDMDConstructor != null
+        delayedDMD != null
     }
 
     def 'isIncreaseAllowed' (int increaseDelay, int decreaseDelay, boolean allowed) {
 
         given:
-        delayedDMD = new DelayedDMD(Mock(IDMDecision), increaseDelay, decreaseDelay)
+        delayedDMD = new DelayedDMDFactory(new StandardDMDFactory(), increaseDelay, decreaseDelay).createInstance()
+
         boolean allowedOrNot = delayedDMD.isIncreaseAllowed()
 
         expect:
@@ -56,14 +55,14 @@ class DelayedDMDTest extends Specification {
 
         where:
         increaseDelay | decreaseDelay | allowed
-        1 | 1 | false
-        0 | 1 | true
+        4 | 1 | false
+        -1 | 1 | true
     }
 
     def 'isDecreaseAllowed' (int increaseDelay, int decreaseDelay, boolean allowed) {
 
         given:
-        delayedDMD = new DelayedDMD(Mock(IDMDecision), increaseDelay, decreaseDelay)
+        delayedDMD = new DelayedDMDFactory(new StandardDMDFactory(), increaseDelay, decreaseDelay).createInstance()
         boolean allowedOrNot = delayedDMD.isDecreaseAllowed()
 
         expect:
@@ -71,8 +70,40 @@ class DelayedDMDTest extends Specification {
 
         where:
         increaseDelay | decreaseDelay | allowed
-        1 | 1 | false
-        1 | 0 | true
+        1 | 4 | false
+        1 | -1 | true
+    }
+
+    def 'isIncreaseAllowedIf' (int increaseDelay, int decreaseDelay, boolean allowed) {
+
+        given:
+        delayedDMD = new DelayedDMDFactory(new StandardDMDFactory(), increaseDelay, decreaseDelay).createInstance()
+
+        boolean allowedOrNot = delayedDMD.isIncreaseAllowedIf()
+
+        expect:
+        allowedOrNot == allowed
+
+        where:
+        increaseDelay | decreaseDelay | allowed
+        4 | 1 | false
+        -1 | 1 | true
+    }
+
+    def 'isDecreaseAllowedIf' (int increaseDelay, int decreaseDelay, boolean allowed) {
+
+        given:
+        delayedDMD = new DelayedDMDFactory(new StandardDMDFactory(), increaseDelay, decreaseDelay).createInstance()
+
+        boolean allowedOrNot = delayedDMD.isDecreaseAllowedIf()
+
+        expect:
+        allowedOrNot == allowed
+
+        where:
+        increaseDelay | decreaseDelay | allowed
+        1 | 4 | false
+        1 | -1 | true
     }
 
     def 'getNextDecision' (EDirection direction, EDirection lastDirection, EDecision decision, int increaseDelay, int decreaseDelay) {
@@ -98,8 +129,7 @@ class DelayedDMDTest extends Specification {
     def 'getNextDecision should throw an IllegalArgumentException' () {
 
         given:
-        StandardDMD nestedDmd = new StandardDMD()
-        delayedDMD = new DelayedDMD(nestedDmd, 1, 1)
+        delayedDMD = new DelayedDMDFactory(new StandardDMDFactory(), 1, 1).createInstance()
 
         when:
         delayedDMD.getNextDecision(null)
@@ -108,28 +138,31 @@ class DelayedDMDTest extends Specification {
         thrown(IllegalArgumentException)
     }
 
-    def 'getNextDecisionIf' (EDirection direction, EDirection lastDirection, EDecision decision, int increaseDelay, int decreaseDelay) {
+    def 'getNextDecisionIf' (EDirection direction, EDirection lastDirection, EDecision decision, int increaseDelay, int decreaseDelay, int requestCount) {
 
         given:
         StandardDMD nestedDmd = new StandardDMD()
         delayedDMD = new DelayedDMD(nestedDmd, increaseDelay, decreaseDelay)
         nestedDmd.lastDirection = lastDirection
+        delayedDMD.decreaseRequestCount = requestCount
+        delayedDMD.increaseRequestCount = requestCount
         EDecision newDecision = delayedDMD.getNextDecisionIf(direction)
 
         expect:
         newDecision == decision
 
         where:
-        direction | lastDirection | decision | increaseDelay | decreaseDelay
-        EDirection.DIRECT | EDirection.DIRECT | EDecision.INCREASE_DELTA | 0 | 1
-        EDirection.DIRECT | EDirection.INDIRECT | EDecision.DECREASE_DELTA | 1 | 0
+        direction | lastDirection | decision | increaseDelay | decreaseDelay | requestCount
+        EDirection.DIRECT | EDirection.DIRECT | EDecision.INCREASE_DELTA | 0 | 1 | 0
+        EDirection.DIRECT | EDirection.INDIRECT | EDecision.DECREASE_DELTA | 1 | 0 | 0
+        EDirection.DIRECT | EDirection.DIRECT | EDecision.SAME_DELTA | 1 | 0 | -5
+        EDirection.DIRECT | EDirection.INDIRECT | EDecision.SAME_DELTA | 1 | 0 | -5
     }
 
     def 'getNextDecisionIf should throw an IllegalArgumentException' () {
 
         given:
-        StandardDMD nestedDmd = new StandardDMD()
-        delayedDMD = new DelayedDMD(nestedDmd, 1, 1)
+        delayedDMD = new DelayedDMDFactory(new StandardDMDFactory(), 1, 1).createInstance()
 
         when:
         delayedDMD.getNextDecisionIf(null)

@@ -5,7 +5,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl.DeterministicGDEFactory
 import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl.StandardDMDFactory
-import fr.irit.smac.libs.tooling.avt.range.IRange
+import fr.irit.smac.libs.tooling.avt.range.impl.MutableRangeImpl
 
 @Unroll
 class ForwardingDMTest extends Specification {
@@ -14,12 +14,12 @@ class ForwardingDMTest extends Specification {
 
     def setupSpec() {
 
-        StandardDM standardDM = new StandardDM(5.0, 12.0, Mock(IRange), new DeterministicGDEFactory(2.0, 4.0).createInstance(),
-                        new StandardDMDFactory().createInstance())
+        StandardDM standardDM = new StandardDMFactory(new DeterministicGDEFactory (2.0,4.0), new StandardDMDFactory(), 3.0,6.0).createInstance(new MutableRangeImpl(1.0, 12.0))
+
         forwardingDM = new ForwardingDM(standardDM)
     }
 
-    def 'ForwardingDM with a dm null should thrown an IllegalArgumentException'() {
+    def 'ForwardingDM with a dm null should throw an IllegalArgumentException'() {
 
         when:
         new ForwardingDM(null)

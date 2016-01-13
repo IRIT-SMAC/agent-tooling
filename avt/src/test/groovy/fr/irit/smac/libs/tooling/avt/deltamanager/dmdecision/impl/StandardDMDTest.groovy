@@ -33,19 +33,19 @@ class StandardDMDTest extends Specification {
     @Shared StandardDMD standardDMD
 
     def setupSpec() {
-        standardDMD = new StandardDMD()
+        standardDMD = new StandardDMDFactory().createInstance()
     }
 
     def 'StandardDMD' () {
 
         given:
-        StandardDMD standardDMDConstructor
+        StandardDMD standardDMD2
 
         when:
-        standardDMDConstructor = new StandardDMD()
+        standardDMD2 = new StandardDMDFactory().createInstance()
 
         then:
-        standardDMDConstructor != null
+        standardDMD2 != null
     }
 
     def 'resetState' () {

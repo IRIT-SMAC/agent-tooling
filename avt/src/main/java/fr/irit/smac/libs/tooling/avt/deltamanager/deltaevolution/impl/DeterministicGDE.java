@@ -21,6 +21,7 @@
  */
 package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl;
 
+import fr.irit.smac.libs.tooling.avt.EMessageException;
 import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDE;
 
 /**
@@ -44,19 +45,19 @@ public class DeterministicGDE implements IGeometricDE {
     public DeterministicGDE(double increaseFactor, double decreaseFactor) {
 
         if (Double.isNaN(increaseFactor)) {
-            throw new IllegalArgumentException("increaseFactor isNaN");
+            throw new IllegalArgumentException(EMessageException.INCREASE_FACTOR_NAN.toString());
         }
 
         if (Double.isNaN(decreaseFactor)) {
-            throw new IllegalArgumentException("decreaseFactor isNaN");
+            throw new IllegalArgumentException(EMessageException.DECREASE_FACTOR_NAN.toString());
         }
 
         if (decreaseFactor < 1) {
-            throw new IllegalArgumentException("decrease factor < 1");
+            throw new IllegalArgumentException(EMessageException.DECREASE_FACTOR_LT_1.toString());
         }
 
         if (increaseFactor < 1) {
-            throw new IllegalArgumentException("increase factor < 1");
+            throw new IllegalArgumentException(EMessageException.INCREASE_FACTOR_LT_1.toString());
         }
 
         this.increaseFactor = increaseFactor;
@@ -69,7 +70,7 @@ public class DeterministicGDE implements IGeometricDE {
     @Override
     public double getIncreasedDelta(double delta) {
         if (Double.isNaN(delta)) {
-            throw new IllegalArgumentException("increaseFactor delta");
+            throw new IllegalArgumentException(EMessageException.INCREASE_FACTOR_DELTA.toString());
         }
 
         return delta * this.increaseFactor;
@@ -81,7 +82,7 @@ public class DeterministicGDE implements IGeometricDE {
     @Override
     public double getDecreasedDelta(double delta) {
         if (Double.isNaN(delta)) {
-            throw new IllegalArgumentException("increaseFactor delta");
+            throw new IllegalArgumentException(EMessageException.INCREASE_FACTOR_DELTA.toString());
         }
 
         return delta / this.decreaseFactor;

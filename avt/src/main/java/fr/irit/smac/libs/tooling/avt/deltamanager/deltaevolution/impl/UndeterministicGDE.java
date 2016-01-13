@@ -23,6 +23,8 @@ package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl;
 
 import java.util.Random;
 
+import fr.irit.smac.libs.tooling.avt.EMessageException;
+
 /**
  * The Class UndeterministicGDE.
  */
@@ -61,15 +63,15 @@ public class UndeterministicGDE extends DeterministicGDE {
         super(increaseFactor, decreaseFactor);
 
         if (decreaseNoise <= 0.) {
-            throw new IllegalArgumentException("decreaseNoise <= 0");
+            throw new IllegalArgumentException(EMessageException.DECREASE_NOISE_LT_ET_0.toString());
         }
 
         if (Double.isNaN(decreaseNoise)) {
-            throw new IllegalArgumentException("decreaseNoise isNaN");
+            throw new IllegalArgumentException(EMessageException.DECREASE_NOISE_NAN.toString());
         }
 
         if (decreaseFactor - decreaseNoise < 1.) {
-            throw new IllegalArgumentException("decreaseFactor - decreaseNoise < 1");
+            throw new IllegalArgumentException(EMessageException.DECREASE_FACTOR_SUB_DECREASE_NOISE_LT_1.toString());
         }
 
         this.decreaseNoise = decreaseNoise;
@@ -83,7 +85,7 @@ public class UndeterministicGDE extends DeterministicGDE {
     public double getDecreasedDelta(double delta) {
 
         if (Double.isNaN(delta)) {
-            throw new IllegalArgumentException("delta isNaN");
+            throw new IllegalArgumentException(EMessageException.DELTA_NAN.toString());
         }
 
         return delta / Math.max(1.0, this.decreaseFactor - decreaseNoise + random.nextDouble() * decreaseNoise * 2.);

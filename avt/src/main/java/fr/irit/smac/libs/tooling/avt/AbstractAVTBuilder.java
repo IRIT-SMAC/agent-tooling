@@ -106,8 +106,7 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
     @Override
     public AbstractAVTBuilder<T> isHardBounds(boolean isHardBounds) {
         if (this.avtFactory != null) {
-            throw new IllegalStateException(
-                "cannot set hardBound option when an avt factory is already set. Call this.avtFactory(null) before.");
+            throw new IllegalStateException(EMessageException.CALL_AVT_FACTORY_BEFORE.toString());
         }
         this.isHardBounds = isHardBounds;
         return this;
@@ -133,11 +132,10 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
     @Override
     public AbstractAVTBuilder<T> softBoundsMemory(int softBoundsMemory) {
         if (softBoundsMemory < 0) {
-            throw new IllegalArgumentException("softBoundsMemory < 0");
+            throw new IllegalArgumentException(EMessageException.SOFT_BOUNDS_MEMORY_LT_0.toString());
         }
         if (this.isHardBounds) {
-            throw new IllegalStateException(
-                "cannot set softBoundsMemory when hardBounds are set to true, call this.isHardBounds(false) before");
+            throw new IllegalStateException(EMessageException.CALL_HARD_BOUNDS_BEFORE.toString());
         }
         this.softBoundsMemory = softBoundsMemory;
         return this;
@@ -184,7 +182,7 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
     @Override
     public AbstractAVTBuilder<T> deltaIncreaseFactor(double increaseFactor) {
         if (increaseFactor < 1.) {
-            throw new IllegalArgumentException("Increase factor < 1.");
+            throw new IllegalArgumentException(EMessageException.INCREASE_FACTOR_LT_1.toString());
         }
         this.deltaIncreaseFactor = increaseFactor;
         return this;
@@ -198,7 +196,7 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
     @Override
     public AbstractAVTBuilder<T> deltaDecreaseFactor(double decreaseFactor) {
         if (decreaseFactor < 1.) {
-            throw new IllegalArgumentException("Decrease factor < 1.");
+            throw new IllegalArgumentException(EMessageException.DECREASE_FACTOR_LT_1.toString());
         }
         this.deltaDecreaseFactor = decreaseFactor;
         return this;
@@ -213,10 +211,10 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
     public AbstractAVTBuilder<T> deltaDecreaseNoise(double decreaseNoise) {
         if (this.isDeterministicDelta) {
             throw new IllegalStateException(
-                "cannot set decreaseNoise if delta decrease is deterministic, call this.deterministic(false) before");
+                EMessageException.CALL_DETERMINISTIC_BEFORE.toString());
         }
         if (decreaseNoise <= 0) {
-            throw new IllegalArgumentException("DecreaseNoise <= 0");
+            throw new IllegalArgumentException(EMessageException.DECREASE_NOISE_LT_ET_0.toString());
         }
         this.deltaDecreaseNoise = decreaseNoise;
         return this;
@@ -242,7 +240,7 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
     @Override
     public AbstractAVTBuilder<T> deltaIncreaseDelay(int increaseDelay) {
         if (increaseDelay < 0) {
-            throw new IllegalArgumentException("increaseDelay < 0");
+            throw new IllegalArgumentException(EMessageException.INCREASE_DELAY_LT_0.toString());
         }
         this.isDelayedDelta = true;
         this.deltaIncreaseDelay = increaseDelay;
@@ -257,7 +255,7 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
     @Override
     public AbstractAVTBuilder<T> deltaDecreaseDelay(int decreaseDelay) {
         if (decreaseDelay < 0) {
-            throw new IllegalArgumentException("decreaseDelay < 0");
+            throw new IllegalArgumentException(EMessageException.DECREASE_DELAY_LT_0.toString());
         }
         this.isDelayedDelta = true;
         this.deltaDecreaseDelay = decreaseDelay;
@@ -328,7 +326,7 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
     @Override
     public AbstractAVTBuilder<T> startValue(double startValue) {
         if (Double.isNaN(startValue)) {
-            throw new IllegalArgumentException("startValue isNaN");
+            throw new IllegalArgumentException(EMessageException.START_VALUE_NAN.toString());
         }
         this.startValue = startValue;
         return this;
@@ -344,7 +342,7 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
     @Override
     public AbstractAVTBuilder<T> deltaManagerFactory(IDeltaManagerFactory<?> deltaManagerFactory) {
         if (deltaManagerFactory == null) {
-            throw new IllegalArgumentException("deltaManage == null");
+            throw new IllegalArgumentException(EMessageException.DELTA_MANAGER_FACTORY_NULL.toString());
         }
 
         this.deltaManagerFactory = deltaManagerFactory;
@@ -410,7 +408,7 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
      */
     protected double getRangeMiddle() {
         if (this.lowerBound > this.upperBound) {
-            throw new IllegalStateException("lowerBound greater than upperBound");
+            throw new IllegalStateException(EMessageException.LOWER_BOUND_GT_UPPER_BOUND.toString());
         }
 
         return (this.getRange().divide(BigDecimal.valueOf(2.)).add(getBigDecValueOf(this.lowerBound))).doubleValue();
@@ -434,7 +432,7 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
     protected void checkLowerBound() {
 
         if (this.lowerBound >= this.upperBound) {
-            throw new IllegalStateException("lowerBound >= upperBound");
+            throw new IllegalStateException(EMessageException.LOWER_BOUND_GE_UPPER_BOUND.toString());
         }
     }
 
@@ -445,11 +443,11 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
 
         if (this.startValue != null) {
             if (this.lowerBound > this.startValue) {
-                throw new IllegalStateException("lowerBound > startValue");
+                throw new IllegalStateException(EMessageException.LOWER_BOUND_GT_START_VALUE.toString());
             }
 
             if (this.startValue > this.upperBound) {
-                throw new IllegalStateException("startValue > upperBound");
+                throw new IllegalStateException(EMessageException.START_VALUE_GT_UPPER_BOUND.toString());
             }
         }
     }
@@ -461,11 +459,11 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
 
         if (this.deltaMin != null) {
             if (this.deltaMin < 0) {
-                throw new IllegalStateException("deltaMin < 0");
+                throw new IllegalStateException(EMessageException.DELTA_MIN_LT_0.toString());
             }
 
             if (this.deltaMax != null && this.deltaMin > this.deltaMax) {
-                throw new IllegalStateException("deltaMin > deltaMax");
+                throw new IllegalStateException(EMessageException.DELTA_MIN_GT_DELTA_MAX.toString());
             }
         }
     }
@@ -476,7 +474,7 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
     protected void checkAvtFactory() {
 
         if (this.avtFactory == null) {
-            throw new IllegalStateException("avtFactory is not set");
+            throw new IllegalStateException(EMessageException.AVT_FACTORY_NULL.toString());
         }
     }
 

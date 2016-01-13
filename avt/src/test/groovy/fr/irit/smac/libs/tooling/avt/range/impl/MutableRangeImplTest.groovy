@@ -39,13 +39,13 @@ class MutableRangeImplTest extends Specification {
     def 'MutableRangeImpl' () {
 
         given:
-        MutableRangeImpl mutableRangeConstructor
+        MutableRangeImpl mutableRange2
 
         when:
-        mutableRangeConstructor = new MutableRangeImpl(lower,upper)
+        mutableRange2 = new MutableRangeImpl(lower,upper)
 
         then:
-        mutableRangeConstructor != null
+        mutableRange2 != null
     }
 
     def 'getLowerBound' () {

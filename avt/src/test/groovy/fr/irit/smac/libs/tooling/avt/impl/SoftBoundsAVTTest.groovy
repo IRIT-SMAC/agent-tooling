@@ -61,35 +61,46 @@ class SoftBoundsAVTTest extends Specification {
         then:
         true
     }
-
-    def 'setValue'() {
-
+    
+    def 'setValue'(double value) {
+        
         given:
-        double newValue = 0.2
+        softBoundsAVT.setValue(value)
 
-        when:
-        softBoundsAVT.setValue(newValue)
-
-        then:
-        softBoundsAVT.value == newValue
+        expect:
+        softBoundsAVT.value == value
+        
+        where:
+        value << [1.5,-20.0]
     }
 
-    def 'adjustValue'(EFeedback feedback, double newValue) {
+    def 'setValue with a null value should throw an IllegalArgumentException'() {
+
+        when:
+        softBoundsAVT.setValue(Math.sqrt(-1))
+
+        then:
+        thrown(IllegalArgumentException)
+    }
+
+    def 'adjustValue'(EFeedback feedback, double newValue, double delta) {
 
         given:
+        softBoundsAVT.deltaManager.delta = delta
         softBoundsAVT.adjustValue(feedback)
 
         expect:
         newValue == softBoundsAVT.value
 
         where:
-        feedback | newValue
-        EFeedback.GOOD | startValue
-        EFeedback.GREATER | 0.532
-        EFeedback.LOWER | 0.46799999999999997
+        feedback | newValue | delta
+        EFeedback.GOOD | startValue | softBoundsAVT.deltaManager.delta
+        EFeedback.GREATER | 0.532 | softBoundsAVT.deltaManager.delta
+        EFeedback.LOWER | 0.46799999999999997 | softBoundsAVT.deltaManager.delta
+        EFeedback.LOWER | -99.5 | 100.0
     }
 
-    def 'adjustValue with a null argument should thrown an IllegalArgumentException'() {
+    def 'adjustValue with a null argument should throw an IllegalArgumentException'() {
 
         when:
         softBoundsAVT.adjustValue(null)
@@ -124,7 +135,7 @@ class SoftBoundsAVTTest extends Specification {
         EFeedback.GOOD | softBoundsAVT.value
     }
 
-    def 'getValueIf with a NaN argument should thrown an IllegalArgumentException'() {
+    def 'getValueIf with a NaN argument should throw an IllegalArgumentException'() {
 
         when:
         softBoundsAVT.getValueIf(null)
@@ -133,7 +144,7 @@ class SoftBoundsAVTTest extends Specification {
         thrown(IllegalArgumentException)
     }
 
-    def 'updateBoundsFromValue with a NaN argument should thrown an IllegalArgumentException'() {
+    def 'updateBoundsFromValue with a NaN argument should throw an IllegalArgumentException'() {
 
         when:
         softBoundsAVT.updateBoundsFromValue(Math.sqrt(-1))
@@ -154,7 +165,7 @@ class SoftBoundsAVTTest extends Specification {
         true
     }
 
-    def 'setLowerBoundFromValue with a NaN argument should thrown an IllegalArgumentException'() {
+    def 'setLowerBoundFromValue with a NaN argument should throw an IllegalArgumentException'() {
 
         when:
         softBoundsAVT.setLowerBoundFromValue(Math.sqrt(-1))
@@ -175,7 +186,7 @@ class SoftBoundsAVTTest extends Specification {
         true
     }
 
-    def 'setUpperBoundFromValue with a NaN argument should thrown an IllegalArgumentException'() {
+    def 'setUpperBoundFromValue with a NaN argument should throw an IllegalArgumentException'() {
 
         when:
         softBoundsAVT.setUpperBoundFromValue(Math.sqrt(-1))
@@ -184,7 +195,7 @@ class SoftBoundsAVTTest extends Specification {
         thrown(IllegalArgumentException)
     }
 
-    def 'setValueFromBounds with a NaN argument should thrown an IllegalArgumentException'() {
+    def 'setValueFromBounds with a NaN argument should throw an IllegalArgumentException'() {
 
         when:
         softBoundsAVT.setValueFromBounds(Math.sqrt(-1))
@@ -196,12 +207,9 @@ class SoftBoundsAVTTest extends Specification {
     def 'updateValueFromBounds'(double value, double newValue) {
 
         given:
-        Field field = StandardAVT.getDeclaredField("value")
-        field.setAccessible(true)
-        Field modifiersField = Field.class.getDeclaredField("modifiers")
-        modifiersField.setAccessible(true)
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.PROTECTED)
-        field.set(softBoundsAVT, value)
+        softBoundsAVT.value = value
+        softBoundsAVT.effectiveLowerBound = -5.0
+        softBoundsAVT.effectiveUpperBound = 5.0
         softBoundsAVT.updateValueFromBounds()
 
         expect:
@@ -209,7 +217,7 @@ class SoftBoundsAVTTest extends Specification {
 
         where:
         value | newValue
-        20 | maxValue
-        -20 | minValue
+        20.0 | 5.0
+        -20.0 | -5.0
     }
 }

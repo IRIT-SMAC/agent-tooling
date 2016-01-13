@@ -28,26 +28,26 @@ import spock.lang.Unroll
 @Unroll
 class UndeterministicGDETest extends Specification{
 
-    @Shared UndeterministicGDE undeterministicGDEConstructor
     @Shared UndeterministicGDE undeterministicGDE
-
+    @Shared UndeterministicGDE undeterministicGDE2
+    
     def setupSpec() {
-        undeterministicGDE = new UndeterministicGDE(1, 5, 4, 1)
+        undeterministicGDE = new UndeterministicGDEFactory(1, 5, 4, 1).createInstance()
     }
 
     def 'UndeterministicGDE (3 arguments) with correct arguments' () {
 
         when:
-        undeterministicGDEConstructor = new UndeterministicGDE(2,7,5)
+        undeterministicGDE2 = new UndeterministicGDEFactory(2,7,5).createInstance()
 
         then:
-        undeterministicGDEConstructor != null
+        undeterministicGDE2 != null
     }
 
     def 'UndeterministicGDE (4 arguments) with a negative decreaseNoise throw an IllegalArgumentException' () {
 
         when:
-        undeterministicGDEConstructor = new UndeterministicGDE(2,1,-1,1)
+        undeterministicGDE2 = new UndeterministicGDEFactory(2,1,-1,1).createInstance()
 
         then:
         thrown(IllegalArgumentException)
@@ -56,7 +56,7 @@ class UndeterministicGDETest extends Specification{
     def 'UndeterministicGDE (4 arguments) with a NaN decreaseNoise throw an IllegalArgumentException' () {
 
         when:
-        undeterministicGDEConstructor = new UndeterministicGDE(2,1,Math.sqrt(-1),1)
+        undeterministicGDE2 = new UndeterministicGDEFactory(2,1,Math.sqrt(-1),1).createInstance()
 
         then:
         thrown(IllegalArgumentException)
@@ -65,7 +65,7 @@ class UndeterministicGDETest extends Specification{
     def 'UndeterministicGDE (4 arguments) with a (decreaseFactor - decreaseNoise) lower than 1 throw an IllegalArgumentException' () {
 
         when:
-        undeterministicGDEConstructor = new UndeterministicGDE(1,1,1,1)
+        undeterministicGDE2 = new UndeterministicGDEFactory(1,1,1,1).createInstance()
 
         then:
         thrown(IllegalArgumentException)
@@ -77,11 +77,11 @@ class UndeterministicGDETest extends Specification{
         double decreaseNoise = 4
 
         when:
-        undeterministicGDEConstructor = new UndeterministicGDE(1,5,decreaseNoise,1)
+        undeterministicGDE2 = new UndeterministicGDEFactory(1,5,decreaseNoise,1).createInstance()
 
         then:
-        undeterministicGDEConstructor.decreaseNoise == decreaseNoise
-        undeterministicGDEConstructor.random != null
+        undeterministicGDE2.decreaseNoise == decreaseNoise
+        undeterministicGDE2.random != null
     }
 
     def 'getDecreasedDelta with a NaN argument throw an IllegalArgumentException' () {

@@ -21,6 +21,7 @@
  */
 package fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl;
 
+import fr.irit.smac.libs.tooling.avt.EMessageException;
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection;
 import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision;
 
@@ -40,7 +41,7 @@ public class ForwardingDMD implements IDMDecision {
     public ForwardingDMD(IDMDecision dmDecison) {
         super();
         if (dmDecison == null) {
-            throw new IllegalArgumentException("dmDecison == null");
+            throw new IllegalArgumentException(EMessageException.DM_DECISION.toString());
         }
         this.dmDecison = dmDecison;
     }
