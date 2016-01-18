@@ -26,21 +26,29 @@ import fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDE;
 
 /**
  * The Class DeterministicGDE.
+ * 
+ * <p>
+ * If the delta has to increase, it is multiplied by an increaseFactor. If the
+ * delta has to decrease, it is divided by a decreaseFactor.
+ * </p>
  */
 public class DeterministicGDE implements IGeometricDE {
 
     /** The decrease factor. */
     protected final double decreaseFactor;
-    
+
     /** The increase factor. */
     protected final double increaseFactor;
 
     /**
      * Instantiates a new deterministic gde.
      *
-     * @param increaseFactor            the increase factor used for delta decrease
-     * @param decreaseFactor            the decrease factor used for delta decrease
-     * @throws IllegalArgumentException             if increaseFactor < 1
+     * @param increaseFactor
+     *            the increase factor used for delta decrease
+     * @param decreaseFactor
+     *            the decrease factor used for delta decrease
+     * @throws IllegalArgumentException
+     *             if increaseFactor < 1
      */
     public DeterministicGDE(double increaseFactor, double decreaseFactor) {
 
@@ -64,8 +72,12 @@ public class DeterministicGDE implements IGeometricDE {
         this.decreaseFactor = decreaseFactor;
     }
 
-    /* (non-Javadoc)
-     * @see fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IDeltaEvolution#getIncreasedDelta(double)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IDeltaEvolution
+     * #getIncreasedDelta(double)
      */
     @Override
     public double getIncreasedDelta(double delta) {
@@ -76,8 +88,12 @@ public class DeterministicGDE implements IGeometricDE {
         return delta * this.increaseFactor;
     }
 
-    /* (non-Javadoc)
-     * @see fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IDeltaEvolution#getDecreasedDelta(double)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IDeltaEvolution
+     * #getDecreasedDelta(double)
      */
     @Override
     public double getDecreasedDelta(double delta) {
@@ -88,16 +104,24 @@ public class DeterministicGDE implements IGeometricDE {
         return delta / this.decreaseFactor;
     }
 
-    /* (non-Javadoc)
-     * @see fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDE#getIncreaseFactor()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDE
+     * #getIncreaseFactor()
      */
     @Override
     public double getIncreaseFactor() {
         return this.increaseFactor;
     }
 
-    /* (non-Javadoc)
-     * @see fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDE#getDecreaseFactor()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.IGeometricDE
+     * #getDecreaseFactor()
      */
     @Override
     public double getDecreaseFactor() {

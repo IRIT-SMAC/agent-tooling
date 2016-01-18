@@ -23,13 +23,18 @@ package fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution;
 
 /**
  * The Interface IDeltaEvolution.
+ * 
+ * <p>
+ * A DeltaEvolution defines how to increase or to decrease the delta.
+ * </p>
  */
 public interface IDeltaEvolution {
-    
+
     /**
      * Gets the increased delta.
      *
-     * @param delta the delta
+     * @param delta
+     *            the delta
      * @return the increased delta
      */
     public double getIncreasedDelta(double delta);
@@ -37,7 +42,8 @@ public interface IDeltaEvolution {
     /**
      * Gets the decreased delta.
      *
-     * @param delta the delta
+     * @param delta
+     *            the delta
      * @return the decreased delta
      */
     public double getDecreasedDelta(double delta);

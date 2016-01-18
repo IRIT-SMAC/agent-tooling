@@ -27,22 +27,34 @@ import fr.irit.smac.libs.tooling.avt.EMessageException;
 
 /**
  * The Class UndeterministicGDE.
+ * 
+ * <p>
+ * Random is added to the computation of the evolution of the delta.
+ * </p>
+ * <p>
+ * UndeterministicGDE is useful to break the cycles in which the system does not
+ * converge.
+ * </p>
  */
 public class UndeterministicGDE extends DeterministicGDE {
 
     /** The decrease noise. */
     private final double decreaseNoise;
-    
+
     /** The random. */
     private final Random random;
 
     /**
      * Instantiates a new undeterministic gde.
      *
-     * @param increaseFactor the increase factor
-     * @param decreaseFactor the decrease factor
-     * @param decreaseNoise the decrease noise
-     * @throws IllegalArgumentException             if decreaseFactor - decreaseNoise < 1 in order to insure that
+     * @param increaseFactor
+     *            the increase factor
+     * @param decreaseFactor
+     *            the decrease factor
+     * @param decreaseNoise
+     *            the decrease noise
+     * @throws IllegalArgumentException
+     *             if decreaseFactor - decreaseNoise < 1 in order to insure that
      *             the average decrease factor is near decreaseFactor
      */
     public UndeterministicGDE(double increaseFactor, double decreaseFactor, double decreaseNoise) {
@@ -52,11 +64,16 @@ public class UndeterministicGDE extends DeterministicGDE {
     /**
      * Instantiates a new undeterministic gde.
      *
-     * @param increaseFactor the increase factor
-     * @param decreaseFactor the decrease factor
-     * @param decreaseNoise the decrease noise
-     * @param seed the seed
-     * @throws IllegalArgumentException             if decreaseFactor - decreaseNoise < 1 in order to insure that
+     * @param increaseFactor
+     *            the increase factor
+     * @param decreaseFactor
+     *            the decrease factor
+     * @param decreaseNoise
+     *            the decrease noise
+     * @param seed
+     *            the seed
+     * @throws IllegalArgumentException
+     *             if decreaseFactor - decreaseNoise < 1 in order to insure that
      *             the average decrease factor is near decreaseFactor
      */
     public UndeterministicGDE(double increaseFactor, double decreaseFactor, double decreaseNoise, Long seed) {
@@ -78,8 +95,11 @@ public class UndeterministicGDE extends DeterministicGDE {
         this.random = seed != null ? new Random(seed) : new Random();
     }
 
-    /* (non-Javadoc)
-     * @see fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl.DeterministicGDE#getDecreasedDelta(double)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.libs.tooling.avt.deltamanager.deltaevolution.impl.
+     * DeterministicGDE#getDecreasedDelta(double)
      */
     @Override
     public double getDecreasedDelta(double delta) {

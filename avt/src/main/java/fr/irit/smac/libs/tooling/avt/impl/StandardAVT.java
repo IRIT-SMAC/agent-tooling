@@ -33,6 +33,10 @@ import fr.irit.smac.libs.tooling.avt.range.impl.MutableRangeImpl;
 
 /**
  * The Class StandardAVT.
+ * 
+ * <p>
+ * A StandardAVT is an AVT whose bounds never change.
+ * </p>
  */
 public class StandardAVT implements IAdvancedAVT {
 

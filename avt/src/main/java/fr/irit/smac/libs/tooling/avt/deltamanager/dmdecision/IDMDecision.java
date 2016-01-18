@@ -25,6 +25,10 @@ import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection;
 
 /**
  * The Interface IDMDecision.
+ * 
+ * <p>
+ * A DMDecision decides on the direction of the evolution of the delta.
+ * </p>
  */
 public interface IDMDecision {
 

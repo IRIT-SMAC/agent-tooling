@@ -5,14 +5,13 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import fr.irit.smac.libs.tooling.avt.AVTBuilder
 import fr.irit.smac.libs.tooling.avt.EFeedback
-import fr.irit.smac.libs.tooling.avt.IAVT
 import fr.irit.smac.libs.tooling.avt.range.impl.MutableRangeImpl
 
 @Unroll
 class SoftBoundsMemoryAVTTest extends Specification{
 
     @Shared AVTBuilder avtBuilder
-    @Shared IAVT softBoundsMemoryAVT
+    @Shared SoftBoundsMemoryAVT softBoundsMemoryAVT
     @Shared double minValue = -25
     @Shared double maxValue = 10
     @Shared double startValue = 0.5

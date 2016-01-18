@@ -24,7 +24,21 @@ package fr.irit.smac.libs.tooling.avt.deltamanager;
 /**
  * Definition of the basic interface of a DeltaManager.
  * 
- * A DeltaManager can be used two way:
+ * <p>
+ * An AVT adjusts a value with a given step. This step is called delta.
+ * </p>
+ * <p>
+ * A DeltaManager handles the evolution of the delta.
+ * </p>
+ * <ul>
+ * <li>First, it decides on the direction of the evolution of the delta.</li>
+ * <li>Then, it defines how to increase or to decrease the delta.</li>
+ * </ul>
+ * </p>
+ * 
+ * <p>
+ * A DeltaManager can be used in two ways:
+ * </p>
  * <ul>
  * <li>by sequentially calling the <code>adjustDelta</code> method</li>
  * <li>or by sequentially calling either <code>increaseDelta</code> or

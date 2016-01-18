@@ -51,7 +51,7 @@ public interface IAVT {
      * <ul>
      * <li><code>Feedback.GREATER</code>: increments the current value</li>
      * <li><code>Feedback.LOWER<code>: decrements the current value</li>
-     *  <li><code>Feedback.GOOD</code>: decreases the criticity of the AVT but
+     * <li><code>Feedback.GOOD</code>: decreases the criticity of the AVT but
      * doesn't change the value. This feedbacks express that the current value
      * is good and should evolve more slowly at the next adjustment.</li>
      * </ul>

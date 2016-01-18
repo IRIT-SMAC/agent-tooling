@@ -27,6 +27,11 @@ import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.IDMDecision;
 
 /**
  * The Class DelayedDMD.
+ * 
+ * <p>
+ * DelayedDMD allows to choose the number of times the DeltaManager have to wait
+ * before deciding on the direction of the evolution of the delta.
+ * </p>
  */
 public class DelayedDMD extends ForwardingDMD {
 

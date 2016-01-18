@@ -27,6 +27,14 @@ import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory;
 
 /**
  * The Class SoftBoundsAVT.
+ * 
+ * <p>
+ * If the value exceeds the bounds, the bounds are updated according to the
+ * value.
+ * </p>
+ * <p>
+ * The SoftBoundsAVT is useful when the research area is unknown.
+ * </p>
  */
 public class SoftBoundsAVT extends StandardAVT {
 

@@ -28,6 +28,10 @@ import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager;
 
 /**
  * The Class BoundedDM.
+ * 
+ * <p>
+ * BoundedDM ensures that the delta does not exceed the bounds.
+ * </p>
  */
 public class BoundedDM extends ForwardingDM {
 
