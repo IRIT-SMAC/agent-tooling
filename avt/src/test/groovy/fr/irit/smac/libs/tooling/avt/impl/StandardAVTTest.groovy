@@ -68,7 +68,7 @@ class StandardAVTTest extends Specification {
     def 'StandardAVT with a NaN lowerBound should throw an IllegalArgumentException' () {
 
         when:
-        standardAVT2 = new StandardAVT(Math.sqrt(-1),2,4,Mock(IDeltaManagerFactory))
+        standardAVT2 = new StandardAVT(Double.NaN,2,4,Mock(IDeltaManagerFactory))
 
         then:
         thrown(IllegalArgumentException)
@@ -77,7 +77,7 @@ class StandardAVTTest extends Specification {
     def 'StandardAVT with a NaN upperBound should throw an IllegalArgumentException' () {
 
         when:
-        standardAVT2 = new StandardAVT(1,Math.sqrt(-1),4,Mock(IDeltaManagerFactory))
+        standardAVT2 = new StandardAVT(1,Double.NaN,4,Mock(IDeltaManagerFactory))
 
         then:
         thrown(IllegalArgumentException)
@@ -86,7 +86,7 @@ class StandardAVTTest extends Specification {
     def 'StandardAVT with a NaN startValue should throw an IllegalArgumentException' () {
 
         when:
-        standardAVT2 = new StandardAVT(1,1,Math.sqrt(-1),Mock(IDeltaManagerFactory))
+        standardAVT2 = new StandardAVT(1,1,Double.NaN,Mock(IDeltaManagerFactory))
 
         then:
         thrown(IllegalArgumentException)
@@ -150,7 +150,7 @@ class StandardAVTTest extends Specification {
     def 'setValue with a NaN argument should throw an IllegalArgumentException'() {
 
         when:
-        standardAVT.setValue(Math.sqrt(-1))
+        standardAVT.setValue(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)
@@ -231,7 +231,7 @@ class StandardAVTTest extends Specification {
     def 'setCriticity with a NaN argument should throw an IllegalArgumentException'() {
 
         when:
-        standardAVT.setCriticity(Math.sqrt(-1))
+        standardAVT.setCriticity(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)

@@ -38,7 +38,7 @@ class StandardDMTest extends Specification{
     def 'standardDM with a NaN deltaMin should throw an IllegalArgumentException'() {
 
         when:
-        standardDM2 = new StandardDMFactory(new DeterministicGDEFactory (2.0,4.0), new StandardDMDFactory(), Math.sqrt(-1)).createInstance(new MutableRangeImpl(1.0, 12.0))
+        standardDM2 = new StandardDMFactory(new DeterministicGDEFactory (2.0,4.0), new StandardDMDFactory(), Double.NaN).createInstance(new MutableRangeImpl(1.0, 12.0))
 
 
         then:
@@ -58,7 +58,7 @@ class StandardDMTest extends Specification{
     def 'standardDM with a NaN deltaMax should throw an IllegalArgumentException'() {
 
         when:
-        standardDM2 = new StandardDM(1, Math.sqrt(-1), Mock(IRange), new DeterministicGDEFactory(2.0, 4.0).createInstance(),
+        standardDM2 = new StandardDM(1, Double.NaN, Mock(IRange), new DeterministicGDEFactory(2.0, 4.0).createInstance(),
                         new StandardDMDFactory().createInstance())
 
         then:
@@ -178,7 +178,7 @@ class StandardDMTest extends Specification{
     def 'setDeltaMin with a NaN argument should throw an IllegalArgumentException'() {
 
         when:
-        standardDM.setDeltaMin(Math.sqrt(-1))
+        standardDM.setDeltaMin(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)
@@ -196,7 +196,7 @@ class StandardDMTest extends Specification{
     def 'setDeltaMax with a NaN argument should throw an IllegalArgumentException'() {
 
         when:
-        standardDM.setDeltaMax(Math.sqrt(-1))
+        standardDM.setDeltaMax(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)
@@ -226,7 +226,7 @@ class StandardDMTest extends Specification{
     def 'setDelta with a NaN argument should throw an IllegalArgumentException'() {
 
         when:
-        standardDM.setDelta(Math.sqrt(-1))
+        standardDM.setDelta(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)
@@ -235,7 +235,7 @@ class StandardDMTest extends Specification{
     def 'computeNbGeometricStepsFromRange with deltaMin as a NaN value should throw an IllegalArgumentException'() {
 
         when:
-        standardDM.computeNbGeometricStepsFromRange(Math.sqrt(-1),4.0,5.0)
+        standardDM.computeNbGeometricStepsFromRange(Double.NaN,4.0,5.0)
 
         then:
         thrown(IllegalArgumentException)
@@ -244,7 +244,7 @@ class StandardDMTest extends Specification{
     def 'computeNbGeometricStepsFromDeltaMax with a NaN deltaMin should throw an IllegalArgumentException'() {
 
         when:
-        standardDM.computeNbGeometricStepsFromDeltaMax(Math.sqrt(-1), 5.0, 4.0)
+        standardDM.computeNbGeometricStepsFromDeltaMax(Double.NaN, 5.0, 4.0)
 
         then:
         thrown(IllegalArgumentException)
@@ -253,7 +253,7 @@ class StandardDMTest extends Specification{
     def 'computeNbGeometricStepsFromDeltaMax with a NaN deltaMax should throw an IllegalArgumentException'() {
 
         when:
-        standardDM.computeNbGeometricStepsFromDeltaMax(4.0, Math.sqrt(-1), 4.0)
+        standardDM.computeNbGeometricStepsFromDeltaMax(4.0, Double.NaN, 4.0)
 
         then:
         thrown(IllegalArgumentException)
@@ -262,7 +262,7 @@ class StandardDMTest extends Specification{
     def 'computeNbGeometricStepsFromDeltaMax with a NaN geometricFactor should throw an IllegalArgumentException'() {
 
         when:
-        standardDM.computeNbGeometricStepsFromDeltaMax(4.0, 10.0, Math.sqrt(-1))
+        standardDM.computeNbGeometricStepsFromDeltaMax(4.0, 10.0, Double.NaN)
 
         then:
         thrown(IllegalArgumentException)

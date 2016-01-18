@@ -111,7 +111,7 @@ class MutableRangeImplTest extends Specification {
     def 'setUpperBound with a NaN argument should throw an IllegalArgumentException' () {
 
         when:
-        mutableRange.setUpperBound(Math.sqrt(-1))
+        mutableRange.setUpperBound(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)
@@ -120,7 +120,7 @@ class MutableRangeImplTest extends Specification {
     def 'setLowerBound with a NaN argument should throw an IllegalArgumentException' () {
 
         when:
-        mutableRange.setLowerBound(Math.sqrt(-1))
+        mutableRange.setLowerBound(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)

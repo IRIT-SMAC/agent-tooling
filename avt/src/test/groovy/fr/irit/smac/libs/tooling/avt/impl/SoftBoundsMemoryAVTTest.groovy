@@ -80,7 +80,7 @@ class SoftBoundsMemoryAVTTest extends Specification{
     def 'setValue with a Nan argument should throw an IllegalArgumentException'() {
 
         when:
-        softBoundsMemoryAVT.setValue(Math.sqrt(-1))
+        softBoundsMemoryAVT.setValue(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)

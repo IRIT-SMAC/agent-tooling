@@ -191,7 +191,7 @@ class AVTBuilderTest extends Specification {
     def 'lowerBound with a NaN argument should throw an IllegalArgumentException' () {
 
         when:
-        avtBuilder.lowerBound(Math.sqrt(-1))
+        avtBuilder.lowerBound(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)
@@ -200,7 +200,7 @@ class AVTBuilderTest extends Specification {
     def 'upperBound with a NaN argument should throw an IllegalArgumentException' () {
 
         when:
-        avtBuilder.upperBound(Math.sqrt(-1))
+        avtBuilder.upperBound(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)
@@ -209,7 +209,7 @@ class AVTBuilderTest extends Specification {
     def 'startValue with a NaN argument should throw an IllegalArgumentException' () {
 
         when:
-        avtBuilder.startValue(Math.sqrt(-1))
+        avtBuilder.startValue(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)
@@ -230,7 +230,7 @@ class AVTBuilderTest extends Specification {
     def 'deltaMax with a NaN argument should throw an IllegalArgumentException' () {
 
         when:
-        avtBuilder.deltaMax(Math.sqrt(-1))
+        avtBuilder.deltaMax(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)
@@ -239,7 +239,7 @@ class AVTBuilderTest extends Specification {
     def 'deltaMin with a NaN argument should throw an IllegalArgumentException' () {
 
         when:
-        avtBuilder.deltaMin(Math.sqrt(-1))
+        avtBuilder.deltaMin(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)

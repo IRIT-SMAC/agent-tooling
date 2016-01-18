@@ -56,7 +56,7 @@ class UndeterministicGDETest extends Specification{
     def 'UndeterministicGDE (4 arguments) with a NaN decreaseNoise throw an IllegalArgumentException' () {
 
         when:
-        undeterministicGDE2 = new UndeterministicGDEFactory(2,1,Math.sqrt(-1),1).createInstance()
+        undeterministicGDE2 = new UndeterministicGDEFactory(2,1,Double.NaN,1).createInstance()
 
         then:
         thrown(IllegalArgumentException)
@@ -87,7 +87,7 @@ class UndeterministicGDETest extends Specification{
     def 'getDecreasedDelta with a NaN argument throw an IllegalArgumentException' () {
 
         when:
-        double delta = undeterministicGDE.getDecreasedDelta(Math.sqrt(-1))
+        double delta = undeterministicGDE.getDecreasedDelta(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)

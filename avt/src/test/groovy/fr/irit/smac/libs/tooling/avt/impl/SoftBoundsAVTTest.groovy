@@ -77,7 +77,7 @@ class SoftBoundsAVTTest extends Specification {
     def 'setValue with a null value should throw an IllegalArgumentException'() {
 
         when:
-        softBoundsAVT.setValue(Math.sqrt(-1))
+        softBoundsAVT.setValue(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)
@@ -147,7 +147,7 @@ class SoftBoundsAVTTest extends Specification {
     def 'updateBoundsFromValue with a NaN argument should throw an IllegalArgumentException'() {
 
         when:
-        softBoundsAVT.updateBoundsFromValue(Math.sqrt(-1))
+        softBoundsAVT.updateBoundsFromValue(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)
@@ -168,7 +168,7 @@ class SoftBoundsAVTTest extends Specification {
     def 'setLowerBoundFromValue with a NaN argument should throw an IllegalArgumentException'() {
 
         when:
-        softBoundsAVT.setLowerBoundFromValue(Math.sqrt(-1))
+        softBoundsAVT.setLowerBoundFromValue(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)
@@ -189,7 +189,7 @@ class SoftBoundsAVTTest extends Specification {
     def 'setUpperBoundFromValue with a NaN argument should throw an IllegalArgumentException'() {
 
         when:
-        softBoundsAVT.setUpperBoundFromValue(Math.sqrt(-1))
+        softBoundsAVT.setUpperBoundFromValue(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)
@@ -198,7 +198,7 @@ class SoftBoundsAVTTest extends Specification {
     def 'setValueFromBounds with a NaN argument should throw an IllegalArgumentException'() {
 
         when:
-        softBoundsAVT.setValueFromBounds(Math.sqrt(-1))
+        softBoundsAVT.setValueFromBounds(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)

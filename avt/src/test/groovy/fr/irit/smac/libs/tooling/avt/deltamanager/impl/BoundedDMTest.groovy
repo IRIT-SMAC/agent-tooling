@@ -45,7 +45,7 @@ class BoundedDMTest extends Specification {
     def 'getBoundedDelta with a NaN delta should throw an IllegalArgumentException'() {
 
         when:
-        boundedDM.getBoundedDelta(Math.sqrt(-1))
+        boundedDM.getBoundedDelta(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)

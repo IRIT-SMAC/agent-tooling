@@ -56,7 +56,7 @@ class DeterministicGDETest extends Specification{
     def 'DeterministicGDE with a NaN decreaseFactor should throw an IllegalArgumentException' () {
 
         when:
-        deterministicGDE2 = new DeterministicGDEFactory(1, Math.sqrt(-1)).createInstance()
+        deterministicGDE2 = new DeterministicGDEFactory(1, Double.NaN).createInstance()
 
         then:
         thrown(IllegalArgumentException)
@@ -65,7 +65,7 @@ class DeterministicGDETest extends Specification{
     def 'DeterministicGDE with a NaN increaseFactor should throw an IllegalArgumentException' () {
 
         when:
-        deterministicGDE2 = new DeterministicGDEFactory(Math.sqrt(-1),1).createInstance()
+        deterministicGDE2 = new DeterministicGDEFactory(Double.NaN,1).createInstance()
 
         then:
         thrown(IllegalArgumentException)
@@ -86,7 +86,7 @@ class DeterministicGDETest extends Specification{
     def 'getDecreasedDelta with a NaN argument should throw an IllegalArgumentException' () {
 
         when:
-        deterministicGDE.getDecreasedDelta(Math.sqrt(-1))
+        deterministicGDE.getDecreasedDelta(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)
@@ -95,7 +95,7 @@ class DeterministicGDETest extends Specification{
     def 'getIncreasedDelta with a NaN argument should throw an IllegalArgumentException' () {
 
         when:
-        deterministicGDE.getIncreasedDelta(Math.sqrt(-1))
+        deterministicGDE.getIncreasedDelta(Double.NaN)
 
         then:
         thrown(IllegalArgumentException)
