@@ -156,7 +156,6 @@ class StandardDMTest extends Specification{
         standardDM.deltaMin = deltaMin
 
         expect:
-        true
         standardDM.getIncreasedDelta() == increasedDelta
 
         where:

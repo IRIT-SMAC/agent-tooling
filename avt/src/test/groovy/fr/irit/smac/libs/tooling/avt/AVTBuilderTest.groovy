@@ -25,6 +25,10 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory
+import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl.DelayedDMDFactory
+import fr.irit.smac.libs.tooling.avt.deltamanager.dmdecision.impl.StandardDMDFactory
+import fr.irit.smac.libs.tooling.avt.deltamanager.impl.BoundedDMFactory
+import fr.irit.smac.libs.tooling.avt.deltamanager.impl.StandardDMFactory
 
 @Unroll
 class AVTBuilderTest extends Specification {
@@ -39,9 +43,14 @@ class AVTBuilderTest extends Specification {
 
         avtBuilder.lowerBound = 5.0
         avtBuilder.upperBound = 10.0
+        avtBuilder.startValue = null
+        avtBuilder.deltaManagerFactory = null
+        avtBuilder.isDeterministicDelta = false
+        avtBuilder.deltaMin = null
+        avtBuilder.deltaMax = 5.0
     }
 
-    def 'avtBuilder with a lowerBound greater than the upperBound should thrown an IllegalStateException' () {
+    def 'avtBuilder with a lowerBound greater than the upperBound should throw an IllegalStateException' () {
 
         given:
         avtBuilder.lowerBound = 15.0
@@ -54,7 +63,7 @@ class AVTBuilderTest extends Specification {
         thrown(IllegalStateException)
     }
 
-    def 'avtBuilder with a startValue greater than the upperBound should thrown an IllegalStateException' () {
+    def 'avtBuilder with a startValue greater than the upperBound should throw an IllegalStateException' () {
 
         given:
         avtBuilder.startValue = 25.0
@@ -66,7 +75,7 @@ class AVTBuilderTest extends Specification {
         thrown(IllegalStateException)
     }
 
-    def 'avtBuilder with a startValue lower than the lowerBound should thrown an IllegalStateException' () {
+    def 'avtBuilder with a startValue lower than the lowerBound should throw an IllegalStateException' () {
 
         given:
         avtBuilder.startValue = -25.0
@@ -78,7 +87,7 @@ class AVTBuilderTest extends Specification {
         thrown(IllegalStateException)
     }
 
-    def 'avtBuilder with a negative deltaMin should thrown an IllegalStateException' () {
+    def 'avtBuilder with a negative deltaMin should throw an IllegalStateException' () {
 
         given:
         avtBuilder.deltaMin = -5.0
@@ -90,7 +99,7 @@ class AVTBuilderTest extends Specification {
         thrown(IllegalStateException)
     }
 
-    def 'avtBuilder with a deltaMin greater than the deltaMax should thrown an IllegalStateException' () {
+    def 'avtBuilder with a deltaMin greater than the deltaMax should throw an IllegalStateException' () {
 
         given:
         avtBuilder.deltaMin = 5.0
@@ -103,20 +112,20 @@ class AVTBuilderTest extends Specification {
         thrown(IllegalStateException)
     }
 
-    def 'avtBuilder with a deltaMin lower than the deltaMax' () {
+    def 'avtBuilder with a deltaMin lower than the deltaMax should not throw an exception' () {
 
         given:
         avtBuilder.deltaMax = 15.0
         avtBuilder.deltaMin = 5.0
 
         when:
-        avtBuilder.checkDeltaMin()
+        def res = avtBuilder.checkDeltaMin()
 
         then:
-        true
+        res == null
     }
 
-    def 'avtBuilder with a null avtFactory should thrown an IllegalStateException' () {
+    def 'avtBuilder with a null avtFactory should throw an IllegalStateException' () {
 
         given:
         avtBuilder.avtFactory = null
@@ -465,53 +474,44 @@ class AVTBuilderTest extends Specification {
         thrown(IllegalStateException)
     }
 
-    def 'build'() {
+    def 'build with a true isDelayedDelta and a true isBoundedDelta'() {
 
         given:
-        avtBuilder.startValue = null
-        avtBuilder.deltaManagerFactory = null
-        avtBuilder.isDeterministicDelta = false
-        avtBuilder.deltaMin = null
-        avtBuilder.deltaMax = 5.0
+        avtBuilder.isDelayedDelta = true
+        avtBuilder.isBoundedDelta = true
 
         when:
         avtBuilder.build()
 
         then:
-        true
-    }
-
-    def 'build with a not null deltaManagerFactory'() {
-
-        given:
-        avtBuilder.startValue = null
-        avtBuilder.deltaManagerFactory = Mock(IDeltaManagerFactory)
-        avtBuilder.isDeterministicDelta = false
-        avtBuilder.deltaMin = null
-        avtBuilder.deltaMax = 5.0
-
-        when:
-        avtBuilder.build()
-
-        then:
-        true
+        avtBuilder.deltaManagerFactory instanceof BoundedDMFactory
+        avtBuilder.deltaManagerFactory.nestedDeltaManagerFactory.dmDecisionFactory instanceof DelayedDMDFactory
     }
 
     def 'build with a false isDelayedDelta and a false isBoundedDelta'() {
 
         given:
-        avtBuilder.startValue = null
-        avtBuilder.deltaManagerFactory = null
-        avtBuilder.isDeterministicDelta = false
-        avtBuilder.deltaMin = null
-        avtBuilder.deltaMax = 5.0
         avtBuilder.isDelayedDelta = false
         avtBuilder.isBoundedDelta = false
-        
+
         when:
         avtBuilder.build()
 
         then:
-        true
+        avtBuilder.deltaManagerFactory instanceof StandardDMFactory
+        avtBuilder.deltaManagerFactory.dmDecisionFactory instanceof StandardDMDFactory
+    }
+
+    def 'build with a not null deltaManagerFactory'() {
+
+        given:
+        IDeltaManagerFactory deltaManagerFactory = Mock(IDeltaManagerFactory)
+        avtBuilder.deltaManagerFactory = deltaManagerFactory
+
+        when:
+        avtBuilder.build()
+
+        then:
+        avtBuilder.deltaManagerFactory == deltaManagerFactory
     }
 }

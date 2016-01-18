@@ -11,10 +11,12 @@ import fr.irit.smac.libs.tooling.avt.range.impl.MutableRangeImpl
 class ForwardingDMTest extends Specification {
 
     @Shared ForwardingDM forwardingDM
+    @Shared double max = 6.0
+    @Shared double min = 3.0
 
     def setupSpec() {
 
-        StandardDM standardDM = new StandardDMFactory(new DeterministicGDEFactory (2.0,4.0), new StandardDMDFactory(), 3.0,6.0).createInstance(new MutableRangeImpl(1.0, 12.0))
+        StandardDM standardDM = new StandardDMFactory(new DeterministicGDEFactory (2.0,4.0), new StandardDMDFactory(), min, max).createInstance(new MutableRangeImpl(1.0, 12.0))
 
         forwardingDM = new ForwardingDM(standardDM)
     }
@@ -31,10 +33,10 @@ class ForwardingDMTest extends Specification {
     def 'getDeltaMax'() {
 
         when:
-        double deltaMax = forwardingDM.getDeltaMax()
+        double delta = forwardingDM.getDeltaMax()
 
         then:
-        deltaMax == forwardingDM.dm.getAdvancedDM().getDeltaMax()
+        delta == max
     }
 
     def 'getDeltaMin'() {
@@ -43,7 +45,7 @@ class ForwardingDMTest extends Specification {
         double deltaMin = forwardingDM.getDeltaMin()
 
         then:
-        deltaMin == forwardingDM.dm.getAdvancedDM().getDeltaMin()
+        deltaMin == min
     }
 
     def 'setDeltaMin'() {

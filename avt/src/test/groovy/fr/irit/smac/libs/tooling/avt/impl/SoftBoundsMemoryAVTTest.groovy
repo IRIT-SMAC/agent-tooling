@@ -46,25 +46,33 @@ class SoftBoundsMemoryAVTTest extends Specification{
 
     def 'setLowerBound'() {
 
+        given:
+        double lowerBound = -30
+        
         when:
         softBoundsMemoryAVT.setLowerBound(-30)
 
         then:
-        true
+        softBoundsMemoryAVT.range.lowerBound == lowerBound
     }
 
     def 'setUpperBound'() {
 
+        given:
+        double upperBound = 11
+        
         when:
-        softBoundsMemoryAVT.setUpperBound(11)
+        softBoundsMemoryAVT.setUpperBound(upperBound)
 
         then:
-        true
+        softBoundsMemoryAVT.range.upperBound == upperBound
     }
 
     def 'updateHistoryFromBounds'() {
 
         given:
+        double lowerBound = softBoundsMemoryAVT.range.lowerBound
+        double upperBound = softBoundsMemoryAVT.range.upperBound
         softBoundsMemoryAVT.valuesHistory.add((Double)-30.0)
         softBoundsMemoryAVT.valuesHistory.add((Double)0.2)
         softBoundsMemoryAVT.valuesHistory.add((Double)7.0)
@@ -74,7 +82,7 @@ class SoftBoundsMemoryAVTTest extends Specification{
         softBoundsMemoryAVT.updateHistoryFromBounds()
 
         then:
-        true
+        softBoundsMemoryAVT.valuesHistory.toArray() == [lowerBound,0.2,upperBound,upperBound]
     }
 
     def 'setValue with a Nan argument should throw an IllegalArgumentException'() {
@@ -91,15 +99,21 @@ class SoftBoundsMemoryAVTTest extends Specification{
         given:
         softBoundsMemoryAVT.range = new MutableRangeImpl(minValue, maxValue)
         softBoundsMemoryAVT.adjustValue(feedback)
-
+        double lowerBound = softBoundsMemoryAVT.range.lowerBound
+        double upperBound = softBoundsMemoryAVT.range.upperBound
+        double delta = softBoundsMemoryAVT.deltaManager.delta
+        
         expect:
-        true
-
+        softBoundsMemoryAVT.deltaManager.delta == delta
+        softBoundsMemoryAVT.value == value
+        softBoundsMemoryAVT.range.lowerBound == lowerBound
+        softBoundsMemoryAVT.range.upperBound == upperBound
+        
         where:
         feedback | value
-        EFeedback.GOOD | 1.0
-        EFeedback.GREATER | 1.0
-        EFeedback.LOWER | 1.0
+        EFeedback.GOOD | 0.5
+        EFeedback.GREATER | 0.5640000000000001
+        EFeedback.LOWER | 0.436
     }
 
     def 'adjustValue with a null argument should throw an IllegalArgumentException'() {
@@ -146,29 +160,30 @@ class SoftBoundsMemoryAVTTest extends Specification{
         softBoundsMemoryAVT.getRange().getLowerBound() == value
     }
 
-    def 'updateBoundsFromHistory with an empty history'() {
+    def 'updateBoundsFromHistory with an empty history should return false'() {
 
         given:
         softBoundsMemoryAVT.range = new MutableRangeImpl(minValue, maxValue)
+        softBoundsMemoryAVT.valuesHistory.clear()
 
         when:
-        softBoundsMemoryAVT.updateBoundsFromHistory()
+        boolean boundsUpdated = softBoundsMemoryAVT.updateBoundsFromHistory()
 
         then:
-        true
+        boundsUpdated == false
     }
 
-    def 'updateBoundsFromHistory'(double value1, double value2) {
+    def 'updateBoundsFromHistory with an history containing numbers differents from the bounds should return true' (double value1, double value2) {
 
         given:
         softBoundsMemoryAVT.range = new MutableRangeImpl(minValue, maxValue)
         softBoundsMemoryAVT.valuesHistory.clear()
         softBoundsMemoryAVT.valuesHistory.add((Double)value1)
         softBoundsMemoryAVT.valuesHistory.add((Double)value2)
-        softBoundsMemoryAVT.updateBoundsFromHistory()
+        boolean boundsUpdated = softBoundsMemoryAVT.updateBoundsFromHistory()
 
         expect:
-        true
+        boundsUpdated == true
 
         where:
         value1 | value2

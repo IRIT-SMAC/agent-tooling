@@ -101,22 +101,28 @@ class StandardAVTTest extends Specification {
         thrown(IllegalArgumentException)
     }
 
-    def 'lower bound'() {
+    def 'setLowerBound'() {
 
+        given:
+        double lowerBound = -4
+        
         when:
-        standardAVT.setLowerBound(-4)
+        standardAVT.setLowerBound(lowerBound)
 
         then:
-        true
+        standardAVT.range.lowerBound == lowerBound
     }
 
-    def 'upper bound'() {
+    def 'setUpperBound'() {
 
+        given:
+        double upperBound = 4
+        
         when:
-        standardAVT.setUpperBound(4)
+        standardAVT.setUpperBound(upperBound)
 
         then:
-        true
+        standardAVT.range.upperBound == upperBound
     }
 
     def 'ensureValueBoundsConsistency'(double value, double newValue) {
@@ -140,11 +146,14 @@ class StandardAVTTest extends Specification {
 
     def 'setValue'() {
 
+        given:
+        double value = 0.3
+        
         when:
-        standardAVT.setValue(0.3)
+        standardAVT.setValue(value)
 
         then:
-        true
+        standardAVT.value == value
     }
 
     def 'setValue with a NaN argument should throw an IllegalArgumentException'() {
@@ -221,11 +230,14 @@ class StandardAVTTest extends Specification {
 
     def 'setCriticity'() {
 
+        given:
+        double criticity = 0.5
+        
         when:
         standardAVT.setCriticity(0.5)
 
         then:
-        true
+        standardAVT.criticity == criticity
     }
 
     def 'setCriticity with a NaN argument should throw an IllegalArgumentException'() {

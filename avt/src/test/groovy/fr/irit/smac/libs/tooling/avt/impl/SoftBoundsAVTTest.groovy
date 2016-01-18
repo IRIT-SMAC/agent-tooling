@@ -46,20 +46,26 @@ class SoftBoundsAVTTest extends Specification {
 
     def 'setLowerBound'() {
 
+        given:
+        double lowerBound = -30
+        
         when:
-        softBoundsAVT.setLowerBound(-30)
+        softBoundsAVT.setLowerBound(lowerBound)
 
         then:
-        true
+        softBoundsAVT.range.lowerBound == lowerBound
     }
 
     def 'setUpperBound'() {
 
+        given:
+        double upperBound = 11
+        
         when:
-        softBoundsAVT.setUpperBound(11)
+        softBoundsAVT.setUpperBound(upperBound)
 
         then:
-        true
+        softBoundsAVT.range.upperBound == upperBound
     }
     
     def 'setValue'(double value) {
@@ -109,18 +115,21 @@ class SoftBoundsAVTTest extends Specification {
         thrown(IllegalArgumentException)
     }
 
-    def 'updateBoundsFromValue'(double value, double lowerBound, double upperBound) {
+    def 'updateBoundsFromValue'(double value, double lowerBound, double upperBound, double newLowerBound, double newUpperBound) {
 
         given:
-        softBoundsAVT.updateBoundsFromValue(value)
+        softBoundsAVT.range.lowerBound = lowerBound
+        softBoundsAVT.range.upperBound = upperBound
+        def res = softBoundsAVT.updateBoundsFromValue(value)
 
         expect:
-        true
+        softBoundsAVT.range.lowerBound == newLowerBound
+        softBoundsAVT.range.upperBound == newUpperBound
 
         where:
-        value | lowerBound | upperBound
-        -20 | -20 | maxValue
-        20 | minValue | 20
+        value | lowerBound | upperBound | newLowerBound | newUpperBound
+        -25 | -20 | maxValue |  -25 | maxValue
+        25 | minValue | 20 | minValue | 25
     }
 
     def 'getValueIf'(EFeedback feedback, double valueIf) {
@@ -162,7 +171,7 @@ class SoftBoundsAVTTest extends Specification {
         softBoundsAVT.setLowerBoundFromValue(lower)
 
         then:
-        true
+        softBoundsAVT.range.lowerBound == lower
     }
 
     def 'setLowerBoundFromValue with a NaN argument should throw an IllegalArgumentException'() {
@@ -183,7 +192,7 @@ class SoftBoundsAVTTest extends Specification {
         softBoundsAVT.setUpperBoundFromValue(upper)
 
         then:
-        true
+        softBoundsAVT.range.upperBound == upper
     }
 
     def 'setUpperBoundFromValue with a NaN argument should throw an IllegalArgumentException'() {
