@@ -22,12 +22,18 @@
 package fr.irit.smac.libs.tooling.messaging.impl.messagecontainer;
 
 /**
- * Something that can receive messages
- * 
- * @author lemouzy
+ * Something that can receive messages.
  *
- * @param <T>
+ * @author lemouzy
+ * @param <T> the generic type
  */
 public interface IMsgSink<T> {
+    
+    /**
+     * Put msg.
+     *
+     * @param msg the msg
+     * @return true, if successful
+     */
     public boolean putMsg(T msg);
 }

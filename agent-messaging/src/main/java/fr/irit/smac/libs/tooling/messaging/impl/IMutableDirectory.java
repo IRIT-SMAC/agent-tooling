@@ -26,26 +26,61 @@ import fr.irit.smac.libs.tooling.messaging.IMsgBox;
 
 /**
  * Interface of a directory that can be modified, and allow add/remove of msgBox
- * and groups
- * 
- * @author lemouzy
+ * and groups.
  *
- * @param <T>
+ * @author lemouzy
+ * @param <T> the generic type
  */
 interface IMutableDirectory<T> extends IDirectory<T> {
 
+    /**
+     * Subscribe agent to group.
+     *
+     * @param agentRef the agent ref
+     * @param groupId the group id
+     * @return the ref
+     */
     public Ref<T> subscribeAgentToGroup(Ref<T> agentRef,
         String groupId);
 
+    /**
+     * Subscribe agent to group.
+     *
+     * @param agentRef the agent ref
+     * @param groupRef the group ref
+     */
     public void subscribeAgentToGroup(Ref<T> agentRef,
         Ref<T> groupRef);
 
+    /**
+     * Unsubscribe agent from group.
+     *
+     * @param agentRef the agent ref
+     * @param groupId the group id
+     */
     public void unsubscribeAgentFromGroup(Ref<T> agentRef, String groupId);
 
+    /**
+     * Unsubscribe agent from group.
+     *
+     * @param agentRef the agent ref
+     * @param groupRef the group ref
+     */
     public void unsubscribeAgentFromGroup(Ref<T> agentRef,
         Ref<T> groupRef);
 
+    /**
+     * Creates the agent msg box.
+     *
+     * @param agentId the agent id
+     * @return the i msg box
+     */
     public IMsgBox<T> createAgentMsgBox(String agentId);
 
+    /**
+     * Removes the agent msg box.
+     *
+     * @param agentRef the agent ref
+     */
     public void removeAgentMsgBox(Ref<T> agentRef);
 }

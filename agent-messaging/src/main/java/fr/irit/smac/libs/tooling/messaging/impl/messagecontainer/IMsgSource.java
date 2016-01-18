@@ -25,17 +25,16 @@ import java.util.List;
 
 /**
  * Something that provides messages.
- * 
- * @author lemouzy
  *
- * @param <T>
+ * @author lemouzy
+ * @param <T> the generic type
  */
 public interface IMsgSource<T> {
 
     /**
-     * Returns and removes the contained messages
-     * 
-     * @return
+     * Returns and removes the contained messages.
+     *
+     * @return the msgs
      */
     public List<T> getMsgs();
 }

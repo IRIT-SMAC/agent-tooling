@@ -28,10 +28,9 @@ package fr.irit.smac.libs.tooling.messaging.impl.messagecontainer;
  * received before (IMsgSource<T>)
  * 
  * TODO: correct generics in comments
- * 
- * @author lemouzy
  *
- * @param <T>
+ * @author lemouzy
+ * @param <T> the generic type
  */
 public interface IMsgContainer<T> extends IMsgSink<T>,
     IMsgSource<T> {

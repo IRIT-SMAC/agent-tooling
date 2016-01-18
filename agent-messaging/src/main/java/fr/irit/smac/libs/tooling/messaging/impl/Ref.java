@@ -28,33 +28,52 @@ import fr.irit.smac.libs.tooling.messaging.impl.messagecontainer.IMsgSink;
  * 
  * This implementation hides to external package a direct access to a message
  * sink.
- * 
- * @author lemouzy
  *
- * @param <T>
+ * @author lemouzy
+ * @param <T> the generic type
  */
 public abstract class Ref<T> implements Comparable<Ref<T>> {
+    
+    /** The id. */
     private final String id;
 
+    /**
+     * Instantiates a new ref.
+     *
+     * @param id the id
+     */
     public Ref(String id) {
         this.id = id;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
         return "@" + id;
     }
 
+    /**
+     * Gets the id.
+     *
+     * @return the id
+     */
     public String getId() {
         return id;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
     @Override
     public int compareTo(Ref<T> ref) {
         return this.getId().compareTo(ref.getId());
     }
 
     /**
+     * Gets the msg sink.
+     *
      * @return the external package hidden message sink
      */
     abstract IMsgSink<T> getMsgSink();

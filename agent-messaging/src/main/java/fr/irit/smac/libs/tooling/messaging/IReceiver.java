@@ -25,11 +25,10 @@ import fr.irit.smac.libs.tooling.messaging.impl.Ref;
 import fr.irit.smac.libs.tooling.messaging.impl.messagecontainer.IMsgSource;
 
 /**
- * Interface of a service that permits to receive messages
- * 
- * @author lemouzy
+ * Interface of a service that permits to receive messages.
  *
- * @param <T>
+ * @author lemouzy
+ * @param <T> the generic type
  */
 public interface IReceiver<T> extends IMsgSource<T> {
 
@@ -37,35 +36,33 @@ public interface IReceiver<T> extends IMsgSource<T> {
      * Add the receiver to the given group. If the corresponding group doesn't
      * exists, then creates the group. Do noting if the current instance is
      * already inscribed
-     * 
-     * @param groupId
+     *
+     * @param groupId the group id
      * @return the group it has been added to.
      */
     public Ref<T> subscribeToGroup(String groupId);
 
     /**
      * Add the receiver to the given group Do noting if the current instance is
-     * already inscribed
-     * 
-     * @param groupRef
+     * already inscribed.
+     *
+     * @param groupRef the group ref
      */
     public void subscribeToGroup(Ref<T> groupRef);
 
     /**
      * Remove the receiver to the given group Do noting if the current instance
-     * is not actually inscribed
-     * 
-     * @param groupId
-     * @return
+     * is not actually inscribed.
+     *
+     * @param groupId the group id
      */
     public void unsubscribeToGroup(String groupId);
 
     /**
      * Remove the receiver to the given group Do noting if the current instance
-     * is not actually inscribed
-     * 
-     * @param groupRef
-     * @return
+     * is not actually inscribed.
+     *
+     * @param groupRef the group ref
      */
     public void unsubscribeToGroup(Ref<T> groupRef);
 }

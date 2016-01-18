@@ -25,27 +25,40 @@ import fr.irit.smac.libs.tooling.messaging.IDirectory;
 import fr.irit.smac.libs.tooling.messaging.ISender;
 
 /**
- * An implementation that get ref in a directory to send messages
- * 
- * @author lemouzy
+ * An implementation that get ref in a directory to send messages.
  *
- * @param <T>
+ * @author lemouzy
+ * @param <T> the generic type
  */
 public class BasicSender<T> implements ISender<T> {
 
+    /** The directory. */
     private final IDirectory<T> directory;
+    
+    /** The broad cast msg box. */
     private final Ref<T>        broadCastMsgBox;
 
+    /**
+     * Instantiates a new basic sender.
+     *
+     * @param directory the directory
+     */
     public BasicSender(IDirectory<T> directory) {
         this.directory = directory;
         this.broadCastMsgBox = this.directory.getGroupRef(IDirectory.ALL);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.ISender#getDirectory()
+     */
     @Override
     public IDirectory<T> getDirectory() {
         return this.directory;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.ISender#send(java.lang.Object, java.lang.String)
+     */
     @Override
     public boolean send(T msg, String receiverId) {
         try {
@@ -59,11 +72,17 @@ public class BasicSender<T> implements ISender<T> {
         }
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.ISender#send(java.lang.Object, fr.irit.smac.libs.tooling.messaging.impl.Ref)
+     */
     @Override
     public boolean send(T msg, Ref<T> receiverRef) {
         return receiverRef.getMsgSink().putMsg(msg);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.ISender#sendToGroup(java.lang.Object, java.lang.String)
+     */
     @Override
     public boolean sendToGroup(T msg, String groupId) {
         try {
@@ -75,11 +94,17 @@ public class BasicSender<T> implements ISender<T> {
         }
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.ISender#sendToGroup(java.lang.Object, fr.irit.smac.libs.tooling.messaging.impl.Ref)
+     */
     @Override
     public boolean sendToGroup(T msg, Ref<T> groupRef) {
         return groupRef.getMsgSink().putMsg(msg);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.ISender#broadcast(java.lang.Object)
+     */
     @Override
     public boolean broadcast(T msg) {
         return this.broadCastMsgBox.getMsgSink().putMsg(msg);

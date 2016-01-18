@@ -31,20 +31,31 @@ import fr.irit.smac.libs.tooling.messaging.impl.messagecontainer.IMsgContainer;
 import fr.irit.smac.libs.tooling.messaging.impl.messagecontainer.IMsgSink;
 
 /**
- * Base implementation of the MsgBox used by agents
- * 
- * @author lemouzy
+ * Base implementation of the MsgBox used by agents.
  *
- * @param <T>
+ * @author lemouzy
+ * @param <T> the generic type
  */
 class AgentMsgBox<T> extends Ref<T> implements IMsgBox<T> {
 
+    /** The Constant dummyMsgContainer. */
     private static final DummyMsgContainer dummyMsgContainer = new DummyMsgContainer();
 
+    /** The directory. */
     private final IMutableDirectory<T>     directory;
+    
+    /** The msg container. */
     private volatile IMsgContainer<T>      msgContainer;
+    
+    /** The sender. */
     private final BasicSender<T>           sender;
 
+    /**
+     * Instantiates a new agent msg box.
+     *
+     * @param agentId the agent id
+     * @param directory the directory
+     */
     public AgentMsgBox(String agentId, IMutableDirectory<T> directory) {
         super(agentId);
         this.directory = directory;
@@ -52,6 +63,9 @@ class AgentMsgBox<T> extends Ref<T> implements IMsgBox<T> {
         this.sender = new BasicSender<T>(this.directory);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.IMsgBox#getRef()
+     */
     @Override
     public Ref<T> getRef() {
         return this;
@@ -61,26 +75,41 @@ class AgentMsgBox<T> extends Ref<T> implements IMsgBox<T> {
     // Directory Concerns
     // /////////////////////////////////////////////////////////////////////////////
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.ISender#getDirectory()
+     */
     @Override
     public IDirectory<T> getDirectory() {
         return this.directory;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.IReceiver#subscribeToGroup(java.lang.String)
+     */
     @Override
     public Ref<T> subscribeToGroup(String groupId) {
         return this.directory.subscribeAgentToGroup(this, groupId);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.IReceiver#subscribeToGroup(fr.irit.smac.libs.tooling.messaging.impl.Ref)
+     */
     @Override
     public void subscribeToGroup(Ref<T> groupRef) {
         this.directory.subscribeAgentToGroup(this, groupRef);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.IReceiver#unsubscribeToGroup(java.lang.String)
+     */
     @Override
     public void unsubscribeToGroup(String groupId) {
         this.directory.unsubscribeAgentFromGroup(this, groupId);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.IReceiver#unsubscribeToGroup(fr.irit.smac.libs.tooling.messaging.impl.Ref)
+     */
     @Override
     public void unsubscribeToGroup(Ref<T> groupRef) {
         this.directory.unsubscribeAgentFromGroup(this, groupRef);
@@ -90,26 +119,41 @@ class AgentMsgBox<T> extends Ref<T> implements IMsgBox<T> {
     // Sending concerns
     // /////////////////////////////////////////////////////////////////////////////
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.ISender#send(java.lang.Object, java.lang.String)
+     */
     @Override
     public boolean send(T msg, String receiverId) {
         return this.sender.send(msg, receiverId);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.ISender#send(java.lang.Object, fr.irit.smac.libs.tooling.messaging.impl.Ref)
+     */
     @Override
     public boolean send(T msg, Ref<T> receiverRef) {
         return this.sender.send(msg, receiverRef);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.ISender#sendToGroup(java.lang.Object, java.lang.String)
+     */
     @Override
     public boolean sendToGroup(T msg, String groupId) {
         return this.sender.sendToGroup(msg, groupId);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.ISender#sendToGroup(java.lang.Object, fr.irit.smac.libs.tooling.messaging.impl.Ref)
+     */
     @Override
     public boolean sendToGroup(T msg, Ref<T> groupRef) {
         return this.sender.sendToGroup(msg, groupRef);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.ISender#broadcast(java.lang.Object)
+     */
     @Override
     public boolean broadcast(T msg) {
         return this.sender.broadcast(msg);
@@ -119,16 +163,25 @@ class AgentMsgBox<T> extends Ref<T> implements IMsgBox<T> {
     // MsgContainer Concerns
     // /////////////////////////////////////////////////////////////////////////////
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.impl.messagecontainer.IMsgSource#getMsgs()
+     */
     @Override
     public List<T> getMsgs() {
         return this.msgContainer.getMsgs();
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.impl.Ref#getMsgSink()
+     */
     @Override
     IMsgSink<T> getMsgSink() {
         return this.msgContainer;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.IMsgBox#dispose()
+     */
     @SuppressWarnings("unchecked")
     @Override
     public void dispose() {

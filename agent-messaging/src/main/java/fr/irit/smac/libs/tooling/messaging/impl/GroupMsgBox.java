@@ -28,38 +28,64 @@ import fr.irit.smac.libs.tooling.messaging.impl.messagecontainer.IMsgSink;
 
 /**
  * A MsgSink that is used to broadcast a message to a collection of agent Ref
- * This implementation is theorically thread safe
- * 
- * @author lemouzy
+ * This implementation is theorically thread safe.
  *
- * @param <T>
+ * @author lemouzy
+ * @param <T> the generic type
  */
 class GroupMsgBox<T> extends Ref<T> implements IMsgSink<T> {
 
+    /** The agent refs. */
     private final Set<Ref<T>> agentRefs;
 
+    /**
+     * Instantiates a new group msg box.
+     *
+     * @param groupId the group id
+     */
     public GroupMsgBox(String groupId) {
         super(groupId);
         this.agentRefs = new ConcurrentSkipListSet<Ref<T>>();
     }
 
+    /**
+     * Subscribe agent.
+     *
+     * @param agentRef the agent ref
+     */
     public void subscribeAgent(Ref<T> agentRef) {
         this.agentRefs.add(agentRef);
     }
 
+    /**
+     * Unsubscribe agent.
+     *
+     * @param agentRef the agent ref
+     */
     public void unsubscribeAgent(Ref<T> agentRef) {
         this.agentRefs.remove(agentRef);
     }
 
+    /**
+     * Gets the agents.
+     *
+     * @return the agents
+     */
     public Set<Ref<T>> getAgents() {
         return this.agentRefs;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.impl.Ref#getMsgSink()
+     */
     @Override
     IMsgSink<T> getMsgSink() {
         return this;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.impl.messagecontainer.IMsgSink#putMsg(java.lang.Object)
+     */
     @Override
     public boolean putMsg(T msg) {
         boolean sentToAll = true;

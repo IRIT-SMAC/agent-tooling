@@ -25,17 +25,23 @@ import java.util.List;
 
 /**
  * An implementation of a dummy msgContainer used when an AgentMsgBox is
- * disposed
- * 
+ * disposed.
+ *
  * @author lemouzy
  */
 public class DummyMsgContainer implements IMsgContainer<Object> {
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.impl.messagecontainer.IMsgSink#putMsg(java.lang.Object)
+     */
     @Override
     public boolean putMsg(Object msg) {
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.impl.messagecontainer.IMsgSource#getMsgs()
+     */
     @Override
     public List<Object> getMsgs() {
         throw new IllegalStateException(

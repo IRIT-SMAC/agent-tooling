@@ -25,18 +25,17 @@ import fr.irit.smac.libs.tooling.messaging.impl.Ref;
 
 /**
  * The interface that will be used by agents to access the services of
- * agentMessaging
- * 
- * @author lemouzy
+ * agentMessaging.
  *
- * @param <T>
+ * @author lemouzy
+ * @param <T> the generic type
  */
 public interface IMsgBox<T> extends ISender<T>, IReceiver<T> {
 
     /**
-     * The ref of the agent using the message box
-     * 
-     * @return
+     * The ref of the agent using the message box.
+     *
+     * @return the ref
      */
     public Ref<T> getRef();
 

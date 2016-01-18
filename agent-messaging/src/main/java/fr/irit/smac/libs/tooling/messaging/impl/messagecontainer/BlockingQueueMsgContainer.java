@@ -27,26 +27,35 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * Implementation of a message container based on a LinkedBlockingQueue
- * 
- * @author lemouzy
+ * Implementation of a message container based on a LinkedBlockingQueue.
  *
- * @param <T>
+ * @author lemouzy
+ * @param <T> the generic type
  */
 public class BlockingQueueMsgContainer<T> implements
     IMsgContainer<T> {
 
+    /** The msg queue. */
     private BlockingQueue<T> msgQueue;
 
+    /**
+     * Instantiates a new blocking queue msg container.
+     */
     public BlockingQueueMsgContainer() {
         this.msgQueue = new LinkedBlockingQueue<T>();
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.impl.messagecontainer.IMsgSink#putMsg(java.lang.Object)
+     */
     @Override
     public boolean putMsg(T msg) {
         return this.msgQueue.offer(msg);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.impl.messagecontainer.IMsgSource#getMsgs()
+     */
     @Override
     public List<T> getMsgs() {
         List<T> messages = new ArrayList<T>(this.msgQueue.size());

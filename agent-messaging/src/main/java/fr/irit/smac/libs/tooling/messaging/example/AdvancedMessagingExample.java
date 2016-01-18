@@ -29,12 +29,24 @@ import fr.irit.smac.libs.tooling.messaging.AgentMessaging;
 import fr.irit.smac.libs.tooling.messaging.IMsgBox;
 import fr.irit.smac.libs.tooling.messaging.impl.Ref;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class AdvancedMessagingExample.
+ */
 public class AdvancedMessagingExample {
 
+    /**
+     * Instantiates a new advanced messaging example.
+     */
     private AdvancedMessagingExample() {
 
     }
 
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     */
     public static final void main(String[] args) {
 
         long randomSeed = 1234L;
@@ -115,12 +127,25 @@ public class AdvancedMessagingExample {
 
     }
 
+    /**
+     * The Class ChattingAgent.
+     */
     private static abstract class ChattingAgent {
 
+        /** The msg box. */
         protected IMsgBox<String> msgBox;
+        
+        /** The id. */
         protected final String    id;
+        
+        /** The nb received messages. */
         protected int             nbReceivedMessages;
 
+        /**
+         * Instantiates a new chatting agent.
+         *
+         * @param id the id
+         */
         public ChattingAgent(String id) {
             this.id = id;
             this.nbReceivedMessages = 0;
@@ -129,27 +154,51 @@ public class AdvancedMessagingExample {
             this.msgBox = AgentMessaging.getMsgBox(id, String.class);
         }
 
+        /**
+         * Read messages.
+         */
         public void readMessages() {
             List<String> receivedMessages = this.msgBox.getMsgs();
             this.nbReceivedMessages += receivedMessages.size();
         }
 
+        /**
+         * Gets the nb received messages.
+         *
+         * @return the nb received messages
+         */
         public int getNbReceivedMessages() {
             return this.nbReceivedMessages;
         }
 
+        /**
+         * Send messages.
+         */
         public abstract void sendMessages();
     }
 
+    /**
+     * The Class ChattingToAGroupAgent.
+     */
     private static class ChattingToAGroupAgent extends ChattingAgent {
 
+        /** The my group. */
         private final Ref<String> myGroup;
 
+        /**
+         * Instantiates a new chatting to a group agent.
+         *
+         * @param id the id
+         * @param groupId the group id
+         */
         public ChattingToAGroupAgent(String id, String groupId) {
             super(id);
             this.myGroup = this.msgBox.subscribeToGroup(groupId);
         }
 
+        /* (non-Javadoc)
+         * @see fr.irit.smac.libs.tooling.messaging.example.AdvancedMessagingExample.ChattingAgent#sendMessages()
+         */
         @Override
         public void sendMessages() {
             this.msgBox.sendToGroup("Chatting to my group !", this.myGroup);
@@ -157,12 +206,23 @@ public class AdvancedMessagingExample {
 
     }
 
+    /**
+     * The Class BroadcastingAgent.
+     */
     private static class BroadcastingAgent extends ChattingAgent {
 
+        /**
+         * Instantiates a new broadcasting agent.
+         *
+         * @param id the id
+         */
         public BroadcastingAgent(String id) {
             super(id);
         }
 
+        /* (non-Javadoc)
+         * @see fr.irit.smac.libs.tooling.messaging.example.AdvancedMessagingExample.ChattingAgent#sendMessages()
+         */
         @Override
         public void sendMessages() {
             this.msgBox.broadcast("I'm joyfully broadcasting !");
@@ -170,16 +230,31 @@ public class AdvancedMessagingExample {
 
     }
 
+    /**
+     * The Class ChattingToAFriendAgent.
+     */
     private static class ChattingToAFriendAgent extends ChattingAgent {
 
+        /** The my friend id. */
         private final String myFriendId;
+        
+        /** The my friend. */
         private Ref<String>  myFriend;
 
+        /**
+         * Instantiates a new chatting to a friend agent.
+         *
+         * @param id the id
+         * @param myFriendId the my friend id
+         */
         public ChattingToAFriendAgent(String id, String myFriendId) {
             super(id);
             this.myFriendId = myFriendId;
         }
 
+        /* (non-Javadoc)
+         * @see fr.irit.smac.libs.tooling.messaging.example.AdvancedMessagingExample.ChattingAgent#sendMessages()
+         */
         @Override
         public void sendMessages() {
             if (this.myFriend == null) {
@@ -192,12 +267,27 @@ public class AdvancedMessagingExample {
         }
     }
 
+    /**
+     * The Class SometimeDisposingMsgBoxBroadcastingAgent.
+     */
     private static class SometimeDisposingMsgBoxBroadcastingAgent extends BroadcastingAgent {
 
+        /** The random. */
         private final Random random;
+        
+        /** The switching prob. */
         private final double switchingProb;
+        
+        /** The enabled. */
         private boolean      enabled;
 
+        /**
+         * Instantiates a new sometime disposing msg box broadcasting agent.
+         *
+         * @param id the id
+         * @param randomSeed the random seed
+         * @param switchingProb the switching prob
+         */
         public SometimeDisposingMsgBoxBroadcastingAgent(String id, long randomSeed, double switchingProb) {
             super(id);
             this.enabled = true;
@@ -205,6 +295,9 @@ public class AdvancedMessagingExample {
             this.switchingProb = switchingProb;
         }
 
+        /**
+         * Switch msg box.
+         */
         private void switchMsgBox() {
             if (this.enabled) {
                 this.msgBox.dispose();
@@ -215,6 +308,9 @@ public class AdvancedMessagingExample {
             this.enabled = !this.enabled;
         }
 
+        /* (non-Javadoc)
+         * @see fr.irit.smac.libs.tooling.messaging.example.AdvancedMessagingExample.ChattingAgent#readMessages()
+         */
         @Override
         public void readMessages() {
             if (this.random.nextDouble() < this.switchingProb) {

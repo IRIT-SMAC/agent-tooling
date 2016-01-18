@@ -26,26 +26,35 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * Implementation of a message container based on a ConcurrentLinkedQueue
- * 
- * @author lemouzy
+ * Implementation of a message container based on a ConcurrentLinkedQueue.
  *
- * @param <T>
+ * @author lemouzy
+ * @param <T> the generic type
  */
 public class ConcurrentQueueMsgContainer<T> implements
     IMsgContainer<T> {
 
+    /** The msg queue. */
     private ConcurrentLinkedQueue<T> msgQueue;
 
+    /**
+     * Instantiates a new concurrent queue msg container.
+     */
     private ConcurrentQueueMsgContainer() {
         this.msgQueue = new ConcurrentLinkedQueue<T>();
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.impl.messagecontainer.IMsgSink#putMsg(java.lang.Object)
+     */
     @Override
     public boolean putMsg(T msg) {
         return this.msgQueue.offer(msg);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.impl.messagecontainer.IMsgSource#getMsgs()
+     */
     @Override
     public List<T> getMsgs() {
         List<T> messages = new ArrayList<T>(this.msgQueue.size());

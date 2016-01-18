@@ -25,8 +25,17 @@ import fr.irit.smac.libs.tooling.messaging.AgentMessaging;
 import fr.irit.smac.libs.tooling.messaging.IMsgBox;
 import fr.irit.smac.libs.tooling.messaging.impl.Ref;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SimpleMessagingExample.
+ */
 public class SimpleMessagingExample {
 
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     */
     public static void main(String[] args) {
         // creation for message boxes able to handle String message type
         IMsgBox<String> msgBox1 = AgentMessaging.getMsgBox("agent1", String.class);

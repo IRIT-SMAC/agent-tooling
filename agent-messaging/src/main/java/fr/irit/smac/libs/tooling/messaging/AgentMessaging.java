@@ -57,23 +57,26 @@ import fr.irit.smac.libs.tooling.messaging.impl.DefaultMsgService;
  */
 public class AgentMessaging {
 
+    /**
+     * Instantiates a new agent messaging.
+     */
     private AgentMessaging() {
 
     }
 
     // the storage of all message service instance, associated to the message
+    /** The instancied msg services. */
     // type class the handle
     private static Map<Class<?>, IMsgService<?>> instanciedMsgServices = new HashMap<Class<?>, IMsgService<?>>();
 
     /**
      * Get or create a message box for the given agentId, associated to the
      * given class message service type.
-     * 
-     * @param agentId
-     *            the agent
-     * @param messageClassType
-     *            the class type or the messages handled by the message box
-     * @return
+     *
+     * @param <T> the generic type
+     * @param agentId            the agent
+     * @param messageClassType            the class type or the messages handled by the message box
+     * @return the msg box
      */
     public static <T> IMsgBox<T> getMsgBox(String agentId,
         Class<T> messageClassType) {
@@ -84,9 +87,10 @@ public class AgentMessaging {
     /**
      * Get or create a message service associated to the given class message
      * service type.
-     * 
-     * @param messageClassType
-     * @return
+     *
+     * @param <T> the generic type
+     * @param messageClassType the message class type
+     * @return the msg service
      */
     public static <T> IMsgService<T> getMsgService(
         Class<T> messageClassType) {

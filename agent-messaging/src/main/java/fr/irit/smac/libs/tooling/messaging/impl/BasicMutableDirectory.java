@@ -35,22 +35,31 @@ import fr.irit.smac.libs.tooling.messaging.IMsgBox;
  * Basic implementation of the msgBox directory.
  * 
  * Manages msgBox and Groups. Theoretically this implementation is thread safe.
- * 
- * @author lemouzy
  *
- * @param <T>
+ * @author lemouzy
+ * @param <T> the generic type
  */
 public class BasicMutableDirectory<T> implements
     IMutableDirectory<T> {
 
+    /** The agent directory. */
     private final Map<String, AgentMsgBox<T>> agentDirectory;
+    
+    /** The group directory. */
     private final Map<String, GroupMsgBox<T>> groupDirectory;
 
+    /** The group modification lock. */
     private final ReentrantLock                     groupModificationLock;
+    
+    /** The agent modification lock. */
     private final ReentrantLock                     agentModificationLock;
 
+    /** The broad cast msg box. */
     private final GroupMsgBox<T>              broadCastMsgBox;
 
+    /**
+     * Instantiates a new basic mutable directory.
+     */
     public BasicMutableDirectory() {
         super();
         this.agentDirectory = new ConcurrentHashMap<String, AgentMsgBox<T>>();
@@ -66,6 +75,9 @@ public class BasicMutableDirectory<T> implements
     // Agent - Group Creation / Deletition
     // ///////////////////////////////////////////////////////////////////////////////
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.impl.IMutableDirectory#createAgentMsgBox(java.lang.String)
+     */
     @Override
     public IMsgBox<T> createAgentMsgBox(String agentId) {
 
@@ -88,6 +100,9 @@ public class BasicMutableDirectory<T> implements
         return agentRef;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.impl.IMutableDirectory#removeAgentMsgBox(fr.irit.smac.libs.tooling.messaging.impl.Ref)
+     */
     @Override
     public void removeAgentMsgBox(Ref<T> agentRef) {
         this.agentModificationLock.lock();
@@ -102,6 +117,12 @@ public class BasicMutableDirectory<T> implements
         this.agentModificationLock.unlock();
     }
 
+    /**
+     * Gets the or create group msg box.
+     *
+     * @param groupId the group id
+     * @return the or create group msg box
+     */
     private GroupMsgBox<T> getOrCreateGroupMsgBox(String groupId) {
         GroupMsgBox<T> groupRef;
 
@@ -124,11 +145,17 @@ public class BasicMutableDirectory<T> implements
     // Agent access
     // ///////////////////////////////////////////////////////////////////////////////
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.IDirectory#getAgentRef(java.lang.String)
+     */
     @Override
     public AgentMsgBox<T> getAgentRef(String agentId) {
         return this.agentDirectory.get(agentId);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.IDirectory#getAgentsRef()
+     */
     @Override
     public List<Ref<T>> getAgentsRef() {
         return new ArrayList<Ref<T>>(agentDirectory.values());
@@ -138,21 +165,33 @@ public class BasicMutableDirectory<T> implements
     // Group access
     // ///////////////////////////////////////////////////////////////////////////////
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.IDirectory#getGroupsRef()
+     */
     @Override
     public List<Ref<T>> getGroupsRef() {
         return new ArrayList<Ref<T>>(groupDirectory.values());
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.IDirectory#getGroupRef(java.lang.String)
+     */
     @Override
     public GroupMsgBox<T> getGroupRef(String groupId) {
         return this.groupDirectory.get(groupId);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.IDirectory#getAgentsOfGroup(fr.irit.smac.libs.tooling.messaging.impl.Ref)
+     */
     @Override
     public Set<Ref<T>> getAgentsOfGroup(Ref<T> groupRef) {
         return this.getAgentsOfGroup(groupRef.getId());
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.IDirectory#getAgentsOfGroup(java.lang.String)
+     */
     @Override
     public Set<Ref<T>> getAgentsOfGroup(String groupId) {
         return this.groupDirectory.get(groupId).getAgents();
@@ -162,6 +201,9 @@ public class BasicMutableDirectory<T> implements
     // Subscription concerns
     // ///////////////////////////////////////////////////////////////////////////////
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.impl.IMutableDirectory#subscribeAgentToGroup(fr.irit.smac.libs.tooling.messaging.impl.Ref, java.lang.String)
+     */
     @Override
     public Ref<T> subscribeAgentToGroup(Ref<T> agentRef,
         String groupId) {
@@ -170,6 +212,9 @@ public class BasicMutableDirectory<T> implements
         return groupRef;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.impl.IMutableDirectory#subscribeAgentToGroup(fr.irit.smac.libs.tooling.messaging.impl.Ref, fr.irit.smac.libs.tooling.messaging.impl.Ref)
+     */
     @Override
     public void subscribeAgentToGroup(Ref<T> agentRef,
         Ref<T> groupId) {
@@ -187,6 +232,9 @@ public class BasicMutableDirectory<T> implements
         this.groupModificationLock.unlock();
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.impl.IMutableDirectory#unsubscribeAgentFromGroup(fr.irit.smac.libs.tooling.messaging.impl.Ref, fr.irit.smac.libs.tooling.messaging.impl.Ref)
+     */
     @Override
     public void unsubscribeAgentFromGroup(Ref<T> agentRef,
         Ref<T> groupRef) {
@@ -205,6 +253,9 @@ public class BasicMutableDirectory<T> implements
         this.groupModificationLock.unlock();
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.impl.IMutableDirectory#unsubscribeAgentFromGroup(fr.irit.smac.libs.tooling.messaging.impl.Ref, java.lang.String)
+     */
     @Override
     public void unsubscribeAgentFromGroup(Ref<T> agentRef, String groupId) {
         this.groupModificationLock.lock();

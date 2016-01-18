@@ -29,10 +29,9 @@ import fr.irit.smac.libs.tooling.messaging.impl.Ref;
 /**
  * A directory that permits : - to link agentIds to their refs. - to link
  * groupIds to their refs. - to access the agents refs belonging to a group.
- * 
- * @author lemouzy
  *
- * @param <T>
+ * @author lemouzy
+ * @param <T> the generic type
  */
 public interface IDirectory<T> {
 
@@ -42,48 +41,48 @@ public interface IDirectory<T> {
     public static final String ALL = "all";
 
     /**
-     * Returns the agent ref from the given agent id
-     * 
-     * @param agentId
-     * @return
+     * Returns the agent ref from the given agent id.
+     *
+     * @param agentId the agent id
+     * @return the agent ref
      */
     public Ref<T> getAgentRef(String agentId);
 
     /**
-     * Returns the group ref from the given agent id
-     * 
-     * @param agentId
-     * @return
+     * Returns the group ref from the given agent id.
+     *
+     * @param groupId the group id
+     * @return the group ref
      */
     public Ref<T> getGroupRef(String groupId);
 
     /**
-     * Returns all the agents inscribed in a group
-     * 
-     * @param groupRef
-     * @return
+     * Returns all the agents inscribed in a group.
+     *
+     * @param groupRef the group ref
+     * @return the agents of group
      */
     public Set<Ref<T>> getAgentsOfGroup(Ref<T> groupRef);
 
     /**
-     * Returns all the agents inscribed in a group
-     * 
-     * @param groupRef
-     * @return
+     * Returns all the agents inscribed in a group.
+     *
+     * @param groupId the group id
+     * @return the agents of group
      */
     public Set<Ref<T>> getAgentsOfGroup(String groupId);
 
     /**
-     * Returns all the agent refs inscribed in the directory
-     * 
-     * @return
+     * Returns all the agent refs inscribed in the directory.
+     *
+     * @return the groups ref
      */
     public List<Ref<T>> getGroupsRef();
 
     /**
-     * Returns all the groups refs inscribed in the directory
-     * 
-     * @return
+     * Returns all the groups refs inscribed in the directory.
+     *
+     * @return the agents ref
      */
     public List<Ref<T>> getAgentsRef();
 }

@@ -26,53 +26,79 @@ import fr.irit.smac.libs.tooling.messaging.IMsgBox;
 import fr.irit.smac.libs.tooling.messaging.IMsgService;
 
 /**
- * A basic implementation of the message service
- * 
- * @author lemouzy
+ * A basic implementation of the message service.
  *
- * @param <T>
+ * @author lemouzy
+ * @param <T> the generic type
  */
 public class DefaultMsgService<T> implements IMsgService<T> {
 
+    /** The directory. */
     private final BasicMutableDirectory<T> directory;
+    
+    /** The sender. */
     private final BasicSender<T>           sender;
 
+    /**
+     * Instantiates a new default msg service.
+     */
     public DefaultMsgService() {
         super();
         this.directory = new BasicMutableDirectory<T>();
         this.sender = new BasicSender<T>(this.directory);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.ISender#getDirectory()
+     */
     @Override
     public IDirectory<T> getDirectory() {
         return this.directory;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.ISender#send(java.lang.Object, java.lang.String)
+     */
     @Override
     public boolean send(T msg, String receiverId) {
         return this.sender.send(msg, receiverId);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.ISender#send(java.lang.Object, fr.irit.smac.libs.tooling.messaging.impl.Ref)
+     */
     @Override
     public boolean send(T msg, Ref<T> receiverRef) {
         return this.sender.send(msg, receiverRef);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.ISender#sendToGroup(java.lang.Object, java.lang.String)
+     */
     @Override
     public boolean sendToGroup(T msg, String groupId) {
         return this.sender.sendToGroup(msg, groupId);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.ISender#sendToGroup(java.lang.Object, fr.irit.smac.libs.tooling.messaging.impl.Ref)
+     */
     @Override
     public boolean sendToGroup(T msg, Ref<T> groupRef) {
         return this.sender.sendToGroup(msg, groupRef);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.ISender#broadcast(java.lang.Object)
+     */
     @Override
     public boolean broadcast(T msg) {
         return this.sender.broadcast(msg);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.messaging.IMsgService#getMsgBox(java.lang.String)
+     */
     @Override
     public IMsgBox<T> getMsgBox(String agentId) {
         return this.directory.createAgentMsgBox(agentId);
