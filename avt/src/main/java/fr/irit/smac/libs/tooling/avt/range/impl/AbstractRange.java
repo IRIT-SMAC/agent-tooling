@@ -53,7 +53,7 @@ public abstract class AbstractRange implements IRange {
      */
     @Override
     public boolean hasInfiniteSize() {
-        return this.getUpperBound() == Double.POSITIVE_INFINITY || this.getLowerBound() == Double.NEGATIVE_INFINITY;
+        return this.getUpperBound() >= Double.POSITIVE_INFINITY || this.getLowerBound() <= Double.NEGATIVE_INFINITY;
     }
 
     /**

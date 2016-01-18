@@ -21,7 +21,6 @@
  */
 package fr.irit.smac.libs.tooling.avt.impl;
 
-import java.math.BigDecimal;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
@@ -183,16 +182,15 @@ public class SoftBoundsMemoryAVT extends StandardAVT {
 
         if (this.valuesHistory.size() >= this.memorySize) {
             double oldestValue = this.valuesHistory.poll();
-            BigDecimal bdOldestValue = BigDecimal.valueOf(oldestValue);
             // if the oldestValue is the max of the history and different to
             // the current upperBound then update
             if (this.isHistoryMax(oldestValue)
-                && !bdOldestValue.equals(BigDecimal.valueOf(this.getRange().getUpperBound()))) {
+                    && oldestValue < this.getRange().getUpperBound()) {
                 super.setUpperBound(oldestValue);
                 boundsUpdated = true;
             } // the same reasoning applied to lower bound
             else if (this.isHistoryMin(oldestValue)
-                && !bdOldestValue.equals(BigDecimal.valueOf(this.getRange().getLowerBound()))) {
+                    && oldestValue > this.getRange().getLowerBound()) {
                 super.setLowerBound(oldestValue);
                 boundsUpdated = true;
             }

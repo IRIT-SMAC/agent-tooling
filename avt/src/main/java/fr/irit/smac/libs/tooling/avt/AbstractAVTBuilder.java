@@ -388,10 +388,10 @@ public abstract class AbstractAVTBuilder<T extends IAVT> implements IAVTBuilder<
     protected static BigDecimal getBigDecValueOf(double value) {
 
         BigDecimal bdVal;
-        if (value == Double.NEGATIVE_INFINITY) {
+        if (value <= Double.NEGATIVE_INFINITY) {
             bdVal = BigDecimal.valueOf(-Double.MAX_VALUE);
         }
-        else if (value == Double.POSITIVE_INFINITY) {
+        else if (value >= Double.POSITIVE_INFINITY) {
             bdVal = BigDecimal.valueOf(Double.MAX_VALUE);
         }
         else {

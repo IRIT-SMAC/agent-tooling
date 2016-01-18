@@ -326,4 +326,13 @@ class StandardDMTest extends Specification{
         then:
         thrown (IllegalArgumentException)
     }
+
+    def 'reconfigure with a too high range should throw an IllegalArgumentException'() {
+
+        when:
+        standardDM.reconfigure(4.0,BigDecimal.valueOf(Double.MAX_VALUE).multiply(2.1))
+
+        then:
+        thrown (IllegalArgumentException)
+    }
 }

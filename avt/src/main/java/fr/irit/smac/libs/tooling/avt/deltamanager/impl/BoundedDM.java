@@ -63,8 +63,9 @@ public class BoundedDM extends ForwardingDM {
      * Ensure bounded delta.
      */
     private void ensureBoundedDelta() {
-        double currentDelta = this.getBoundedDelta(this.dm.getDelta());
-        if (!BigDecimal.valueOf(currentDelta).equals(BigDecimal.valueOf(this.dm.getDelta()))) {
+        double delta = this.dm.getDelta();
+        double currentDelta = this.getBoundedDelta(delta);
+        if (currentDelta > delta) {
             this.dm.getAdvancedDM().setDelta(currentDelta);
         }
     }

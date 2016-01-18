@@ -126,6 +126,19 @@ class DelayedDMDTest extends Specification {
         EDirection.DIRECT | EDirection.INDIRECT | EDecision.SAME_DELTA | 1 | 1
     }
 
+    def 'getNextDecision returns SAME_DELTA' () {
+
+        given:
+        StandardDMD nestedDmd = Spy( StandardDMD)
+        delayedDMD = Spy (DelayedDMD, constructorArgs: [nestedDmd, 1, 1])
+
+        when:
+        nestedDmd.getNextDecision(EDirection.DIRECT) >> EDecision.SAME_DELTA
+
+        then:
+        delayedDMD.getNextDecision(EDirection.DIRECT) == EDecision.SAME_DELTA
+    }
+
     def 'getNextDecision should throw an IllegalArgumentException' () {
 
         given:

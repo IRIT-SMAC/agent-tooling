@@ -21,11 +21,9 @@
  */
 package fr.irit.smac.libs.tooling.avt.impl;
 
-import java.math.BigDecimal;
-
+import fr.irit.smac.libs.tooling.avt.EFeedback;
 import fr.irit.smac.libs.tooling.avt.EMessageException;
 import fr.irit.smac.libs.tooling.avt.IAdvancedAVT;
-import fr.irit.smac.libs.tooling.avt.EFeedback;
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager;
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManager.EDirection;
 import fr.irit.smac.libs.tooling.avt.deltamanager.IDeltaManagerFactory;
@@ -305,10 +303,8 @@ public class StandardAVT implements IAdvancedAVT {
      */
     private boolean willStayAtBounds(EFeedback feedback) {
 
-        BigDecimal bdValue = BigDecimal.valueOf(this.value);
-
-        return (bdValue.equals(BigDecimal.valueOf(this.effectiveLowerBound)) && feedback == EFeedback.LOWER)
-            || (bdValue.equals(BigDecimal.valueOf(this.effectiveUpperBound)) && feedback == EFeedback.GREATER);
+        return (this.value <= this.effectiveLowerBound && feedback == EFeedback.LOWER)
+            || (this.value >= this.effectiveUpperBound && feedback == EFeedback.GREATER);
     }
 
     /**
@@ -377,10 +373,10 @@ public class StandardAVT implements IAdvancedAVT {
     private static double getNonInfiniteEquivalOf(double value) {
         double finiteVal;
 
-        if (value == Double.NEGATIVE_INFINITY) {
+        if (value <= Double.NEGATIVE_INFINITY) {
             finiteVal = -Double.MAX_VALUE;
         }
-        else if (value == Double.POSITIVE_INFINITY) {
+        else if (value >= Double.POSITIVE_INFINITY) {
             finiteVal = Double.MAX_VALUE;
         }
         else {
