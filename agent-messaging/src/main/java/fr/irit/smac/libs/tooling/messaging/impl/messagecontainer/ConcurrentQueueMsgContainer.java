@@ -57,7 +57,7 @@ public class ConcurrentQueueMsgContainer<T> implements
      */
     @Override
     public List<T> getMsgs() {
-        List<T> messages = new ArrayList<T>(this.msgQueue.size());
+        List<T> messages = new ArrayList<T>(/*this.msgQueue.size()*/);
         while (!this.msgQueue.isEmpty()) {
             messages.add(this.msgQueue.poll());
         }

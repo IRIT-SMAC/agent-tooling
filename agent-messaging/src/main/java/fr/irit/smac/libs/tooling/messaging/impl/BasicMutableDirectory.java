@@ -28,7 +28,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
-import fr.irit.smac.libs.tooling.messaging.IDirectory;
 import fr.irit.smac.libs.tooling.messaging.IMsgBox;
 
 /**
@@ -58,6 +57,11 @@ public class BasicMutableDirectory<T> implements
     private final GroupMsgBox<T>              broadCastMsgBox;
 
     /**
+     * Name of the group that will contain all the agents (used for broadcast).
+     */
+    public static final String ALL = "all";
+    
+    /**
      * Instantiates a new basic mutable directory.
      */
     public BasicMutableDirectory() {
@@ -68,11 +72,11 @@ public class BasicMutableDirectory<T> implements
         this.groupModificationLock = new ReentrantLock();
         this.agentModificationLock = new ReentrantLock();
 
-        this.broadCastMsgBox = this.getOrCreateGroupMsgBox(IDirectory.ALL);
+        this.broadCastMsgBox = this.getOrCreateGroupMsgBox(ALL);
     }
 
     // ///////////////////////////////////////////////////////////////////////////////
-    // Agent - Group Creation / Deletition
+    // Agent - Group Creation / Deletion
     // ///////////////////////////////////////////////////////////////////////////////
 
     /* (non-Javadoc)

@@ -36,11 +36,6 @@ import fr.irit.smac.libs.tooling.messaging.impl.Ref;
 public interface IDirectory<T> {
 
     /**
-     * Name of the group that will contain all the agents (used for broadcast).
-     */
-    public static final String ALL = "all";
-
-    /**
      * Returns the agent ref from the given agent id.
      *
      * @param agentId the agent id

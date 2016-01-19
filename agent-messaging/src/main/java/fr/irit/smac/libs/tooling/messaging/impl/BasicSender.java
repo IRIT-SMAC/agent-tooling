@@ -28,27 +28,36 @@ import fr.irit.smac.libs.tooling.messaging.ISender;
  * An implementation that get ref in a directory to send messages.
  *
  * @author lemouzy
- * @param <T> the generic type
+ * @param <T>
+ *            the generic type
  */
 public class BasicSender<T> implements ISender<T> {
 
     /** The directory. */
     private final IDirectory<T> directory;
-    
+
     /** The broad cast msg box. */
     private final Ref<T>        broadCastMsgBox;
 
     /**
+     * Name of the group that will contain all the agents (used for broadcast).
+     */
+    public static final String  ALL = "all";
+
+    /**
      * Instantiates a new basic sender.
      *
-     * @param directory the directory
+     * @param directory
+     *            the directory
      */
     public BasicSender(IDirectory<T> directory) {
         this.directory = directory;
-        this.broadCastMsgBox = this.directory.getGroupRef(IDirectory.ALL);
+        this.broadCastMsgBox = this.directory.getGroupRef(ALL);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.irit.smac.libs.tooling.messaging.ISender#getDirectory()
      */
     @Override
@@ -56,54 +65,75 @@ public class BasicSender<T> implements ISender<T> {
         return this.directory;
     }
 
-    /* (non-Javadoc)
-     * @see fr.irit.smac.libs.tooling.messaging.ISender#send(java.lang.Object, java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.libs.tooling.messaging.ISender#send(java.lang.Object,
+     * java.lang.String)
      */
     @Override
     public boolean send(T msg, String receiverId) {
-        try {
-            return this.directory.getAgentRef(receiverId).getMsgSink()
-                .putMsg(msg);
-        }
-        catch (NullPointerException e) {
+
+        Ref<T> receiver = this.directory.getAgentRef(receiverId);
+
+        if (receiver == null) {
             throw new IllegalArgumentException(
                 "Trying to send a message to an unknown receiver : "
                     + receiverId);
         }
+
+        return receiver.getMsgSink().putMsg(msg);
+
     }
 
-    /* (non-Javadoc)
-     * @see fr.irit.smac.libs.tooling.messaging.ISender#send(java.lang.Object, fr.irit.smac.libs.tooling.messaging.impl.Ref)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.irit.smac.libs.tooling.messaging.ISender#send(java.lang.Object,
+     * fr.irit.smac.libs.tooling.messaging.impl.Ref)
      */
     @Override
     public boolean send(T msg, Ref<T> receiverRef) {
         return receiverRef.getMsgSink().putMsg(msg);
     }
 
-    /* (non-Javadoc)
-     * @see fr.irit.smac.libs.tooling.messaging.ISender#sendToGroup(java.lang.Object, java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.messaging.ISender#sendToGroup(java.lang.Object,
+     * java.lang.String)
      */
     @Override
     public boolean sendToGroup(T msg, String groupId) {
-        try {
-            return this.directory.getGroupRef(groupId).getMsgSink().putMsg(msg);
-        }
-        catch (NullPointerException e) {
+
+        Ref<T> group = this.directory.getGroupRef(groupId);
+
+        if (group == null) {
             throw new IllegalArgumentException(
                 "Trying to send a message to an unknown group : " + groupId);
         }
+
+        return group.getMsgSink().putMsg(msg);
     }
 
-    /* (non-Javadoc)
-     * @see fr.irit.smac.libs.tooling.messaging.ISender#sendToGroup(java.lang.Object, fr.irit.smac.libs.tooling.messaging.impl.Ref)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.messaging.ISender#sendToGroup(java.lang.Object,
+     * fr.irit.smac.libs.tooling.messaging.impl.Ref)
      */
     @Override
     public boolean sendToGroup(T msg, Ref<T> groupRef) {
         return groupRef.getMsgSink().putMsg(msg);
     }
 
-    /* (non-Javadoc)
-     * @see fr.irit.smac.libs.tooling.messaging.ISender#broadcast(java.lang.Object)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.messaging.ISender#broadcast(java.lang.Object)
      */
     @Override
     public boolean broadcast(T msg) {
