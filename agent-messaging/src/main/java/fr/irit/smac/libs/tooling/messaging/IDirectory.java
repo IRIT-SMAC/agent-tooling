@@ -27,8 +27,13 @@ import java.util.Set;
 import fr.irit.smac.libs.tooling.messaging.impl.Ref;
 
 /**
- * A directory that permits : - to link agentIds to their refs. - to link
- * groupIds to their refs. - to access the agents refs belonging to a group.
+ * A directory that permits : 
+ * 
+ * <ul>
+ * <li>to link agentIds to their refs.</li>
+ * <li>to link groupIds to their refs.</li>
+ * <li>to access the agents refs belonging to a group.</li>
+ * </ul>
  *
  * @author lemouzy
  * @param <T> the generic type

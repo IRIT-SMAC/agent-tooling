@@ -23,6 +23,7 @@ package fr.irit.smac.libs.tooling.messaging.impl;
 
 import fr.irit.smac.libs.tooling.messaging.IDirectory;
 import fr.irit.smac.libs.tooling.messaging.ISender;
+import fr.irit.smac.libs.tooling.messaging.ExceptionMessage;
 
 /**
  * An implementation that get ref in a directory to send messages.
@@ -78,8 +79,7 @@ public class BasicSender<T> implements ISender<T> {
 
         if (receiver == null) {
             throw new IllegalArgumentException(
-                "Trying to send a message to an unknown receiver : "
-                    + receiverId);
+                ExceptionMessage.formatMessage(ExceptionMessage.UNKNOWN_RECEIVER_SEND,receiverId));
         }
 
         return receiver.getMsgSink().putMsg(msg);
@@ -111,7 +111,7 @@ public class BasicSender<T> implements ISender<T> {
 
         if (group == null) {
             throw new IllegalArgumentException(
-                "Trying to send a message to an unknown group : " + groupId);
+                ExceptionMessage.formatMessage(ExceptionMessage.UNKNOWN_GROUP_SEND,groupId));
         }
 
         return group.getMsgSink().putMsg(msg);

@@ -29,29 +29,34 @@ import fr.irit.smac.libs.tooling.messaging.impl.DefaultMsgService;
 /**
  * Main agent-messaging access interface.
  * 
+ * <p>
  * Permits to get directly - an IMsgBox<T> - an IMsgService<T>
+ * </p>
  * 
+ * <p>
  * For example :
+ * </p>
  * 
- * - an agent "a1" access a message box sending Strings messages with the
- * following lines:
+ * <ul>
+ * <li><p>an agent "a1" access a message box sending Strings messages with the
+ * following lines:</p>
+ * <code>IMsgBox<String> msgBox = AgentMessaging.getMsgBox("a1", String.class);</code>
+ * </li>
+ * <li><p>access to the message service associated with String message sending:</p>
+ * <code>IMsgService<String> msgService = AgentMessaging.getMsgService(String.class);</code>
+ * </li>
+ * </ul>
  * 
- * IMsgBox<String> msgBox = AgentMessaging.getMsgBox("a1", String.class);
- * 
- * - access to the message service associated with String message sending:
- * 
- * IMsgService<String> msgService = AgentMessaging.getMsgService(String.class);
- * 
- * Note : all the created and returned instances are associated to a given
+ * <p>Note : all the created and returned instances are associated to a given
  * message type class. Hence, in the following example, msgBox1 and msgBox2 are
- * different even though they are associated to the same string id.
+ * different even though they are associated to the same string id.</p>
  * 
- * IMsgBox<String> msgBox1 = AgentMessaging.getMsgBox("a1", String.class);
- * IMsgBox<String> msgBox2 = AgentMessaging.getMsgBox("a1", Integer.class);
+ * <p><code>IMsgBox<String> msgBox1 = AgentMessaging.getMsgBox("a1", String.class);</code></p>
+ * <p><code>IMsgBox<String> msgBox2 = AgentMessaging.getMsgBox("a1", Integer.class);</code></p>
  * 
+ * <p>
  * This remark is also valid for AgentMessaging.getMsgService
- * 
- * TODO: correct generics in comments
+ * </p>
  * 
  * @author lemouzy
  */

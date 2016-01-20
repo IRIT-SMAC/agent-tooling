@@ -34,8 +34,10 @@ import fr.irit.smac.libs.tooling.messaging.IMsgBox;
 interface IMutableDirectory<T> extends IDirectory<T> {
 
     /**
-     * Subscribe agent to group.
-     *
+     * Subscribe an agent to a group.
+     * 
+     * The group is created if it does not exist
+     * 
      * @param agentRef the agent ref
      * @param groupId the group id
      * @return the ref
@@ -44,7 +46,7 @@ interface IMutableDirectory<T> extends IDirectory<T> {
         String groupId);
 
     /**
-     * Subscribe agent to group.
+     * Subscribe an agent to a group.
      *
      * @param agentRef the agent ref
      * @param groupRef the group ref
@@ -53,7 +55,7 @@ interface IMutableDirectory<T> extends IDirectory<T> {
         Ref<T> groupRef);
 
     /**
-     * Unsubscribe agent from group.
+     * Unsubscribe an agent from a group.
      *
      * @param agentRef the agent ref
      * @param groupId the group id
@@ -61,7 +63,7 @@ interface IMutableDirectory<T> extends IDirectory<T> {
     public void unsubscribeAgentFromGroup(Ref<T> agentRef, String groupId);
 
     /**
-     * Unsubscribe agent from group.
+     * Unsubscribe an agent from a group.
      *
      * @param agentRef the agent ref
      * @param groupRef the group ref

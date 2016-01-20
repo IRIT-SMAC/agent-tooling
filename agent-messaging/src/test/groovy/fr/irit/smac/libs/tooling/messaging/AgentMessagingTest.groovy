@@ -10,7 +10,7 @@ import fr.irit.smac.libs.tooling.messaging.impl.DefaultMsgService
 @Unroll
 class AgentMessagingTest extends Specification {
 
-    def 'constructor should be private'() {
+    def 'constructor should be private - this test is just here for the coverage'() {
 
         when:
         Constructor constructor = AgentMessaging.class.getDeclaredConstructor()

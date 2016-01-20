@@ -10,9 +10,7 @@ class AgentMsgBoxTest extends Specification{
 
     @Shared AgentMsgBox agentMsgBox
     @Shared DefaultMsgService defaultMsgService
-    @Shared String message = "hello"
-    @Shared String agent1 = "agent1"
-    @Shared String group1 = "group1"
+    @Shared String message = "hello", agent1 = "agent1", group1 = "group1"
 
     def setup() {
 

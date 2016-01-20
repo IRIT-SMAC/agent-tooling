@@ -27,7 +27,6 @@ package fr.irit.smac.libs.tooling.messaging.impl.messagecontainer;
  * It can receive messages (IMsgSink<T>) and it can provide the messages it
  * received before (IMsgSource<T>)
  * 
- * TODO: correct generics in comments
  *
  * @author lemouzy
  * @param <T> the generic type

@@ -14,6 +14,7 @@ class BasicSenderTest extends Specification {
     @Shared String message = "hello", agent1 = "agent1", group1 = "group1"
 
     def setup() {
+
         defaultMsgService = new DefaultMsgService()
         groupMsgBox = defaultMsgService.directory.getOrCreateGroupMsgBox(group1)
         agentMsgBox = defaultMsgService.getMsgBox(agent1)
@@ -78,6 +79,15 @@ class BasicSenderTest extends Specification {
 
         then:
         isSent == true
+    }
+
+    def 'sendToGroup with a wrong groupId should throw an IllegalArgumentException'() {
+
+        when:
+        basicSender.sendToGroup(message, "group2")
+
+        then:
+        thrown(IllegalArgumentException)
     }
 
     def 'broadcast'() {

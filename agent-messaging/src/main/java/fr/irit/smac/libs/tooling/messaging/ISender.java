@@ -26,10 +26,9 @@ import fr.irit.smac.libs.tooling.messaging.impl.Ref;
 /**
  * Interface of a service that permits to send messages.
  * 
- * TODO: correct generics in comments
- *
  * @author lemouzy
- * @param <T> the generic type
+ * @param <T>
+ *            the generic type
  */
 public interface ISender<T> {
 
@@ -45,8 +44,10 @@ public interface ISender<T> {
      * send(MsgType msg, Ref<MsgType> receiverRef) method we recommend to use
      * this other method for performance reasons.
      *
-     * @param msg the msg
-     * @param receiverId the receiver id
+     * @param msg
+     *            the msg
+     * @param receiverId
+     *            the receiver id
      * @return true if the message has been actually sent, false otherwise
      */
     public boolean send(T msg, String receiverId);
@@ -55,20 +56,24 @@ public interface ISender<T> {
      * Sends a message to the given ref Note : this method is faster than the
      * send(MsgType msg, String receiverId) method.
      *
-     * @param msg the msg
-     * @param receiverRef the receiver ref
+     * @param msg
+     *            the msg
+     * @param receiverRef
+     *            the receiver ref
      * @return true if the message has been actually sent, false otherwise
      */
     public boolean send(T msg, Ref<T> receiverRef);
 
     /**
      * Sends a message to all message boxes inscribed to the given group id Note
-     * : this method is slower than the sendToGroup(MsgType msg, Ref
-     * <MsgType> receiverRef) method we recommend to use this other method for
-     * performance reasons.
+     * : this method is slower than the sendToGroup(MsgType msg, Ref <MsgType>
+     * receiverRef) method we recommend to use this other method for performance
+     * reasons.
      *
-     * @param msg the msg
-     * @param groupId the group id
+     * @param msg
+     *            the msg
+     * @param groupId
+     *            the group id
      * @return true if all the messages have been actually sent, false otherwise
      */
     public boolean sendToGroup(T msg, String groupId);
@@ -78,8 +83,10 @@ public interface ISender<T> {
      * Note : this method is faster than the sendToGroup(MsgType msg, String
      * receiverId) method.
      *
-     * @param msg the msg
-     * @param groupRef the group ref
+     * @param msg
+     *            the msg
+     * @param groupRef
+     *            the group ref
      * @return true if all the messages have been actually sent, false otherwise
      */
     public boolean sendToGroup(T msg, Ref<T> groupRef);
@@ -88,7 +95,8 @@ public interface ISender<T> {
      * Sends a message to all the existing message boxes (created with the
      * current message service).
      *
-     * @param msg the msg
+     * @param msg
+     *            the msg
      * @return true, if successful
      */
     public boolean broadcast(T msg);
