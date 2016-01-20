@@ -36,17 +36,23 @@ import java.util.concurrent.Future;
 import fr.irit.smac.libs.tooling.scheduling.IAgentStrategy;
 
 /**
- * TODO: document
- * 
+ * TODO: document.
+ *
  * @author jorquera
- * 
  */
 public class SynchronizedSystemStrategy extends
     AbstractSystemStrategy<IAgentStrategy> {
 
+    /** The agents callables. */
     private final Map<IAgentStrategy, Callable<?>> agentsCallables = Collections
         .synchronizedMap(new HashMap<IAgentStrategy, Callable<?>>());
 
+    /**
+     * Instantiates a new synchronized system strategy.
+     *
+     * @param agents the agents
+     * @param agentExecutor the agent executor
+     */
     public SynchronizedSystemStrategy(Collection<IAgentStrategy> agents,
         ExecutorService agentExecutor) {
         super(agentExecutor);
@@ -54,10 +60,18 @@ public class SynchronizedSystemStrategy extends
         this.addAgents(agents);
     }
 
+    /**
+     * Instantiates a new synchronized system strategy.
+     *
+     * @param agents the agents
+     */
     public SynchronizedSystemStrategy(Collection<IAgentStrategy> agents) {
         this(agents, Executors.newFixedThreadPool(1));
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.scheduling.impl.system.AbstractSystemStrategy#doStep()
+     */
     @Override
     protected void doStep() {
         Set<Future<?>> executionResults = new HashSet<Future<?>>();
@@ -81,6 +95,9 @@ public class SynchronizedSystemStrategy extends
         }
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.scheduling.impl.system.AbstractSystemStrategy#addAgent(java.lang.Object)
+     */
     @Override
     public void addAgent(final IAgentStrategy agent) {
         if (!this.agents.contains(agent)) {
@@ -97,6 +114,9 @@ public class SynchronizedSystemStrategy extends
         }
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.scheduling.impl.system.AbstractSystemStrategy#removeAgent(java.lang.Object)
+     */
     @Override
     public void removeAgent(IAgentStrategy agent) {
         if (this.agents.contains(agent)) {

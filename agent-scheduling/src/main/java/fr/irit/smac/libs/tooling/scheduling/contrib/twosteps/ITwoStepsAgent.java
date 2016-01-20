@@ -22,16 +22,20 @@
 package fr.irit.smac.libs.tooling.scheduling.contrib.twosteps;
 
 /**
- * 
- * TODO: document
- * 
+ * TODO: document.
+ *
  * @author jorquera
- * 
  */
 public interface ITwoStepsAgent {
 
+    /**
+     * Perceive.
+     */
     public void perceive();
 
+    /**
+     * Decide and act.
+     */
     public void decideAndAct();
 
 }

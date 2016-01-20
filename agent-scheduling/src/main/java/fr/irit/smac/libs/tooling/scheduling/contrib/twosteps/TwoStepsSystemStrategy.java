@@ -37,29 +37,50 @@ import fr.irit.smac.libs.tooling.scheduling.impl.system.AbstractSystemStrategy;
 import fr.irit.smac.libs.tooling.scheduling.impl.system.SynchronizedSystemStrategy;
 
 /**
- * 
- * TODO: document
- * 
+ * TODO: document.
+ *
  * @author jorquera
- * 
  */
 public class TwoStepsSystemStrategy extends
     AbstractSystemStrategy<ITwoStepsAgent> {
 
+    /**
+     * The Enum EState.
+     */
     private static enum EState {
-        PERCEIVE, DECIDE_ACT
+
+        /** The perceive. */
+        PERCEIVE,
+        /** The decide act. */
+        DECIDE_ACT
     }
 
+    /** The current state. */
     private volatile EState currentState = EState.PERCEIVE;
 
+    /**
+     * The Class AgentWrapper.
+     */
     protected class AgentWrapper implements IAgentStrategy {
 
+        /** The agent. */
         private final ITwoStepsAgent agent;
 
+        /**
+         * Instantiates a new agent wrapper.
+         *
+         * @param agent
+         *            the agent
+         */
         public AgentWrapper(ITwoStepsAgent agent) {
             this.agent = agent;
         }
 
+        /*
+         * (non-Javadoc)
+         * 
+         * @see fr.irit.smac.libs.tooling.scheduling.IAgentStrategy#nextStep()
+         */
         @Override
         public void nextStep() {
 
@@ -80,14 +101,27 @@ public class TwoStepsSystemStrategy extends
 
     }
 
+    /** The agent wrappers. */
     private final Map<ITwoStepsAgent, AgentWrapper>      agentWrappers        = new ConcurrentHashMap<ITwoStepsAgent, AgentWrapper>();
 
+    /** The pending added agents. */
     // NOTE: BlockingQueue implem is thread-safe
     private final BlockingQueue<ITwoStepsAgent>          pendingAddedAgents   = new LinkedBlockingDeque<ITwoStepsAgent>();
+
+    /** The pending removed agents. */
     private final BlockingQueue<ITwoStepsAgent>          pendingRemovedAgents = new LinkedBlockingDeque<ITwoStepsAgent>();
 
+    /** The internal system strategy. */
     private final AbstractSystemStrategy<IAgentStrategy> internalSystemStrategy;
 
+    /**
+     * Instantiates a new two steps system strategy.
+     *
+     * @param agents
+     *            the agents
+     * @param agentExecutor
+     *            the agent executor
+     */
     public TwoStepsSystemStrategy(Collection<ITwoStepsAgent> agents,
         ExecutorService agentExecutor) {
         super(agentExecutor);
@@ -121,6 +155,12 @@ public class TwoStepsSystemStrategy extends
         };
     }
 
+    /**
+     * Instantiates a new two steps system strategy.
+     *
+     * @param agents
+     *            the agents
+     */
     public TwoStepsSystemStrategy(Collection<ITwoStepsAgent> agents) {
         // setting a "reasonable" default size for the thread pool of 2xNbCores
         // (according to e.g.
@@ -131,6 +171,9 @@ public class TwoStepsSystemStrategy extends
 
     }
 
+    /**
+     * Adds the pending agents.
+     */
     private void addPendingAgents() {
 
         Collection<ITwoStepsAgent> drainedAgents = new HashSet<ITwoStepsAgent>();
@@ -144,6 +187,9 @@ public class TwoStepsSystemStrategy extends
 
     }
 
+    /**
+     * Removes the pending agents.
+     */
     private void removePendingAgents() {
         Collection<ITwoStepsAgent> drainedAgents = new HashSet<ITwoStepsAgent>();
         pendingRemovedAgents.drainTo(drainedAgents);
@@ -155,6 +201,13 @@ public class TwoStepsSystemStrategy extends
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.scheduling.impl.system.AbstractSystemStrategy
+     * #doStep()
+     */
     @Override
     protected void doStep() {
 
@@ -188,19 +241,35 @@ public class TwoStepsSystemStrategy extends
 
     }
 
-    /*** Executor Handling ***/
+    /**
+     * * Executor Handling **.
+     *
+     * @return the executor service
+     */
 
     @Override
     public ExecutorService getExecutorService() {
         return internalSystemStrategy.getExecutorService();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.scheduling.impl.system.AbstractSystemStrategy
+     * #setExecutorService(java.util.concurrent.ExecutorService)
+     */
     @Override
     public void setExecutorService(ExecutorService executor) {
         internalSystemStrategy.setExecutorService(executor);
     }
 
-    /*** Agent Handling ***/
+    /**
+     * * Agent Handling **.
+     *
+     * @param agent
+     *            the agent
+     */
 
     @Override
     public void addAgent(final ITwoStepsAgent agent) {
@@ -210,6 +279,13 @@ public class TwoStepsSystemStrategy extends
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.scheduling.impl.system.AbstractSystemStrategy
+     * #removeAgent(java.lang.Object)
+     */
     @Override
     public void removeAgent(ITwoStepsAgent agent) {
         if (this.agents.contains(agent)) {

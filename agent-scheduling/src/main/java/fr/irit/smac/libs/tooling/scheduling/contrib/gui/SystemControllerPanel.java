@@ -38,23 +38,33 @@ import javax.swing.event.ChangeListener;
 import fr.irit.smac.libs.tooling.scheduling.ISystemControlHandler;
 
 /**
- * 
- * TODO: document
- * 
+ * TODO: document.
+ *
  * @author jorquera
- * 
  */
 public class SystemControllerPanel extends JPanel {
 
+    /** The Constant serialVersionUID. */
     private static final long           serialVersionUID = -8768099103951586071L;
 
+    /** The system. */
     private final ISystemControlHandler system;
 
+    /** The ms. */
     private int                         ms;
 
+    /** The speed slider. */
     private final SchedulerSlider       speedSlider;
+    
+    /** The step button. */
     private final JButton               stepButton       = new JButton("step");
 
+    /**
+     * Instantiates a new system controller panel.
+     *
+     * @param system the system
+     * @param ms the ms
+     */
     public SystemControllerPanel(final ISystemControlHandler system, int ms) {
         super();
 
@@ -78,14 +88,26 @@ public class SystemControllerPanel extends JPanel {
         });
     }
 
+    /**
+     * Instantiates a new system controller panel.
+     *
+     * @param system the system
+     */
     public SystemControllerPanel(final ISystemControlHandler system) {
         this(system, 500);
     }
 
+    /**
+     * The Class SchedulerSlider.
+     */
     private class SchedulerSlider extends JSlider {
 
+        /** The Constant serialVersionUID. */
         private static final long serialVersionUID = -5591439208368228848L;
 
+        /**
+         * Instantiates a new scheduler slider.
+         */
         public SchedulerSlider() {
 
             super(SwingConstants.HORIZONTAL, 1, 3, 1);

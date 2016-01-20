@@ -40,20 +40,16 @@ import java.util.concurrent.Executor;
 public interface IHookHandler {
 
     /**
-     * 
-     * Add a new task to be executed before each step
-     * 
-     * @param task
-     *            the new task to be added to pre-step hooks
+     * Add a new task to be executed before each step.
+     *
+     * @param task            the new task to be added to pre-step hooks
      */
     public void addPreStepHook(Runnable task);
 
     /**
-     * 
-     * Add a new task to be executed after each step
-     * 
-     * @param task
-     *            the new task to be added to post-step hooks
+     * Add a new task to be executed after each step.
+     *
+     * @param task            the new task to be added to post-step hooks
      */
     public void addPostStepHook(Runnable task);
 
@@ -78,13 +74,15 @@ public interface IHookHandler {
     public void removePostStepHook(Runnable task);
 
     /**
-     * 
+     * Gets the pre step hooks.
+     *
      * @return the currently registered pre-step hooks
      */
     public Set<Runnable> getPreStepHooks();
 
     /**
-     * 
+     * Gets the post step hooks.
+     *
      * @return the currently registered post-step hooks
      */
     public Set<Runnable> getPostStepHooks();

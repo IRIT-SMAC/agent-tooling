@@ -38,7 +38,8 @@ import java.util.concurrent.ExecutorService;
 public interface IExecutorServiceHandler {
 
     /**
-     * 
+     * Gets the executor service.
+     *
      * @return the currently used {@link ExecutorService}
      */
     public ExecutorService getExecutorService();

@@ -36,43 +36,57 @@ import fr.irit.smac.libs.tooling.scheduling.IHookHandler;
 import fr.irit.smac.libs.tooling.scheduling.ISystemControlHandler;
 
 /**
- * 
- * TODO: Document (important)
- * 
+ * TODO: Document (important).
+ *
  * @author jorquera
- * 
- * @param <T>
- *            the type of agents handled by the strategy
+ * @param <T>            the type of agents handled by the strategy
  */
 public abstract class AbstractSystemStrategy<T> implements
     ISystemControlHandler, IAgentsHandler<T>,
     IExecutorServiceHandler, IHookHandler {
 
+    /** The agents. */
     protected final Set<T>     agents         = Collections
                                                           .synchronizedSet(new HashSet<T>());
 
+    /** The pre step hooks. */
     protected final Set<Runnable>      preStepHooks   = Collections
                                                           .synchronizedSet(new LinkedHashSet<Runnable>());
 
+    /** The post step hooks. */
     protected final Set<Runnable>      postStepHooks  = Collections
                                                           .synchronizedSet(new LinkedHashSet<Runnable>());
 
+    /** The agent executor. */
     protected volatile ExecutorService agentExecutor;
+    
+    /** The system executor. */
     protected final ExecutorService    systemExecutor = Executors
                                                           .newFixedThreadPool(1);
 
+    /** The do run. */
     private volatile Boolean           doRun          = false;
+    
+    /** The delay. */
     private volatile long              delay          = 0L;
 
+    /**
+     * Instantiates a new abstract system strategy.
+     *
+     * @param agentExecutor the agent executor
+     */
     public AbstractSystemStrategy(ExecutorService agentExecutor) {
         this.agentExecutor = agentExecutor;
     }
 
     /**
-     * TODO: comment (very important)
+     * TODO: comment (very important).
      */
     protected abstract void doStep();
 
+    /**
+     * Pre step.
+     */
     protected void preStep() {
         synchronized (preStepHooks) {
             for (Runnable hook : preStepHooks) {
@@ -81,6 +95,9 @@ public abstract class AbstractSystemStrategy<T> implements
         }
     }
 
+    /**
+     * Post step.
+     */
     protected void postStep() {
         synchronized (postStepHooks) {
             for (Runnable hook : postStepHooks) {
@@ -89,6 +106,9 @@ public abstract class AbstractSystemStrategy<T> implements
         }
     }
 
+    /**
+     * Step and hooks.
+     */
     protected void stepAndHooks() {
 
         preStep();
@@ -97,6 +117,7 @@ public abstract class AbstractSystemStrategy<T> implements
 
     }
 
+    /** The looping runnable. */
     protected Runnable loopingRunnable = new Runnable() {
         @Override
         public void run() {
@@ -127,6 +148,9 @@ public abstract class AbstractSystemStrategy<T> implements
         }
     };
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.scheduling.ISystemControlHandler#run(long)
+     */
     @Override
     public void run(long milis) {
         delay = milis;
@@ -136,6 +160,7 @@ public abstract class AbstractSystemStrategy<T> implements
         }
     }
 
+    /** The stepping runnable. */
     protected Runnable steppingRunnable = new Runnable() {
         @Override
         public void run() {
@@ -145,11 +170,15 @@ public abstract class AbstractSystemStrategy<T> implements
         }
     };
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.scheduling.ISystemControlHandler#step()
+     */
     @Override
     public Future<?> step() {
         return systemExecutor.submit(steppingRunnable);
     }
 
+    /** The pausing runnable. */
     protected Runnable pausingRunnable = new Runnable() {
         @Override
         public void run() {
@@ -158,11 +187,15 @@ public abstract class AbstractSystemStrategy<T> implements
         }
     };
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.scheduling.ISystemControlHandler#pause()
+     */
     @Override
     public Future<?> pause() {
         return systemExecutor.submit(pausingRunnable);
     }
 
+    /** The shutdown runnable. */
     protected Runnable shutdownRunnable = new Runnable() {
         @Override
         public void run() {
@@ -172,17 +205,27 @@ public abstract class AbstractSystemStrategy<T> implements
         }
     };
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.scheduling.ISystemControlHandler#shutdown()
+     */
     @Override
     public Future<?> shutdown() {
         return systemExecutor.submit(shutdownRunnable);
     }
 
-    /*** Executor Handling ***/
+    /**
+     * * Executor Handling **.
+     *
+     * @return the executor service
+     */
     @Override
     public ExecutorService getExecutorService() {
         return agentExecutor;
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.scheduling.IExecutorServiceHandler#setExecutorService(java.util.concurrent.ExecutorService)
+     */
     @Override
     public void setExecutorService(ExecutorService executor) {
         ExecutorService old = agentExecutor;
@@ -190,23 +233,36 @@ public abstract class AbstractSystemStrategy<T> implements
         old.shutdown();
     }
 
-    /*** Agent Handling ***/
+    /**
+     * * Agent Handling **.
+     *
+     * @return the agents
+     */
 
     @Override
     public Collection<T> getAgents() {
         return new HashSet<T>(agents);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.scheduling.IAgentsHandler#addAgent(java.lang.Object)
+     */
     @Override
     public void addAgent(T agent) {
         this.agents.add(agent);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.scheduling.IAgentsHandler#removeAgent(java.lang.Object)
+     */
     @Override
     public void removeAgent(T agent) {
         this.agents.remove(agent);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.scheduling.IAgentsHandler#addAgents(java.util.Collection)
+     */
     @Override
     public void addAgents(Collection<T> agents) {
         for (T agent : agents) {
@@ -214,6 +270,9 @@ public abstract class AbstractSystemStrategy<T> implements
         }
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.scheduling.IAgentsHandler#removeAgents(java.util.Collection)
+     */
     @Override
     public void removeAgents(Collection<T> agents) {
         for (T agent : agents) {
@@ -221,31 +280,49 @@ public abstract class AbstractSystemStrategy<T> implements
         }
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.scheduling.IHookHandler#addPreStepHook(java.lang.Runnable)
+     */
     @Override
     public void addPreStepHook(Runnable task) {
         preStepHooks.add(task);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.scheduling.IHookHandler#addPostStepHook(java.lang.Runnable)
+     */
     @Override
     public void addPostStepHook(Runnable task) {
         postStepHooks.add(task);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.scheduling.IHookHandler#removePreStepHook(java.lang.Runnable)
+     */
     @Override
     public void removePreStepHook(Runnable task) {
         preStepHooks.remove(task);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.scheduling.IHookHandler#removePostStepHook(java.lang.Runnable)
+     */
     @Override
     public void removePostStepHook(Runnable task) {
         postStepHooks.remove(task);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.scheduling.IHookHandler#getPreStepHooks()
+     */
     @Override
     public Set<Runnable> getPreStepHooks() {
         return new HashSet<Runnable>(preStepHooks);
     }
 
+    /* (non-Javadoc)
+     * @see fr.irit.smac.libs.tooling.scheduling.IHookHandler#getPostStepHooks()
+     */
     @Override
     public Set<Runnable> getPostStepHooks() {
         return new HashSet<Runnable>(postStepHooks);
