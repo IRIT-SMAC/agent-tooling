@@ -20,6 +20,13 @@
 		<additionalparam>-Xdoclint:none</additionalparam>
 	</properties>
 	<dependencies>
+		<!-- AssertJ Swing -->
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-swing-junit</artifactId>
+			<version>3.0.2</version>
+			<scope>test</scope>
+		</dependency>
 		<!-- Spock -->
 		<dependency>
 			<groupId>org.spockframework</groupId>
