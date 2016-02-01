@@ -32,6 +32,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import fr.irit.smac.libs.tooling.scheduling.IAgentStrategy;
 
@@ -45,13 +47,17 @@ public class SynchronizedSystemStrategy extends
 
     /** The agents callables. */
     private final Map<IAgentStrategy, Callable<?>> agentsCallables = Collections
-        .synchronizedMap(new HashMap<IAgentStrategy, Callable<?>>());
+                                                                       .synchronizedMap(new HashMap<IAgentStrategy, Callable<?>>());
+
+    private static final Logger                        LOGGER               = Logger.getLogger(SynchronizedSystemStrategy.class.getName());
 
     /**
      * Instantiates a new synchronized system strategy.
      *
-     * @param agents the agents
-     * @param agentExecutor the agent executor
+     * @param agents
+     *            the agents
+     * @param agentExecutor
+     *            the agent executor
      */
     public SynchronizedSystemStrategy(Collection<IAgentStrategy> agents,
         ExecutorService agentExecutor) {
@@ -63,14 +69,19 @@ public class SynchronizedSystemStrategy extends
     /**
      * Instantiates a new synchronized system strategy.
      *
-     * @param agents the agents
+     * @param agents
+     *            the agents
      */
     public SynchronizedSystemStrategy(Collection<IAgentStrategy> agents) {
         this(agents, Executors.newFixedThreadPool(1));
     }
 
-    /* (non-Javadoc)
-     * @see fr.irit.smac.libs.tooling.scheduling.impl.system.AbstractSystemStrategy#doStep()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.scheduling.impl.system.AbstractSystemStrategy
+     * #doStep()
      */
     @Override
     protected void doStep() {
@@ -87,16 +98,20 @@ public class SynchronizedSystemStrategy extends
                 f.get();
             }
             catch (InterruptedException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.INFO, e.getMessage(), e);
             }
             catch (ExecutionException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.INFO, e.getMessage(), e);
             }
         }
     }
 
-    /* (non-Javadoc)
-     * @see fr.irit.smac.libs.tooling.scheduling.impl.system.AbstractSystemStrategy#addAgent(java.lang.Object)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.scheduling.impl.system.AbstractSystemStrategy
+     * #addAgent(java.lang.Object)
      */
     @Override
     public void addAgent(final IAgentStrategy agent) {
@@ -114,8 +129,12 @@ public class SynchronizedSystemStrategy extends
         }
     }
 
-    /* (non-Javadoc)
-     * @see fr.irit.smac.libs.tooling.scheduling.impl.system.AbstractSystemStrategy#removeAgent(java.lang.Object)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.irit.smac.libs.tooling.scheduling.impl.system.AbstractSystemStrategy
+     * #removeAgent(java.lang.Object)
      */
     @Override
     public void removeAgent(IAgentStrategy agent) {

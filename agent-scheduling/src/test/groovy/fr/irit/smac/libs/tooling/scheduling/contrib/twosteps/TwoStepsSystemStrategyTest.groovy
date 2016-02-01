@@ -7,6 +7,8 @@ import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit;
 
+import javax.sql.rowset.Joinable;
+
 import org.codehaus.groovy.transform.tailrec.VariableReplacedListener.*
 import org.spockframework.util.InternalSpockError
 
@@ -131,26 +133,38 @@ class TwoStepsSystemStrategyTest extends Specification {
 
         given:
         Hook hook = new Hook("hook")
+        Hook hook2 = new Hook("hook2")
         twoStepsSystemStrategy.addPostStepHook(hook)
-
+        twoStepsSystemStrategy.addPostStepHook(hook2)
+        
         when:
-        twoStepsSystemStrategy.postStep()
+        ArrayList<Thread> threads = twoStepsSystemStrategy.postStep()
 
         then:
+        for (Thread t: threads) {
+            t.join()
+        }
         hook.done == true
+        hook2.done == true
     }
 
     def 'preStep with preStepHook'() {
 
         given:
         Hook hook = new Hook("hook")
+        Hook hook2 = new Hook("hook2")
         twoStepsSystemStrategy.addPreStepHook(hook)
-
+        twoStepsSystemStrategy.addPreStepHook(hook2)
+        
         when:
-        twoStepsSystemStrategy.preStep()
+        ArrayList<Thread> threads = twoStepsSystemStrategy.preStep()
 
         then:
+        for (Thread t: threads) {
+            t.join()
+        }
         hook.done == true
+        hook2.done == true
     }
 
     def 'getExecutorService should return the executorService'() {

@@ -31,6 +31,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import fr.irit.smac.libs.tooling.scheduling.IAgentStrategy;
 import fr.irit.smac.libs.tooling.scheduling.impl.system.AbstractSystemStrategy;
@@ -47,7 +49,7 @@ public class TwoStepsSystemStrategy extends
     /**
      * The Enum EState.
      */
-    private static enum EState {
+    private enum EState {
 
         /** The perceive. */
         PERCEIVE,
@@ -57,6 +59,8 @@ public class TwoStepsSystemStrategy extends
 
     /** The current state. */
     private volatile EState currentState = EState.PERCEIVE;
+
+    private static final Logger                        LOGGER               = Logger.getLogger(TwoStepsSystemStrategy.class.getName());
 
     /**
      * The Class AgentWrapper.
@@ -94,7 +98,7 @@ public class TwoStepsSystemStrategy extends
                     break;
 
                 default:
-                    throw new RuntimeException("case not covered");
+                    throw new BadStepRuntimeException("case not covered");
             }
 
         }
@@ -137,7 +141,6 @@ public class TwoStepsSystemStrategy extends
             @Override
             public void run() {
                 // shutdown internalSystemStrategy
-                //
                 // NOTE: since internalSystemStrategy is only accessed by
                 // ourself on a step-by-step basis, it is guaranteed that its
                 // execution queue will be empty by the time we reach
@@ -149,8 +152,8 @@ public class TwoStepsSystemStrategy extends
                 internalSystemStrategy.shutdown();
 
                 // propagate to inherited shutdown task
-                inheritedShutdownRunnable.run();
-
+                Thread thread = new Thread(inheritedShutdownRunnable);
+                thread.start();
             }
         };
     }
@@ -219,10 +222,11 @@ public class TwoStepsSystemStrategy extends
             internalSystemStrategy.step().get();
         }
         catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
+            LOGGER.log(Level.INFO, e.getMessage(), e);
         }
         catch (ExecutionException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.INFO, e.getMessage(), e);
         }
 
         // start the decide-and-act of the agents
@@ -231,10 +235,11 @@ public class TwoStepsSystemStrategy extends
             internalSystemStrategy.step().get();
         }
         catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
+            LOGGER.log(Level.INFO, e.getMessage(), e);
         }
         catch (ExecutionException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.INFO, e.getMessage(), e);
         }
 
         removePendingAgents();

@@ -26,19 +26,30 @@ import javax.swing.JFrame;
 import fr.irit.smac.libs.tooling.scheduling.ISystemControlHandler;
 
 /**
- * TODO: document
- * 
- * @author jorquera
+ * TODO: document.
  *
+ * @author jorquera
  */
 public class SystemControllerFrame extends JFrame {
 
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 147438810874039124L;
 
+    /**
+     * Instantiates a new system controller frame.
+     *
+     * @param systemControlHandler the system control handler
+     */
     public SystemControllerFrame(ISystemControlHandler systemControlHandler) {
         this(systemControlHandler, 500);
     }
 
+    /**
+     * Instantiates a new system controller frame.
+     *
+     * @param systemControlHandler the system control handler
+     * @param delay the delay
+     */
     public SystemControllerFrame(ISystemControlHandler systemControlHandler,
         int delay) {
         SystemControllerPanel controlPannel = new SystemControllerPanel(

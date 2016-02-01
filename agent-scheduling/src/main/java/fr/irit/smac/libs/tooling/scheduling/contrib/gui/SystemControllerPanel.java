@@ -48,13 +48,13 @@ public class SystemControllerPanel extends JPanel {
     private static final long           serialVersionUID = -8768099103951586071L;
 
     /** The system. */
-    private final ISystemControlHandler system;
+    private final transient ISystemControlHandler system;
 
     /** The ms. */
     private int                         ms;
 
     /** The speed slider. */
-    private final SchedulerSlider       speedSlider;
+    private final transient SchedulerSlider       speedSlider;
     
     /** The step button. */
     private final JButton               stepButton       = new JButton("step");
@@ -140,6 +140,7 @@ public class SystemControllerPanel extends JPanel {
                             case 3:
                                 stepButton.setEnabled(false);
                                 system.run(0);
+                                break;
                             default:
                                 break;
                         }
