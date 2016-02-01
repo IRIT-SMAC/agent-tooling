@@ -2,8 +2,8 @@ package fr.irit.smac.libs.tooling.scheduling.contrib.gui
 
 import static org.junit.Assert.*
 
-import java.awt.WaitDispatchSupport;
-import java.util.concurrent.TimeUnit;
+import java.awt.WaitDispatchSupport
+import java.util.concurrent.TimeUnit
 
 import org.assertj.swing.edt.GuiActionRunner
 import org.assertj.swing.edt.GuiQuery
@@ -15,7 +15,6 @@ import org.junit.Test
 
 import fr.irit.smac.libs.tooling.scheduling.IAgentStrategy
 import fr.irit.smac.libs.tooling.scheduling.impl.system.SynchronizedSystemStrategy
-
 
 public class SystemControllerFrameSpec extends AssertJSwingJUnitTestCase{
 
@@ -56,10 +55,12 @@ public class SystemControllerFrameSpec extends AssertJSwingJUnitTestCase{
     }
 
     @Test
-    public void testSystemControllerPanelTest() {
+    public void testButtonAndSlider() {
 
         stepButtonFixture.click()
-        assertTrue(panel.system.agents.iterator().next().done)
+        Set<IAgentStrategy> agents = panel.system.agents
+        MyAgent agent = agents.iterator().next()
+        assertTrue(agent.done)
 
         sliderFixture.slideTo(2)
         assertFalse(panel.stepButton.enabled)
@@ -69,5 +70,8 @@ public class SystemControllerFrameSpec extends AssertJSwingJUnitTestCase{
 
         sliderFixture.slideTo(3)
         assertFalse(panel.stepButton.enabled)
+
+        // To test the case where source.getValueIsAjusting is false
+        sliderFixture.click()
     }
 }

@@ -45,25 +45,27 @@ import fr.irit.smac.libs.tooling.scheduling.ISystemControlHandler;
 public class SystemControllerPanel extends JPanel {
 
     /** The Constant serialVersionUID. */
-    private static final long           serialVersionUID = -8768099103951586071L;
+    private static final long                     serialVersionUID = -8768099103951586071L;
 
     /** The system. */
     private final transient ISystemControlHandler system;
 
     /** The ms. */
-    private int                         ms;
+    private int                                   ms;
 
     /** The speed slider. */
     private final transient SchedulerSlider       speedSlider;
-    
+
     /** The step button. */
-    private final JButton               stepButton       = new JButton("step");
+    private final JButton                         stepButton       = new JButton("step");
 
     /**
      * Instantiates a new system controller panel.
      *
-     * @param system the system
-     * @param ms the ms
+     * @param system
+     *            the system
+     * @param ms
+     *            the ms
      */
     public SystemControllerPanel(final ISystemControlHandler system, int ms) {
         super();
@@ -81,9 +83,7 @@ public class SystemControllerPanel extends JPanel {
         this.stepButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                if (stepButton.isEnabled()) {
-                    SystemControllerPanel.this.system.step();
-                }
+                SystemControllerPanel.this.system.step();
             }
         });
     }
@@ -91,7 +91,8 @@ public class SystemControllerPanel extends JPanel {
     /**
      * Instantiates a new system controller panel.
      *
-     * @param system the system
+     * @param system
+     *            the system
      */
     public SystemControllerPanel(final ISystemControlHandler system) {
         this(system, 500);
@@ -145,7 +146,6 @@ public class SystemControllerPanel extends JPanel {
                                 break;
                         }
                     }
-
                 }
             });
         }

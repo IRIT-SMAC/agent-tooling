@@ -5,9 +5,9 @@ import static org.junit.Assert.*
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeUnit
 
-import javax.sql.rowset.Joinable;
+import javax.sql.rowset.Joinable
 
 import org.codehaus.groovy.transform.tailrec.VariableReplacedListener.*
 import org.spockframework.util.InternalSpockError
@@ -16,6 +16,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import fr.irit.smac.libs.tooling.scheduling.IAgentStrategy
+import fr.irit.smac.libs.tooling.scheduling.contrib.twosteps.TwoStepsSystemStrategy.AgentWrapper
 import fr.irit.smac.libs.tooling.scheduling.contrib.twosteps.TwoStepsSystemStrategy.EState
 
 @Unroll
@@ -35,7 +36,7 @@ class TwoStepsSystemStrategyTest extends Specification {
 
         @Override
         public void run() {
-            System.out.println("\n-- Hook: " + message)
+            //            System.out.println("\n-- Hook: " + message)
             done = true
         }
 
@@ -53,13 +54,13 @@ class TwoStepsSystemStrategyTest extends Specification {
 
         @Override
         public void perceive() {
-            System.out.println("Agent " + this + " is perceiving " + step)
+            //            System.out.println("Agent " + this + " is perceiving " + step)
             perceive = true
         }
 
         @Override
         public void decideAndAct() {
-            System.out.println("Agent " + this + " is acting " + step++)
+            //            System.out.println("Agent " + this + " is acting " + step++)
             decideAndAct = true
         }
     }
@@ -136,7 +137,7 @@ class TwoStepsSystemStrategyTest extends Specification {
         Hook hook2 = new Hook("hook2")
         twoStepsSystemStrategy.addPostStepHook(hook)
         twoStepsSystemStrategy.addPostStepHook(hook2)
-        
+
         when:
         ArrayList<Thread> threads = twoStepsSystemStrategy.postStep()
 
@@ -155,7 +156,7 @@ class TwoStepsSystemStrategyTest extends Specification {
         Hook hook2 = new Hook("hook2")
         twoStepsSystemStrategy.addPreStepHook(hook)
         twoStepsSystemStrategy.addPreStepHook(hook2)
-        
+
         when:
         ArrayList<Thread> threads = twoStepsSystemStrategy.preStep()
 
@@ -243,6 +244,7 @@ class TwoStepsSystemStrategyTest extends Specification {
         agents.add(agent)
         TwoStepsSystemStrategy twoStepsSystemStrategy2 = new TwoStepsSystemStrategy(agents)
         twoStepsSystemStrategy2.doStep()
+
         boolean perceive = true
         boolean decideAndAct = true
 
