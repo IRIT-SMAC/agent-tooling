@@ -100,9 +100,8 @@ class SynchronizedSystemStrategySpec extends Specification {
         done == true
     }
 
-    private SynchronizedSystemStrategy getSystemWithMockLogger(Set<IAgentStrategy> agents) {
+    private SynchronizedSystemStrategy getSystemWithMockLogger(Logger logger, Set<IAgentStrategy> agents) {
 
-        Logger logger = Mock(Logger)
         SynchronizedSystemStrategy synchronizedSystemStrategy = new SynchronizedSystemStrategy(agents)
         Field field = SynchronizedSystemStrategy.class.getDeclaredField("LOGGER")
         field.setAccessible(true)
@@ -120,13 +119,15 @@ class SynchronizedSystemStrategySpec extends Specification {
         Set<AgentMock2> agents = new HashSet<AgentMock2>()
         AgentMock2 agent = new AgentMock2()
         agents.add(agent)
-        SynchronizedSystemStrategy synchronizedSystemStrategy = getSystemWithMockLogger(agents)
+        Logger logger = Mock(Logger)
+
+        SynchronizedSystemStrategy synchronizedSystemStrategy = getSystemWithMockLogger(logger, agents)
 
         when:
         synchronizedSystemStrategy.doStep()
 
         then:
-        1*synchronizedSystemStrategy.LOGGER.log(_,'java.util.concurrent.ExecutionException',_)
+        1*logger.log(_,'java.util.concurrent.ExecutionException',_)
     }
 
     def 'doStep should catch any InterruptedException'() {
@@ -135,13 +136,15 @@ class SynchronizedSystemStrategySpec extends Specification {
         Set<AgentMock3> agents = new HashSet<AgentMock3>()
         AgentMock3 agent = new AgentMock3()
         agents.add(agent)
-        SynchronizedSystemStrategy synchronizedSystemStrategy = getSystemWithMockLogger(agents)
+        Logger logger = Mock(Logger)
+        SynchronizedSystemStrategy synchronizedSystemStrategy = getSystemWithMockLogger(logger, agents)
 
         when:
         synchronizedSystemStrategy.doStep()
+        Thread.sleep(2000)
 
         then:
-        1*synchronizedSystemStrategy.LOGGER.log(_,'java.lang.InterruptedException',_)
+        1*logger.log(_,'java.lang.InterruptedException',_)
     }
 
     def 'addAgent with an agent who is not in the system' () {

@@ -100,8 +100,8 @@ public class SynchronizedSystemStrategy extends
                 f.get();
             }
             catch (InterruptedException e) {
-                LOGGER.log(Level.INFO, e.getMessage(), e);
                 Thread.currentThread().interrupt();
+                LOGGER.log(Level.INFO, e.getMessage(), e);
             }
             catch (ExecutionException e) {
                 LOGGER.log(Level.INFO, e.getMessage(), e);

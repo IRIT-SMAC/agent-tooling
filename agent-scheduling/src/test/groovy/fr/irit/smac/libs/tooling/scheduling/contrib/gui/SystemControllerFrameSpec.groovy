@@ -58,6 +58,7 @@ public class SystemControllerFrameSpec extends AssertJSwingJUnitTestCase{
     public void testButtonAndSlider() {
 
         stepButtonFixture.click()
+        Thread.sleep(5000)
         Set<IAgentStrategy> agents = panel.system.agents
         AgentMock agent = agents.iterator().next()
         assertTrue(agent.done)
