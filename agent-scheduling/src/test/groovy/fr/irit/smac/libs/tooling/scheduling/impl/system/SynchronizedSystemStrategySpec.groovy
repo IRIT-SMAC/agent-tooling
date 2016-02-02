@@ -100,52 +100,52 @@ class SynchronizedSystemStrategySpec extends Specification {
         done == true
     }
 
-    private SynchronizedSystemStrategy getSystemWithMockLogger(Logger logger, Set<IAgentStrategy> agents) {
-
-        SynchronizedSystemStrategy synchronizedSystemStrategy = new SynchronizedSystemStrategy(agents)
-        Field field = SynchronizedSystemStrategy.class.getDeclaredField("LOGGER")
-        field.setAccessible(true)
-        Field modifiersField = Field.class.getDeclaredField("modifiers")
-        modifiersField.setAccessible(true)
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL)
-        field.set(synchronizedSystemStrategy, logger)
-
-        return synchronizedSystemStrategy
-    }
-
-    def 'doStep should catch any ExecutionException'() {
-
-        given:
-        Set<AgentMock2> agents = new HashSet<AgentMock2>()
-        AgentMock2 agent = new AgentMock2()
-        agents.add(agent)
-        Logger logger = Mock(Logger)
-
-        SynchronizedSystemStrategy synchronizedSystemStrategy = getSystemWithMockLogger(logger, agents)
-
-        when:
-        synchronizedSystemStrategy.doStep()
-
-        then:
-        1*logger.log(_,'java.util.concurrent.ExecutionException',_)
-    }
-
-    def 'doStep should catch any InterruptedException'() {
-
-        given:
-        Set<AgentMock3> agents = new HashSet<AgentMock3>()
-        AgentMock3 agent = new AgentMock3()
-        agents.add(agent)
-        Logger logger = Mock(Logger)
-        SynchronizedSystemStrategy synchronizedSystemStrategy = getSystemWithMockLogger(logger, agents)
-
-        when:
-        synchronizedSystemStrategy.doStep()
-        Thread.sleep(2000)
-
-        then:
-        1*logger.log(_,'java.lang.InterruptedException',_)
-    }
+//    private SynchronizedSystemStrategy getSystemWithMockLogger(Logger logger, Set<IAgentStrategy> agents) {
+//
+//        SynchronizedSystemStrategy synchronizedSystemStrategy = new SynchronizedSystemStrategy(agents)
+//        Field field = SynchronizedSystemStrategy.class.getDeclaredField("LOGGER")
+//        field.setAccessible(true)
+//        Field modifiersField = Field.class.getDeclaredField("modifiers")
+//        modifiersField.setAccessible(true)
+//        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL)
+//        field.set(synchronizedSystemStrategy, logger)
+//
+//        return synchronizedSystemStrategy
+//    }
+//
+//    def 'doStep should catch any ExecutionException'() {
+//
+//        given:
+//        Set<AgentMock2> agents = new HashSet<AgentMock2>()
+//        AgentMock2 agent = new AgentMock2()
+//        agents.add(agent)
+//        Logger logger = Mock(Logger)
+//
+//        SynchronizedSystemStrategy synchronizedSystemStrategy = getSystemWithMockLogger(logger, agents)
+//
+//        when:
+//        synchronizedSystemStrategy.doStep()
+//
+//        then:
+//        1*logger.log(_,'java.util.concurrent.ExecutionException',_)
+//    }
+//
+//    def 'doStep should catch any InterruptedException'() {
+//
+//        given:
+//        Set<AgentMock3> agents = new HashSet<AgentMock3>()
+//        AgentMock3 agent = new AgentMock3()
+//        agents.add(agent)
+//        Logger logger = Mock(Logger)
+//        SynchronizedSystemStrategy synchronizedSystemStrategy = getSystemWithMockLogger(logger, agents)
+//
+//        when:
+//        synchronizedSystemStrategy.doStep()
+//        Thread.sleep(2000)
+//
+//        then:
+//        1*logger.log(_,'java.lang.InterruptedException',_)
+//    }
 
     def 'addAgent with an agent who is not in the system' () {
 
