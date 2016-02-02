@@ -21,6 +21,7 @@
  */
 package fr.irit.smac.libs.tooling.scheduling;
 
+
 /**
  * Defines the execution strategy of an agent.
  * <p>

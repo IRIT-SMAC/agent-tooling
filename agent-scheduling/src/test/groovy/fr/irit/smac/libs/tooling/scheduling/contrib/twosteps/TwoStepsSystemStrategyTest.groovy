@@ -6,18 +6,13 @@ import java.util.concurrent.ExecutionException
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
-
-import javax.sql.rowset.Joinable
+import java.util.logging.Logger
 
 import org.codehaus.groovy.transform.tailrec.VariableReplacedListener.*
-import org.spockframework.util.InternalSpockError
 
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import fr.irit.smac.libs.tooling.scheduling.IAgentStrategy
-import fr.irit.smac.libs.tooling.scheduling.contrib.twosteps.TwoStepsSystemStrategy.AgentWrapper
-import fr.irit.smac.libs.tooling.scheduling.contrib.twosteps.TwoStepsSystemStrategy.EState
 
 @Unroll
 class TwoStepsSystemStrategyTest extends Specification {
@@ -49,19 +44,21 @@ class TwoStepsSystemStrategyTest extends Specification {
     private static class AgentMock implements ITwoStepsAgent {
 
         private int step = 0
-        private boolean perceive = false
-        private boolean decideAndAct = false
+        private int perceive = -1
+        private int decideAndAct = -1
 
         @Override
         public void perceive() {
             //            System.out.println("Agent " + this + " is perceiving " + step)
-            perceive = true
+            perceive = step
+            step++
         }
 
         @Override
         public void decideAndAct() {
             //            System.out.println("Agent " + this + " is acting " + step++)
-            decideAndAct = true
+            decideAndAct = step
+            step++
         }
     }
 
@@ -139,12 +136,9 @@ class TwoStepsSystemStrategyTest extends Specification {
         twoStepsSystemStrategy.addPostStepHook(hook2)
 
         when:
-        ArrayList<Thread> threads = twoStepsSystemStrategy.postStep()
+        twoStepsSystemStrategy.postStep()
 
         then:
-        for (Thread t: threads) {
-            t.join()
-        }
         hook.done == true
         hook2.done == true
     }
@@ -158,12 +152,9 @@ class TwoStepsSystemStrategyTest extends Specification {
         twoStepsSystemStrategy.addPreStepHook(hook2)
 
         when:
-        ArrayList<Thread> threads = twoStepsSystemStrategy.preStep()
+        twoStepsSystemStrategy.preStep()
 
         then:
-        for (Thread t: threads) {
-            t.join()
-        }
         hook.done == true
         hook2.done == true
     }
@@ -236,29 +227,6 @@ class TwoStepsSystemStrategyTest extends Specification {
         twoStepsSystemStrategy.pendingRemovedAgents.contains(agent) == false
     }
 
-    def 'doStep'() {
-
-        given:
-        Set<AgentMock> agents = new HashSet<AgentMock>()
-        AgentMock agent = new AgentMock()
-        agents.add(agent)
-        TwoStepsSystemStrategy twoStepsSystemStrategy2 = new TwoStepsSystemStrategy(agents)
-        twoStepsSystemStrategy2.doStep()
-
-        boolean perceive = true
-        boolean decideAndAct = true
-
-        when:
-        for (Iterator iterator = twoStepsSystemStrategy2.agents.iterator(); iterator.hasNext();) {
-            AgentMock a = (AgentMock) iterator.next()
-            perceive = perceive && a.perceive
-            decideAndAct = decideAndAct && a.decideAndAct
-        }
-
-        then:
-        perceive == true && decideAndAct == true
-    }
-
     def 'shutdown'() {
 
         when:
@@ -269,5 +237,25 @@ class TwoStepsSystemStrategyTest extends Specification {
         twoStepsSystemStrategy.systemExecutor.awaitTermination(5L, TimeUnit.MINUTES)
         twoStepsSystemStrategy.agentExecutor.terminated == true
         twoStepsSystemStrategy.systemExecutor.terminated == true
+    }
+
+    def 'doStep have to run the steps of each agent. First, the step perceive is run. Then, the step decideAndAct is run.'() {
+
+        given:
+        Set<AgentMock> agents = new HashSet<AgentMock>()
+        AgentMock agent = new AgentMock()
+        agents.add(agent)
+        TwoStepsSystemStrategy twoStepsSystemStrategy2 = new TwoStepsSystemStrategy(agents)
+
+        when:
+        twoStepsSystemStrategy2.doStep()
+
+        then:
+        boolean ok = true
+        for (Iterator iterator = twoStepsSystemStrategy2.agents.iterator(); iterator.hasNext();) {
+            AgentMock a = (AgentMock) iterator.next()
+            ok = (a.perceive == a.step - 2) && (a.decideAndAct == a.step - 1)
+        }
+        ok == true
     }
 }

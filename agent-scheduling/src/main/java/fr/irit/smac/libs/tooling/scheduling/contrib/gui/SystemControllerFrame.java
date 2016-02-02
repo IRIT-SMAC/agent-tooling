@@ -26,7 +26,7 @@ import javax.swing.JFrame;
 import fr.irit.smac.libs.tooling.scheduling.ISystemControlHandler;
 
 /**
- * TODO: document.
+ * Provides a Swing GUI allowing to handle the execution of the agents of the system.
  *
  * @author jorquera
  */
@@ -38,7 +38,8 @@ public class SystemControllerFrame extends JFrame {
     /**
      * Instantiates a new system controller frame.
      *
-     * @param systemControlHandler the system control handler
+     * @param systemControlHandler
+     *            the system control handler
      */
     public SystemControllerFrame(ISystemControlHandler systemControlHandler) {
         this(systemControlHandler, 500);
@@ -47,8 +48,10 @@ public class SystemControllerFrame extends JFrame {
     /**
      * Instantiates a new system controller frame.
      *
-     * @param systemControlHandler the system control handler
-     * @param delay the delay
+     * @param systemControlHandler
+     *            the system control handler
+     * @param delay
+     *            the delay
      */
     public SystemControllerFrame(ISystemControlHandler systemControlHandler,
         int delay) {

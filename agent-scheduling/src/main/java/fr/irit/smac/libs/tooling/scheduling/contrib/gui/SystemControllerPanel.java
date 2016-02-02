@@ -38,8 +38,12 @@ import javax.swing.event.ChangeListener;
 import fr.irit.smac.libs.tooling.scheduling.ISystemControlHandler;
 
 /**
- * TODO: document.
- *
+ * Provides a panel in which the user can handle the execution of the agents of
+ * the system. The scheduleSlider allows to choose the speed of the execution.
+ * When the slider is at the state "Pause", the user can move on the next step
+ * with the stepButton. The other states, "Slow" and "Fast", run the steps
+ * automatically.
+ * 
  * @author jorquera
  */
 public class SystemControllerPanel extends JPanel {

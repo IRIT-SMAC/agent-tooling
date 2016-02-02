@@ -23,12 +23,12 @@ public class SystemControllerFrameSpec extends AssertJSwingJUnitTestCase{
     private JSliderFixture sliderFixture
     private JButtonFixture stepButtonFixture
 
-    private class MyAgent implements IAgentStrategy {
+    private class AgentMock implements IAgentStrategy {
 
         private final int id
         private boolean done = false
 
-        MyAgent(int id) {
+        AgentMock(int id) {
             this.id = id
         }
 
@@ -41,8 +41,8 @@ public class SystemControllerFrameSpec extends AssertJSwingJUnitTestCase{
     @Override
     protected void onSetUp() {
 
-        Set<IAgentStrategy> agents = new HashSet<MyAgent>()
-        agents.add(new MyAgent(1))
+        Set<IAgentStrategy> agents = new HashSet<AgentMock>()
+        agents.add(new AgentMock(1))
 
         SystemControllerFrame frame = GuiActionRunner.execute(new GuiQuery<SystemControllerFrame>() {
                             protected SystemControllerFrame executeInEDT() {
@@ -59,7 +59,7 @@ public class SystemControllerFrameSpec extends AssertJSwingJUnitTestCase{
 
         stepButtonFixture.click()
         Set<IAgentStrategy> agents = panel.system.agents
-        MyAgent agent = agents.iterator().next()
+        AgentMock agent = agents.iterator().next()
         assertTrue(agent.done)
 
         sliderFixture.slideTo(2)

@@ -39,8 +39,13 @@ import fr.irit.smac.libs.tooling.scheduling.impl.system.AbstractSystemStrategy;
 import fr.irit.smac.libs.tooling.scheduling.impl.system.SynchronizedSystemStrategy;
 
 /**
- * TODO: document.
- *
+ * TwoStepsSystemStrategy allows to create a system.
+ * In this system, an agent runs in two steps.
+ * Each agent have to finish its step before the next step of each agent is run.
+ * For instance, each agent have to finish the step "perceive" before the "decideAndAct" of each agent is run.
+ * 
+ * TwoStepsSystemStrategy is using the SynchronizedSystemStrategy to run a step.
+ * 
  * @author jorquera
  */
 public class TwoStepsSystemStrategy extends
@@ -51,9 +56,9 @@ public class TwoStepsSystemStrategy extends
      */
     private enum EState {
 
-        /** The perceive. */
+        /** The step perceive. */
         PERCEIVE,
-        /** The decide act. */
+        /** The step decideAndAct. */
         DECIDE_ACT
     }
 
@@ -64,6 +69,7 @@ public class TwoStepsSystemStrategy extends
 
     /**
      * The Class AgentWrapper.
+     * Defines the next step of an agent.
      */
     protected class AgentWrapper implements IAgentStrategy {
 
@@ -96,7 +102,7 @@ public class TwoStepsSystemStrategy extends
                 case DECIDE_ACT:
                     agent.decideAndAct();
                     break;
-
+                    
                 default:
                     throw new BadStepRuntimeException("case not covered");
             }
@@ -152,8 +158,7 @@ public class TwoStepsSystemStrategy extends
                 internalSystemStrategy.shutdown();
 
                 // propagate to inherited shutdown task
-                Thread thread = new Thread(inheritedShutdownRunnable);
-                thread.start();
+                inheritedShutdownRunnable.run();
             }
         };
     }
@@ -176,6 +181,7 @@ public class TwoStepsSystemStrategy extends
 
     /**
      * Adds the pending agents.
+     * This method is called when a step is run.
      */
     private void addPendingAgents() {
 
@@ -192,6 +198,7 @@ public class TwoStepsSystemStrategy extends
 
     /**
      * Removes the pending agents.
+     * This method is called when a step is finished.
      */
     private void removePendingAgents() {
         Collection<ITwoStepsAgent> drainedAgents = new HashSet<ITwoStepsAgent>();
@@ -247,7 +254,7 @@ public class TwoStepsSystemStrategy extends
     }
 
     /**
-     * * Executor Handling **.
+     * Executor Handling.
      *
      * @return the executor service
      */
@@ -270,8 +277,9 @@ public class TwoStepsSystemStrategy extends
     }
 
     /**
-     * * Agent Handling **.
-     *
+     * Agent Handling.
+     * Add an agent to the system.
+     * 
      * @param agent
      *            the agent
      */

@@ -21,7 +21,6 @@
  */
 package fr.irit.smac.libs.tooling.scheduling.impl.system;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -39,7 +38,7 @@ import fr.irit.smac.libs.tooling.scheduling.IHookHandler;
 import fr.irit.smac.libs.tooling.scheduling.ISystemControlHandler;
 
 /**
- * TODO: Document (important).
+ * AbstractSystemStrategy allows to define the strategy of a system.
  *
  * @author jorquera
  * @param <T>
@@ -74,9 +73,9 @@ public abstract class AbstractSystemStrategy<T> implements
     /** The delay. */
     private volatile long              delay            = 0L;
 
-    private static final Logger        LOGGER           = Logger.getLogger(SynchronizedSystemStrategy.class.getName());
+    private static final Logger                     LOGGER           = Logger.getLogger(AbstractSystemStrategy.class.getName());
 
-    /** The looping runnable. */
+    /** Looping runnable. This task runs the system until we stop it. */
     // TODO:
     /*
      * change it for the delay to be themax* time waited
@@ -107,7 +106,10 @@ public abstract class AbstractSystemStrategy<T> implements
                                                             }
                                                         };
 
-    /** The stepping runnable. */
+    /**
+     * The stepping runnable. This task runs an entire step of the system
+     * (preStep, step and postStep)
+     */
     protected Runnable                 steppingRunnable = new Runnable() {
                                                             @Override
                                                             public void run() {
@@ -117,7 +119,7 @@ public abstract class AbstractSystemStrategy<T> implements
                                                             }
                                                         };
 
-    /** The pausing runnable. */
+    /** The pausing runnable. This task pauses the system. */
     protected Runnable                 pausingRunnable  = new Runnable() {
                                                             @Override
                                                             public void run() {
@@ -126,7 +128,7 @@ public abstract class AbstractSystemStrategy<T> implements
                                                             }
                                                         };
 
-    /** The shutdown runnable. */
+    /** The shutdown runnable. This task shuts the system. */
     protected Runnable                 shutdownRunnable = new Runnable() {
                                                             @Override
                                                             public void run() {
@@ -147,42 +149,32 @@ public abstract class AbstractSystemStrategy<T> implements
     }
 
     /**
-     * TODO: comment (very important).
+     * doStep describes the step that each have to do.
      */
     protected abstract void doStep();
 
     /**
      * Pre step.
      */
-    protected ArrayList<Thread> preStep() {
+    protected void preStep() {
 
-        ArrayList<Thread> threads = new ArrayList<Thread>();
         synchronized (preStepHooks) {
             for (Runnable hook : preStepHooks) {
-                Thread thread = new Thread(hook);
-                threads.add(thread);
-                thread.start();
+                hook.run();
             }
         }
-
-        return threads;
     }
 
     /**
      * Post step.
      */
-    protected ArrayList<Thread> postStep() {
+    protected void postStep() {
 
-        ArrayList<Thread> threads = new ArrayList<Thread>();
         synchronized (postStepHooks) {
             for (Runnable hook : postStepHooks) {
-                Thread thread = new Thread(hook);
-                threads.add(thread);
-                thread.start();
+                hook.run();
             }
         }
-
-        return threads;
     }
 
     /**

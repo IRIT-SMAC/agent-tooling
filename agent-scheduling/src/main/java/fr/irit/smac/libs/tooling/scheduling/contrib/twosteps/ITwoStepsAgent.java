@@ -21,8 +21,10 @@
  */
 package fr.irit.smac.libs.tooling.scheduling.contrib.twosteps;
 
+
 /**
- * TODO: document.
+ * This interface defines the steps of an agent. The steps are split into two
+ * parts : perceive and decideAndAct.
  *
  * @author jorquera
  */

@@ -38,7 +38,9 @@ import java.util.logging.Logger;
 import fr.irit.smac.libs.tooling.scheduling.IAgentStrategy;
 
 /**
- * TODO: document.
+ * SynchronizedSystemStrategy allows to create a system.
+ * In this system, an agent have a single step to run.
+ * All agents have to finish their step before the next step of the agents is run.
  *
  * @author jorquera
  */
@@ -99,10 +101,12 @@ public class SynchronizedSystemStrategy extends
             }
             catch (InterruptedException e) {
                 LOGGER.log(Level.INFO, e.getMessage(), e);
+                Thread.currentThread().interrupt();
             }
             catch (ExecutionException e) {
                 LOGGER.log(Level.INFO, e.getMessage(), e);
             }
+
         }
     }
 
