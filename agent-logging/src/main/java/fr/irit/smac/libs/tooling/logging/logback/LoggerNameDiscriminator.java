@@ -23,6 +23,7 @@ package fr.irit.smac.libs.tooling.logging.logback;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.sift.Discriminator;
+import fr.irit.smac.libs.tooling.logging.AgentLog;
 
 public class LoggerNameDiscriminator implements Discriminator<ILoggingEvent> {
 
@@ -45,7 +46,7 @@ public class LoggerNameDiscriminator implements Discriminator<ILoggingEvent> {
 
     @Override
     public String getDiscriminatingValue(ILoggingEvent logEvent) {
-        return logEvent.getLoggerName();
+        return logEvent.getLoggerName().substring(AgentLog.ROOT_AGENT_LOGGER.length()+1);
     }
 
     @Override
