@@ -114,4 +114,21 @@ public class AgentMessaging {
 
         return msgService;
     }
+    
+    /**
+     * Shutdown the message service associated with the given class message
+     * @param messageClassType
+     */
+    public static <T> void shutdownMsgService(Class<T> messageClassType) {
+        @SuppressWarnings("unchecked")
+        IMsgService<T> msgService = (IMsgService<T>) instanciedMsgServices
+            .get(messageClassType);
+        if (msgService != null) {
+            instanciedMsgServices.remove(messageClassType);
+        } else {
+            throw new IllegalArgumentException(
+                "Trying to shutdown a non existing service : "+messageClassType
+            );
+        }
+    }
 }
