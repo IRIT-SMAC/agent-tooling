@@ -150,7 +150,7 @@ public class AgentLoggingExample {
             this.traceLogCount = 0;
 
             // Fetch the logger instance
-            this.logger = AgentLog.getLogger(name);
+            this.logger = AgentLog.getAgentLogger(name);
         }
 
         public void perceiveDecideAndAct() {

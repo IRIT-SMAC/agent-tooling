@@ -53,6 +53,8 @@ import fr.irit.smac.libs.tooling.logging.logback.LoggerNameDiscriminator;
  * 
  */
 public class AgentLog {
+    
+    public final static String ROOT_AGENT_LOGGER = "rootAgentLogger";
 
     private AgentLog() {
 
@@ -451,7 +453,7 @@ public class AgentLog {
      */
     private static void setLogLevel(Level logLevel) {
         ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(
-            ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
+            AgentLog.ROOT_AGENT_LOGGER);
 
         root.setLevel(logLevel);
     }
@@ -462,7 +464,20 @@ public class AgentLog {
      * @param loggerName
      * @return
      */
-    public static Logger getLogger(String loggerName) {
+    public static Logger getAgentLogger(String loggerName) {
+        return LoggerFactory.getLogger(AgentLog.ROOT_AGENT_LOGGER +"."+ loggerName);
+    }
+    
+    /**
+     * Return the logger instance corresponding to the given name
+     * 
+     * @param loggerName
+     * @return
+     */
+    public static Logger getStandardLogger(String loggerName) {
+        if (loggerName.startsWith(AgentLog.ROOT_AGENT_LOGGER+".")){
+            throw new IllegalArgumentException("Standard loggers cannot start with "+ AgentLog.ROOT_AGENT_LOGGER+".");
+        }
         return LoggerFactory.getLogger(loggerName);
     }
 
@@ -514,9 +529,9 @@ public class AgentLog {
         final String logTemplate) {
         // get root logger and clear all existing appenders
         LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-        ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger) LoggerFactory
-            .getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
-        rootLogger.detachAndStopAllAppenders();
+        ch.qos.logback.classic.Logger rootAgentLogger = (ch.qos.logback.classic.Logger) LoggerFactory
+            .getLogger(AgentLog.ROOT_AGENT_LOGGER);
+        rootAgentLogger.detachAndStopAllAppenders();
 
         // Configure and create a sifting encoder
 
@@ -530,8 +545,9 @@ public class AgentLog {
         appender.start();
 
         // add the created appender
-        rootLogger.addAppender(appender);
-
+        rootAgentLogger.addAppender(appender);
+        rootAgentLogger.setAdditive(false);
+        
         // set log level
         setLogLevel(logLevel);
     }
