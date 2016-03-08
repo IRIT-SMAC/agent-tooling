@@ -8,24 +8,10 @@
 		<artifactId>agent-tooling</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>agent-logging</artifactId>
-	<name>agent-logging</name>
+	<artifactId>agent-messaging</artifactId>
+	<name>agent-messaging</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<dependencies>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>1.0.13</version>
-			<optional>false</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.jfree</groupId>
-			<artifactId>jfreechart</artifactId>
-			<version>1.0.14</version>
-			<optional>false</optional>
-		</dependency>
-	</dependencies>
 </project>

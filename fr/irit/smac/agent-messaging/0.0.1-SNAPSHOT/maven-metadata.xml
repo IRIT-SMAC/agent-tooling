@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata modelVersion="1.1.0">
   <groupId>fr.irit.smac</groupId>
-  <artifactId>agent-logging</artifactId>
+  <artifactId>agent-messaging</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <versioning>
     <snapshot>
-      <timestamp>20160308.142521</timestamp>
+      <timestamp>20160308.142617</timestamp>
       <buildNumber>1</buildNumber>
     </snapshot>
-    <lastUpdated>20160308142521</lastUpdated>
+    <lastUpdated>20160308142617</lastUpdated>
     <snapshotVersions>
       <snapshotVersion>
         <extension>jar</extension>
-        <value>0.0.1-20160308.142521-1</value>
-        <updated>20160308142521</updated>
+        <value>0.0.1-20160308.142617-1</value>
+        <updated>20160308142617</updated>
       </snapshotVersion>
       <snapshotVersion>
         <extension>pom</extension>
-        <value>0.0.1-20160308.142521-1</value>
-        <updated>20160308142521</updated>
+        <value>0.0.1-20160308.142617-1</value>
+        <updated>20160308142617</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>
