@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata>
   <groupId>fr.irit.smac</groupId>
-  <artifactId>agent-plot</artifactId>
+  <artifactId>avt</artifactId>
   <versioning>
     <versions>
       <version>0.0.1-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20160308142801</lastUpdated>
+    <lastUpdated>20160308142853</lastUpdated>
   </versioning>
 </metadata>
