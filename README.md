@@ -13,7 +13,7 @@ Agent-tooling est un ensemble de librairies développées dans le but de facilit
 Dans chaque librairie, le package “example” contient des exemples d’utilisation de la librairie en question.
 
 ## Agent-scheduling
-** Agent-scheduling gère l’exécution des agents. **
+**Agent-scheduling gère l’exécution des agents.**
 
 Deux stratégies d'exécution des agents sont actuellement implémentées.
 
@@ -29,13 +29,13 @@ Dans cette stratégie, l'exécution d'un agent se fait en deux étapes.
   1. Etape de perception des agents : Tous les agents exécutent en parallèle leur perception. Cette étape est terminée lorsque tous les agents l'ont terminée. Les agents doivent donc implémenter une méthode perceive().
   2. Etape de décision et action des agents :  Tous les agents exécutent en parallèle leurs décisions et leurs actions. Les agents doivent donc implémenter une méthode decideAndAct().
 
-** Pour les deux stratégies :**
+**Pour les deux stratégies :**
  * Une étape d'un agent est une exécution asynchrone.
  * Une étape du système est une exécution synchrone.
 
 
 ## Agent-messaging
-** Agent-messaging permet aux agents de communiquer entre eux. **
+**Agent-messaging permet aux agents de communiquer entre eux.**
 
 Dans cette librairie, les agents communiquent par messages. Un message est envoyé dans la boîte aux lettres du ou des agents concerné(s).
 
@@ -46,12 +46,12 @@ Un agent peut :
 * Faire partie d’un groupe.  
 
 ## Agent-plot
-** Agent-plot permet d'afficher des valeurs sous forme de courbes. **
+**Agent-plot permet d'afficher des valeurs sous forme de courbes.**
 
 Ainsi, dans le cas d'un SMA, on peut visualiser l'évolution des valeurs des attributs des agents.
 
 ## Agent-logging
-** Agent-logging permet de tracer l'exécution des agents sous forme de logs. **
+**Agent-logging permet de tracer l'exécution des agents sous forme de logs.**
 
 Un fichier de log est crée pour chaque agent dans un dossier log.  
 Les logs doivent être implémentés pour chaque agent. Par exemple, les logs peuvent être implémentés dans l’étape perceive d’un agent.
