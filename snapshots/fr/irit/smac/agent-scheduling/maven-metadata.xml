@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>fr.irit.smac</groupId>
+  <artifactId>agent-scheduling</artifactId>
+  <versioning>
+    <versions>
+      <version>0.2-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20160407202706</lastUpdated>
+  </versioning>
+</metadata>
