@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>fr.irit.smac</groupId>
 		<artifactId>agent-tooling</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.1</version>
 	</parent>
 	<artifactId>agent-scheduling</artifactId>
 	<name>agent-scheduling</name>
