@@ -12,6 +12,7 @@ buildNumber.properties
 .classpath
 .project
 .settings/
+bin/
 
 # Package Files
 *.jar
