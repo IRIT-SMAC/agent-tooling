@@ -293,11 +293,11 @@
 					<noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
 					<merge>true</merge>
 					<outputDirectory>${user.dir}/target/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
-					<branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
+					<branch>refs/heads/master</branch>                       <!-- remote branch name -->
 					<includes>
 						<include>**/*</include>
 					</includes>
-					<repositoryName>agent-tooling</repositoryName>      <!-- github repo name -->
+					<repositoryName>mvn-repo</repositoryName>      <!-- github repo name -->
 					<repositoryOwner>IRIT-SMAC</repositoryOwner>    <!-- github username -->
 				</configuration>
 				<executions>
