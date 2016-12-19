@@ -127,7 +127,7 @@ public class BasicMutableDirectory<T> implements
             this.unsubscribeAgentFromGroup(agentRef, group);
         }
 
-        this.groupModificationLock.lock();
+        this.groupModificationLock.unlock();
         this.agentModificationLock.unlock();
     }
 
