@@ -184,11 +184,18 @@ public class AgentPlotChart implements IAgentPlotChart {
 
     }
 
+	/**
+	 * Close the window automatically when there are no more Chart. (no more AWT
+	 * running thread).
+	 */
     @Override
     public void close() {
         getChartContainer().remove(getChartPanel());
         getChartContainer().revalidate();
         getChartContainer().repaint();
+		if (0 == getChartContainer().getComponentCount()) {
+			frame.dispose();
+		}
     }
 
     @Override
