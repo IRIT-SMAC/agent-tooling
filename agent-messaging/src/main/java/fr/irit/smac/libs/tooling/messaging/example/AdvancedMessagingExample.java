@@ -29,7 +29,6 @@ import fr.irit.smac.libs.tooling.messaging.AgentMessaging;
 import fr.irit.smac.libs.tooling.messaging.IMsgBox;
 import fr.irit.smac.libs.tooling.messaging.impl.Ref;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class AdvancedMessagingExample.
  */

@@ -112,14 +112,14 @@ public class TwoStepsSystemStrategy extends
     }
 
     /** The agent wrappers. */
-    private final Map<ITwoStepsAgent, AgentWrapper>      agentWrappers        = new ConcurrentHashMap<ITwoStepsAgent, AgentWrapper>();
+	private final Map<ITwoStepsAgent, AgentWrapper> agentWrappers = new ConcurrentHashMap<>();
 
     /** The pending added agents. */
     // NOTE: BlockingQueue implem is thread-safe
-    private final BlockingQueue<ITwoStepsAgent>          pendingAddedAgents   = new LinkedBlockingDeque<ITwoStepsAgent>();
+	private final BlockingQueue<ITwoStepsAgent> pendingAddedAgents = new LinkedBlockingDeque<>();
 
     /** The pending removed agents. */
-    private final BlockingQueue<ITwoStepsAgent>          pendingRemovedAgents = new LinkedBlockingDeque<ITwoStepsAgent>();
+	private final BlockingQueue<ITwoStepsAgent> pendingRemovedAgents = new LinkedBlockingDeque<>();
 
     /** The internal system strategy. */
     private final AbstractSystemStrategy<IAgentStrategy> internalSystemStrategy;
@@ -185,7 +185,7 @@ public class TwoStepsSystemStrategy extends
      */
     private void addPendingAgents() {
 
-        Collection<ITwoStepsAgent> drainedAgents = new HashSet<ITwoStepsAgent>();
+		Collection<ITwoStepsAgent> drainedAgents = new HashSet<>();
         pendingAddedAgents.drainTo(drainedAgents);
 
         for (ITwoStepsAgent agent : drainedAgents) {
@@ -201,7 +201,7 @@ public class TwoStepsSystemStrategy extends
      * This method is called when a step is finished.
      */
     private void removePendingAgents() {
-        Collection<ITwoStepsAgent> drainedAgents = new HashSet<ITwoStepsAgent>();
+		Collection<ITwoStepsAgent> drainedAgents = new HashSet<>();
         pendingRemovedAgents.drainTo(drainedAgents);
 
         for (ITwoStepsAgent agent : drainedAgents) {

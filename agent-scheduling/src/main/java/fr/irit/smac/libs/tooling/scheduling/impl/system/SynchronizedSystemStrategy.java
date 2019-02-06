@@ -87,7 +87,7 @@ public class SynchronizedSystemStrategy extends
      */
     @Override
     protected void doStep() {
-        Set<Future<?>> executionResults = new HashSet<Future<?>>();
+		Set<Future<?>> executionResults = new HashSet<>();
 
         // start the execution of the agents
         for (Callable<?> c : agentsCallables.values()) {
